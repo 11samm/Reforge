@@ -1,0 +1,222 @@
+{
+  "status": "passed",
+  "viewport": {
+    "width": 1440,
+    "height": 1000
+  },
+  "cases": [
+    {
+      "case_id": "gb017",
+      "input": "D:\\Samuel\\Downloads\\Code\\Reforge\\fixtures\\development\\inputs\\gb017.png",
+      "original": {
+        "width": 129,
+        "height": 97,
+        "mode": "RGB",
+        "png_sha256": "d074df31f01443693f713ee55bf7008acc23e328cd2a88fcf25ac1267fb97844",
+        "rgba_sha256": "23be971cdb95f31cfbc945683ac2ab349bd1219d228d89b64d12d015215dad57",
+        "alpha_extrema": [
+          255,
+          255
+        ]
+      },
+      "preview_original_bytes_equal": true,
+      "preview_dimensions": [
+        129,
+        97
+      ],
+      "single_layer": true,
+      "checkerboard": true,
+      "output": {
+        "width": 129,
+        "height": 97,
+        "mode": "RGBA",
+        "png_sha256": "ee43c2d7df423f3bfee7b9e3dcd239f2c8e14a47933d169df1105f536d7896e7",
+        "rgba_sha256": "23be971cdb95f31cfbc945683ac2ab349bd1219d228d89b64d12d015215dad57",
+        "alpha_extrema": [
+          255,
+          255
+        ]
+      },
+      "suggested_filename": "gb017.png",
+      "comparison": {
+        "dimensions_equal": true,
+        "rgba_equal": true,
+        "different_pixels": 0,
+        "max_channel_delta": 0
+      }
+    },
+    {
+      "case_id": "gb010",
+      "input": "D:\\Samuel\\Downloads\\Code\\Reforge\\fixtures\\development\\inputs\\gb010.png",
+      "original": {
+        "width": 65,
+        "height": 49,
+        "mode": "RGBA",
+        "png_sha256": "e3fad9a9ff04e3a6018549f642db8a4f4f74f0d820869651d296c1a432e13e08",
+        "rgba_sha256": "9ee69c2495b356d6646dfb196c152d65d02e1919f21367688416bc78079d68dd",
+        "alpha_extrema": [
+          0,
+          255
+        ]
+      },
+      "preview_original_bytes_equal": true,
+      "preview_dimensions": [
+        65,
+        49
+      ],
+      "single_layer": true,
+      "checkerboard": true,
+      "output": {
+        "width": 65,
+        "height": 49,
+        "mode": "RGBA",
+        "png_sha256": "b69047bd59546135322ce337fd9e4f2437f17196bcfe8dad082c59a2642f534b",
+        "rgba_sha256": "9ee69c2495b356d6646dfb196c152d65d02e1919f21367688416bc78079d68dd",
+        "alpha_extrema": [
+          0,
+          255
+        ]
+      },
+      "suggested_filename": "gb010.png",
+      "comparison": {
+        "dimensions_equal": true,
+        "rgba_equal": true,
+        "different_pixels": 0,
+        "max_channel_delta": 0
+      }
+    }
+  ],
+  "checks": {
+    "empty_export_disabled": true,
+    "unimplemented_controls_disabled": true,
+    "blur_unavailable": true,
+    "replacement": {
+      "previous": "gb017",
+      "current": "gb010",
+      "single_layer": true
+    },
+    "invisible_rgb_and_partial_alpha": {
+      "dimensions_equal": true,
+      "rgba_equal": true,
+      "different_pixels": 0,
+      "max_channel_delta": 0
+    },
+    "current_state_export": {
+      "fixture_entry": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\baseline-regressions\\20261010-111958-b460f848\\shell\\current-state-fixture\\entry.tsx",
+      "input": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\baseline-regressions\\20261010-111958-b460f848\\shell\\current-state-input.png",
+      "output": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\baseline-regressions\\20261010-111958-b460f848\\shell\\current-state-export.png",
+      "expected": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\baseline-regressions\\20261010-111958-b460f848\\shell\\current-state-expected.png",
+      "mutation": {
+        "x": 2,
+        "y": 1,
+        "before": [
+          16,
+          46,
+          96,
+          1
+        ],
+        "after": [
+          17,
+          231,
+          83,
+          1
+        ]
+      },
+      "dimensions": [
+        4,
+        3
+      ],
+      "changed_pixels": 1,
+      "unaffected_pixels_equal": true,
+      "all_alpha_equal": true,
+      "comparison": {
+        "dimensions_equal": true,
+        "rgba_equal": true,
+        "different_pixels": 0,
+        "max_channel_delta": 0
+      },
+      "export_path": "Production File > Export PNG calling serializeCurrentImage; only mutation injection is fixture-specific",
+      "production_test_hook_absent": true
+    },
+    "jpeg": {
+      "browser_decoded_rgba_equal": true,
+      "dimensions": [
+        129,
+        97
+      ],
+      "alpha_extrema": [
+        255,
+        255
+      ],
+      "browser_rgba_sha256": "0bf32c00e838cf8688909efa4bb53f0c3d8368b12f73c9b513ef19fcef6fafa7"
+    },
+    "unsupported_and_corrupt_retain_document": true,
+    "empty_error_state": true
+  },
+  "evidence": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\baseline-regressions\\20261010-111958-b460f848\\shell",
+  "initial_accessibility": "- navigation \"Main Menu\":\n  - menubar:\n    - menuitem \"File\"\n    - menuitem \"Edit\" [disabled]\n    - menuitem \"View\" [disabled]\n    - menuitem \"Image\" [disabled]\n    - menuitem \"Layer\" [disabled]\n    - menuitem \"Effects\"\n    - menuitem \"Tools\" [disabled]\n    - menuitem \"Help\" [disabled]\n- text: Open image (PNG or JPEG)\n- button \"Open image (PNG or JPEG)\"\n- banner:\n  - text: \"miniPaint Size:\"\n  - spinbutton \"Size:\" [disabled]: \"4\"\n  - button \"\u00d7 Pressure\" [disabled]\n- main:\n  - complementary \"Unavailable editing tools\":\n    - button \"Pointer\" [disabled]\n    - button \"Rectangle selection\" [disabled]\n    - button \"Brush\" [disabled]\n    - button \"Pencil\" [disabled]\n    - button \"Eyedropper\" [disabled]\n    - button \"Eraser\" [disabled]\n    - button \"Magic wand\" [disabled]\n    - button \"Paint bucket\" [disabled]\n    - button \"Shapes\" [disabled]\n    - button \"Picture\" [disabled]\n    - button \"Text\" [disabled]\n    - button \"Gradient\" [disabled]\n    - button \"Stamp\" [disabled]\n    - button \"Crop\" [disabled]\n    - button \"Droplet\" [disabled]\n    - button \"Diamond\" [disabled]\n    - button \"Sponge\" [disabled]\n    - button \"Inward arrows\" [disabled]\n    - button \"Play\" [disabled]\n  - region \"Image workspace\":\n    - text: No image loaded\n    - button \"Open image\u2026\"\n  - complementary:\n    - heading \"Preview\" [level=2]\n    - button \"\u2212\" [disabled]\n    - button \"100%\" [disabled]\n    - button \"+\" [disabled]\n    - button \"Fit\" [disabled]\n    - slider \"Zoom\" [disabled]: \"100\"\n    - heading \"Colors\" [level=2]\n    - button \"Toggle Color Picker\" [disabled]: \u25c9\n    - button \"Toggle Color Channels\" [disabled]: \u25a4\n    - button \"Toggle Swatches\" [disabled]: \u25a6\n    - text: Hex\n    - textbox \"Hex\" [disabled]: \"#008000\"\n    - heading \"Information\" [level=2]\n    - text: \"Size: 1024 x 768 px Mouse: - px Resolution: 72\"\n    - heading \"Layer details\" [level=2]\n    - text: X\n    - button \"Reset X\" [disabled]: \u27f3\n    - spinbutton \"X\" [disabled]: \"0\"\n    - text: \"Y:\"\n    - button \"Reset Y\" [disabled]: \u27f3\n    - spinbutton \"Y:\" [disabled]: \"0\"\n    - text: \"Width:\"\n    - spinbutton \"Width:\" [disabled]\n    - text: \"Height:\"\n    - spinbutton \"Height:\" [disabled]\n    - text: \"Rotate:\"\n    - button \"Reset Rotate\" [disabled]: \u27f3\n    - spinbutton \"Rotate:\" [disabled]: \"0\"\n    - text: \"Opacity:\"\n    - button \"Reset Opacity\" [disabled]: \u27f3\n    - spinbutton \"Opacity:\" [disabled]: \"100\"\n    - text: \"Color:\"\n    - textbox \"Color:\" [disabled]: \"#008000\"\n    - heading \"Layers\" [level=2]\n    - button \"Insert new layer\" [disabled]: +\n    - button \"Duplicate layer\" [disabled]: D\n    - button \"Convert layer to raster\" [disabled]: R\n    - button \"Move layer up\" [disabled]: \u2191\n    - button \"Move layer down\" [disabled]: \u2193\n    - text: No uploaded layer",
+  "layout_bounds": {
+    "menu": {
+      "x": 0,
+      "y": 0,
+      "width": 1440,
+      "height": 30
+    },
+    "options": {
+      "x": 0,
+      "y": 30,
+      "width": 1440,
+      "height": 40
+    },
+    "tools": {
+      "x": 0,
+      "y": 75,
+      "width": 40,
+      "height": 576
+    },
+    "canvas": {
+      "x": 126,
+      "y": 151,
+      "width": 1024,
+      "height": 768
+    },
+    "sidebar": {
+      "x": 1230,
+      "y": 70,
+      "width": 210,
+      "height": 930
+    },
+    "preview": {
+      "x": 1236,
+      "y": 76,
+      "width": 198,
+      "height": 182
+    },
+    "colors": {
+      "x": 1236,
+      "y": 268,
+      "width": 198,
+      "height": 258
+    },
+    "information": {
+      "x": 1236,
+      "y": 536,
+      "width": 198,
+      "height": 94
+    },
+    "details": {
+      "x": 1236,
+      "y": 640,
+      "width": 198,
+      "height": 231
+    },
+    "layers": {
+      "x": 1236,
+      "y": 881,
+      "width": 198,
+      "height": 87
+    }
+  },
+  "browser_errors": [],
+  "external_requests": []
+}

@@ -20,7 +20,7 @@ class BoundaryTests(unittest.TestCase):
             broker.call('shell_write_file',{'path':'src/main.tsx','text':'test'})
             self.assertEqual(broker.call('shell_read_file',{'path':'src/main.tsx'})[0]['text'],'test')
             self.assertEqual(broker.call('shell_read_file',{'path':'layout-packet/observation.md'})[0]['text'],'layout')
-            for path in ('../private.txt','D:/private.txt','src/../../private.txt','src\\main.tsx','evidence/reference.png','adapter/minipaint.py','node_modules/private.txt','package.json:stream','/private.txt'):
+            for path in ('../private.txt','D:/private.txt','src/../../private.txt','src\\main.tsx','evidence/reference.png','adapter/minipaint.py','evaluator/compare.py','evaluator/policies/exact-rgba-v1.json','baseline_regressions.py','fixtures/development/inputs/gb010.png','node_modules/private.txt','package.json:stream','/private.txt'):
                 for write in (True,False):
                     with self.subTest(path=path,write=write),self.assertRaises(ValueError): broker.path(path,write)
             with self.assertRaises(ValueError): broker.path('layout-packet/observation.md',True)

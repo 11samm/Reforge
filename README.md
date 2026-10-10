@@ -120,3 +120,9 @@ command and authentication route above remain unchanged.
 
 See [README-shell.md](README-shell.md) for the local editor, layout evidence,
 restricted generation invocation, exact upload/export checks, and limitations.
+
+## Deterministic evaluator milestone
+
+See [README-evaluator.md](README-evaluator.md) for independent raw-RGBA metrics,
+versioned exact/provisional policies, controlled examples, and the four-case baseline
+command. Blur implementation and the learning loop remain deferred.

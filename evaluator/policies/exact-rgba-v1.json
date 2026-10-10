@@ -1,0 +1,13 @@
+{
+  "id": "exact-rgba-v1",
+  "version": 1,
+  "mode": "exact",
+  "rgb_mean_max": 0,
+  "rgb_pixel_tolerance": 0,
+  "rgb_fraction_min": 1,
+  "alpha_mean_max": 0,
+  "alpha_max": 0,
+  "alpha_pixel_tolerance": 0,
+  "alpha_fraction_min": 1,
+  "description": "Exact decoded 8-bit RGBA equality for baseline regressions."
+}

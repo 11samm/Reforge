@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "case_id": "sparse-region-gate",
+  "status": "failed",
+  "classification": "pixel_mismatch",
+  "policy": {
+    "id": "blur-provisional-v1",
+    "version": 1,
+    "mode": "tolerance",
+    "rgb_mean_max": 1,
+    "rgb_pixel_tolerance": 3,
+    "rgb_fraction_min": 0.99,
+    "alpha_mean_max": 1,
+    "alpha_max": 3,
+    "alpha_pixel_tolerance": 3,
+    "alpha_fraction_min": 1,
+    "description": "Provisional engineering targets, not established compatibility standards. RGB mean across all three channels <=1 and >=99% pixels with max RGB error <=3. Alpha mean <=1, maximum <=3, and 100% within 3. No blur success established."
+  },
+  "policy_sha256": "d9c44da6267c83a9f5aaf7e8df601c4597c743a4ae231b525b8b2fa2268a97bf",
+  "dimensions_equal": true,
+  "dimensions": {
+    "reference": [
+      100,
+      100
+    ],
+    "candidate": [
+      100,
+      100
+    ]
+  },
+  "metrics": {
+    "pixel_count": 10000,
+    "rgb_mae_per_channel": [
+      0.0255,
+      0.0,
+      0.0
+    ],
+    "rgb_mae": 0.0085,
+    "rgb_max": 255,
+    "alpha_mae": 0.0,
+    "alpha_max": 0,
+    "rgb_fraction_within_tolerance": 0.9999,
+    "alpha_fraction_within_tolerance": 1.0,
+    "different_pixels": 1
+  },
+  "regions": {
+    "informative": {
+      "box": [
+        50,
+        50,
+        51,
+        51
+      ],
+      "metrics": {
+        "pixel_count": 1,
+        "rgb_mae_per_channel": [
+          255.0,
+          0.0,
+          0.0
+        ],
+        "rgb_mae": 85.0,
+        "rgb_max": 255,
+        "alpha_mae": 0.0,
+        "alpha_max": 0,
+        "rgb_fraction_within_tolerance": 0.0,
+        "alpha_fraction_within_tolerance": 1.0,
+        "different_pixels": 1
+      },
+      "passed": false,
+      "reasons": [
+        "rgb_mae=85.0 violates rgb_mean_max=1",
+        "rgb_fraction_within_tolerance=0.0 violates rgb_fraction_min=0.99"
+      ]
+    }
+  },
+  "reasons": [
+    "informative: rgb_mae=85.0 violates rgb_mean_max=1",
+    "informative: rgb_fraction_within_tolerance=0.0 violates rgb_fraction_min=0.99"
+  ],
+  "artifacts": {
+    "reference_raw": "reference-raw.png",
+    "candidate_raw": "candidate-raw.png",
+    "alpha-difference-x16": "alpha-difference-x16.png",
+    "candidate-raw": "candidate-raw.png",
+    "changed-bounds-alpha-x16": "changed-bounds-alpha-x16.png",
+    "changed-bounds-rgb-x16": "changed-bounds-rgb-x16.png",
+    "reference-raw": "reference-raw.png",
+    "region-informative-alpha-difference-x16": "region-informative-alpha-difference-x16.png",
+    "region-informative-changed-bounds-alpha-x16": "region-informative-changed-bounds-alpha-x16.png",
+    "region-informative-changed-bounds-rgb-x16": "region-informative-changed-bounds-rgb-x16.png",
+    "region-informative-rgb-difference-x16": "region-informative-rgb-difference-x16.png",
+    "region-informative-side-by-side": "region-informative-side-by-side.png",
+    "rgb-difference-x16": "rgb-difference-x16.png",
+    "side-by-side": "side-by-side.png"
+  },
+  "display": {
+    "checker_size": 8,
+    "difference_gain": 16,
+    "side_by_side_order": [
+      "reference",
+      "candidate"
+    ],
+    "scoring": "raw unpremultiplied 8-bit RGBA; no compositing",
+    "changed_bounds": [
+      50,
+      50,
+      51,
+      51
+    ]
+  },
+  "reference_path": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\evaluator-examples\\20261010-111957-1384f482\\fixtures\\sparse-reference.png",
+  "candidate_path": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\evaluator-examples\\20261010-111957-1384f482\\fixtures\\sparse-candidate.png"
+}

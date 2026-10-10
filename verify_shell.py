@@ -14,12 +14,16 @@ from playwright.sync_api import sync_playwright, expect
 from adapter.png import ROOT, FIXTURES, png_info, compare_pngs
 
 
+class PixelMismatchError(AssertionError):
+    pass
+
+
 class QuietHandler(SimpleHTTPRequestHandler):
     def log_message(self,*args): pass
 
 
-def main():
-    evidence=ROOT/'evidence/shell-verification'/(time.strftime('%Y%m%d-%H%M%S')+'-'+uuid.uuid4().hex[:8])
+def main(evidence=None):
+    evidence=Path(evidence) if evidence is not None else ROOT/'evidence/shell-verification'/(time.strftime('%Y%m%d-%H%M%S')+'-'+uuid.uuid4().hex[:8])
     evidence.mkdir(parents=True)
     report={'status':'failed','viewport':{'width':1440,'height':1000},'cases':[],'checks':{},'evidence':str(evidence)}
     server=ThreadingHTTPServer(('127.0.0.1',0),partial(QuietHandler,directory=str(ROOT/'generated-app/dist')))
@@ -94,16 +98,25 @@ def main():
                 out=evidence/(case+'-export.png')
                 suggested=export_to(out)
                 comparison=compare_pngs(out,original)
-                if not comparison['rgba_equal']: raise AssertionError('Exact original RGBA export mismatch')
+                if not comparison['rgba_equal']: raise PixelMismatchError('Exact original RGBA export mismatch')
                 page.screenshot(path=str(evidence/(case+'-uploaded.png')))
                 report['cases'].append({'case_id':case,'input':str(original),'original':info,'preview_original_bytes_equal':True,'preview_dimensions':dimensions,'single_layer':True,'checkerboard':True,'output':png_info(out),'suggested_filename':suggested,'comparison':comparison})
+
+            # Explicit replacement gate on the same document: opaque -> transparent.
+            upload(FIXTURES/'inputs/gb017.png')
+            replacement=FIXTURES/'inputs/gb010.png'
+            upload(replacement)
+            expect(page.locator('.layer-name')).to_have_count(1)
+            expect(page.locator('.layer-name')).to_have_text(replacement.name)
+            export_to(evidence/'replacement-export.png')
+            report['checks']['replacement']={'previous':'gb017','current':'gb010','single_layer':True}
 
             # A separate synthetic PNG checks invisible RGB and partial alpha preservation.
             edge=evidence/'alpha-sentinel.png'
             image=Image.new('RGBA',(3,1)); image.putdata([(19,37,91,0),(123,45,67,1),(200,100,50,128)]); image.save(edge)
             upload(edge); out=evidence/'alpha-sentinel-export.png'; export_to(out)
             report['checks']['invisible_rgb_and_partial_alpha']=compare_pngs(out,edge)
-            if not report['checks']['invisible_rgb_and_partial_alpha']['rgba_equal']: raise AssertionError('Invisible RGB lost')
+            if not report['checks']['invisible_rgb_and_partial_alpha']['rgba_equal']: raise PixelMismatchError('Invisible RGB lost')
 
             # Test-only entry imports the same production App and current-image module.
             # The mutation capability exists only in this separately bundled evidence fixture.
@@ -137,7 +150,7 @@ def main():
                     output_pixels=list(im.convert('RGBA').getdata()); dimensions=im.size
                 changed=[i for i,(a,b) in enumerate(zip(output_pixels,original_pixels)) if a!=b]
                 if dimensions!=(4,3) or changed!=[index] or not comparison['rgba_equal'] or any(a[3]!=b[3] for a,b in zip(output_pixels,original_pixels)):
-                    raise AssertionError('Current state export failed pixel/dimensions/unaffected/alpha checks')
+                    raise PixelMismatchError('Current state export failed pixel/dimensions/unaffected/alpha checks')
                 report['checks']['current_state_export']={'fixture_entry':str(entry),'input':str(changed_input),'output':str(changed_output),'expected':str(expected),'mutation':{'x':x,'y':y,'before':old,'after':accepted},'dimensions':[4,3],'changed_pixels':len(changed),'unaffected_pixels_equal':True,'all_alpha_equal':True,'comparison':comparison,'export_path':'Production File > Export PNG calling serializeCurrentImage; only mutation injection is fixture-specific','production_test_hook_absent':True}
             finally:
                 fixture_server.shutdown();fixture_server.server_close()
@@ -150,7 +163,7 @@ def main():
             browser_rgba=base64.b64decode(img.evaluate("img=>{const c=document.createElement('canvas');c.width=img.naturalWidth;c.height=img.naturalHeight;const x=c.getContext('2d');x.drawImage(img,0,0);const a=x.getImageData(0,0,c.width,c.height).data;let s='';for(const b of a)s+=String.fromCharCode(b);return btoa(s)}"))
             jpegout=evidence/'jpeg-export.png'; export_to(jpegout)
             with Image.open(jpegout) as im: encoded_rgba=im.convert('RGBA').tobytes()
-            if encoded_rgba!=browser_rgba: raise AssertionError('JPEG PNG export differs from browser preview decode')
+            if encoded_rgba!=browser_rgba: raise PixelMismatchError('JPEG PNG export differs from browser preview decode')
             report['checks']['jpeg']={'browser_decoded_rgba_equal':True,'dimensions':[129,97],'alpha_extrema':png_info(jpegout)['alpha_extrema'],'browser_rgba_sha256':hashlib.sha256(browser_rgba).hexdigest()}
             for invalid in [{'name':'bad.txt','mimeType':'text/plain','buffer':b'hello'}, {'name':'broken.png','mimeType':'image/png','buffer':b'not a PNG'}, {'name':'broken.jpg','mimeType':'image/jpeg','buffer':b'\xff\xd8broken\xff\xd9'}]:
                 page.locator('input[type=file]').set_input_files(invalid)
@@ -171,6 +184,7 @@ def main():
             report['status']='passed'
             browser.close()
     except Exception as error:
+        report['classification']='pixel_mismatch' if isinstance(error,PixelMismatchError) else 'infrastructure_error'
         report['error']={'type':type(error).__name__,'message':str(error)[:2000]}
     finally:
         server.shutdown(); server.server_close()

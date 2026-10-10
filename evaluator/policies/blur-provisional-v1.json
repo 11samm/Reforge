@@ -1,0 +1,13 @@
+{
+  "id": "blur-provisional-v1",
+  "version": 1,
+  "mode": "tolerance",
+  "rgb_mean_max": 1,
+  "rgb_pixel_tolerance": 3,
+  "rgb_fraction_min": 0.99,
+  "alpha_mean_max": 1,
+  "alpha_max": 3,
+  "alpha_pixel_tolerance": 3,
+  "alpha_fraction_min": 1,
+  "description": "Provisional engineering targets, not established compatibility standards. RGB mean across all three channels <=1 and >=99% pixels with max RGB error <=3. Alpha mean <=1, maximum <=3, and 100% within 3. No blur success established."
+}

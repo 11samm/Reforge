@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "case_id": "alpha-only-change",
+  "status": "failed",
+  "classification": "pixel_mismatch",
+  "policy": {
+    "id": "exact-rgba-v1",
+    "version": 1,
+    "mode": "exact",
+    "rgb_mean_max": 0,
+    "rgb_pixel_tolerance": 0,
+    "rgb_fraction_min": 1,
+    "alpha_mean_max": 0,
+    "alpha_max": 0,
+    "alpha_pixel_tolerance": 0,
+    "alpha_fraction_min": 1,
+    "description": "Exact decoded 8-bit RGBA equality for baseline regressions."
+  },
+  "policy_sha256": "7b797f2dccaf177ec68ec8ba0e20b7aaa1c34d7bf460dd8e6ba2ba28bbd15f8f",
+  "dimensions_equal": true,
+  "dimensions": {
+    "reference": [
+      2,
+      1
+    ],
+    "candidate": [
+      2,
+      1
+    ]
+  },
+  "metrics": {
+    "pixel_count": 2,
+    "rgb_mae_per_channel": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rgb_mae": 0.0,
+    "rgb_max": 0,
+    "alpha_mae": 1.0,
+    "alpha_max": 2,
+    "rgb_fraction_within_tolerance": 1.0,
+    "alpha_fraction_within_tolerance": 0.5,
+    "different_pixels": 1
+  },
+  "regions": {},
+  "reasons": [
+    "full_image: 1 pixels differ in raw RGBA"
+  ],
+  "artifacts": {
+    "reference_raw": "reference-raw.png",
+    "candidate_raw": "candidate-raw.png",
+    "alpha-difference-x16": "alpha-difference-x16.png",
+    "candidate-raw": "candidate-raw.png",
+    "changed-bounds-alpha-x16": "changed-bounds-alpha-x16.png",
+    "changed-bounds-rgb-x16": "changed-bounds-rgb-x16.png",
+    "reference-raw": "reference-raw.png",
+    "rgb-difference-x16": "rgb-difference-x16.png",
+    "side-by-side": "side-by-side.png"
+  },
+  "display": {
+    "checker_size": 8,
+    "difference_gain": 16,
+    "side_by_side_order": [
+      "reference",
+      "candidate"
+    ],
+    "scoring": "raw unpremultiplied 8-bit RGBA; no compositing",
+    "changed_bounds": [
+      0,
+      0,
+      1,
+      1
+    ]
+  },
+  "reference_path": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\evaluator-examples\\20261010-111739-4fcb99b1\\fixtures\\reference.png",
+  "candidate_path": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\evaluator-examples\\20261010-111739-4fcb99b1\\fixtures\\alpha-only.png"
+}

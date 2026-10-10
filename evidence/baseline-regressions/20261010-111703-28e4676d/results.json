@@ -1,0 +1,8 @@
+{
+  "suite_id": "shell-baseline-v1",
+  "status": "failed",
+  "cases": [],
+  "classification": "infrastructure_error",
+  "shell_results": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\baseline-regressions\\20261010-111703-28e4676d\\shell\\results.json",
+  "reason": "Shell checks did not complete successfully; inspect shell/results.json before inferring pixel behavior"
+}
