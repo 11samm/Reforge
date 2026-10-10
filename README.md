@@ -2,7 +2,8 @@
 
 Milestone 1 only, implemented during OCC Hacks on October 10, 2026. Design context:
 `reforge_prd_v1.3.md` in ReforgerData. No dataset files or collector code were read,
-copied, or changed. The editor, browser automation, and learning loop are deferred.
+copied, or changed. The editor and learning loop are deferred. Deterministic reference browser replay
+was added in the next milestone; see [adapter setup and recovery](README-adapter.md).
 
 ## Setup and rerun
 
@@ -108,3 +109,9 @@ permissions. Official actions are pinned to verified commit hashes.
 CI needs no Codex login, secrets, or model requests. The two live model checks
 remain local: run `python smoke.py` with your ChatGPT sign-in. Deployment is
 deferred until there is an application to deploy.
+
+## Reference adapter milestone
+
+See [README-adapter.md](README-adapter.md) for separated workspaces, the headed
+miniPaint validation command, recorded results, and recovery. The model smoke
+command and authentication route above remain unchanged.

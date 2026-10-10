@@ -1,0 +1,8 @@
+{
+  "generated_app_edit_root": "generated-app",
+  "reference_adapter_root": "adapter",
+  "development_fixtures_root": "fixtures/development",
+  "evidence_root": "evidence",
+  "scratch_root": ".scratch",
+  "policy": "No runtime coding-agent access is added in this milestone. Future hosts must expose only generated-app, with restricted read roots and no symlink escapes. Directory separation alone is not an OS sandbox."
+}

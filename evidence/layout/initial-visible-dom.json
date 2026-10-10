@@ -1,0 +1,793 @@
+{
+  "captured_at": "2026-10-10T17:13:23.284140+00:00",
+  "url": "https://viliusle.github.io/miniPaint/",
+  "accessibility": "- navigation \"Main Menu\":\n  - menubar:\n    - listitem:\n      - menuitem \"File\"\n    - listitem:\n      - menuitem \"Edit\"\n    - listitem:\n      - menuitem \"View\"\n    - listitem:\n      - menuitem \"Image\"\n    - listitem:\n      - menuitem \"Layer\"\n    - listitem:\n      - menuitem \"Effects\"\n    - listitem:\n      - menuitem \"Tools\"\n    - listitem:\n      - menuitem \"Help\"\n- link \"miniPaint\":\n  - /url: \"#\"\n- text: \"Size:\"\n- spinbutton \"Size:\": \"4\"\n- button \"Increase\"\n- button \"Decrease\"\n- button \"Pressure\"\n- heading \"Preview\" [level=2]\n- button \"-\"\n- button \"100%\"\n- button \"+\"\n- button \"Fit\"\n- slider: \"100\"\n- heading \"Colors\" [level=2]\n- button \"Toggle Color Picker\" [pressed]:\n  - text: Toggle Color Picker\n  - img\n- button \"Toggle Color Channels\":\n  - text: Toggle Color Channels\n  - img\n- button \"Toggle Swatches\":\n  - text: Toggle Swatches\n  - img\n- figure \"Saturation vs value selection. Use left/right arrow keys to control saturation. Use up/down arrow keys to control value.\"\n- slider\n- text: Hex\n- textbox \"Hex\": \"#008000\"\n- heading \"Information\" [level=2]\n- text: \"Size: 1024 x 768 px Mouse: - px Resolution: 72\"\n- heading \"Layer details\" [level=2]\n- text: X\n- spinbutton: \"0\"\n- button \"Reset\"\n- text: \"Y:\"\n- spinbutton: \"0\"\n- button \"Reset\"\n- text: \"Width:\"\n- spinbutton [disabled]\n- text: \"Height:\"\n- spinbutton [disabled]\n- separator\n- text: \"Rotate:\"\n- spinbutton: \"0\"\n- button \"Reset\"\n- text: \"Opacity:\"\n- spinbutton: \"100\"\n- button \"Reset\"\n- text: \"Color:\"\n- textbox: \"#008000\"\n- heading \"Layers\" [level=2]\n- button \"+\"\n- button \"D\"\n- button \"R\"\n- button \"\u2193\"\n- button \"\u2191\"\n- button \"Hide\"\n- button \"Delete\"\n- 'button \"Brush #1\"'\n- textbox",
+  "accessibility_truncated": false,
+  "visible_controls": [
+    {
+      "tag": "A",
+      "id": "main_menu_0_0",
+      "role": "menuitem",
+      "label": null,
+      "title": null,
+      "type": null,
+      "text": "File",
+      "value": null,
+      "bounds": {
+        "x": 10,
+        "y": 0,
+        "width": 39.34375,
+        "height": 30
+      }
+    },
+    {
+      "tag": "A",
+      "id": "main_menu_0_1",
+      "role": "menuitem",
+      "label": null,
+      "title": null,
+      "type": null,
+      "text": "Edit",
+      "value": null,
+      "bounds": {
+        "x": 49.34375,
+        "y": 0,
+        "width": 40.6875,
+        "height": 30
+      }
+    },
+    {
+      "tag": "A",
+      "id": "main_menu_0_2",
+      "role": "menuitem",
+      "label": null,
+      "title": null,
+      "type": null,
+      "text": "View",
+      "value": null,
+      "bounds": {
+        "x": 90.03125,
+        "y": 0,
+        "width": 45.796875,
+        "height": 30
+      }
+    },
+    {
+      "tag": "A",
+      "id": "main_menu_0_3",
+      "role": "menuitem",
+      "label": null,
+      "title": null,
+      "type": null,
+      "text": "Image",
+      "value": null,
+      "bounds": {
+        "x": 135.828125,
+        "y": 0,
+        "width": 53.359375,
+        "height": 30
+      }
+    },
+    {
+      "tag": "A",
+      "id": "main_menu_0_4",
+      "role": "menuitem",
+      "label": null,
+      "title": null,
+      "type": null,
+      "text": "Layer",
+      "value": null,
+      "bounds": {
+        "x": 189.1875,
+        "y": 0,
+        "width": 50.03125,
+        "height": 30
+      }
+    },
+    {
+      "tag": "A",
+      "id": "main_menu_0_5",
+      "role": "menuitem",
+      "label": null,
+      "title": null,
+      "type": null,
+      "text": "Effects",
+      "value": null,
+      "bounds": {
+        "x": 239.21875,
+        "y": 0,
+        "width": 56.46875,
+        "height": 30
+      }
+    },
+    {
+      "tag": "A",
+      "id": "main_menu_0_6",
+      "role": "menuitem",
+      "label": null,
+      "title": null,
+      "type": null,
+      "text": "Tools",
+      "value": null,
+      "bounds": {
+        "x": 295.6875,
+        "y": 0,
+        "width": 48.015625,
+        "height": 30
+      }
+    },
+    {
+      "tag": "A",
+      "id": "main_menu_0_7",
+      "role": "menuitem",
+      "label": null,
+      "title": null,
+      "type": null,
+      "text": "Help",
+      "value": null,
+      "bounds": {
+        "x": 343.703125,
+        "y": 0,
+        "width": 44.6875,
+        "height": 30
+      }
+    },
+    {
+      "tag": "A",
+      "id": "",
+      "role": null,
+      "label": null,
+      "title": null,
+      "type": null,
+      "text": "miniPaint",
+      "value": null,
+      "bounds": {
+        "x": 5,
+        "y": 35,
+        "width": 110,
+        "height": 30
+      }
+    },
+    {
+      "tag": "LABEL",
+      "id": "attribute_label_size",
+      "role": null,
+      "label": null,
+      "title": null,
+      "type": null,
+      "text": "Size:",
+      "value": null,
+      "bounds": {
+        "x": 130,
+        "y": 40.90625,
+        "width": 28.90625,
+        "height": 18.1875
+      }
+    },
+    {
+      "tag": "INPUT",
+      "id": "",
+      "role": null,
+      "label": null,
+      "title": null,
+      "type": "number",
+      "text": "",
+      "value": "4",
+      "bounds": {
+        "x": 164.90625,
+        "y": 39.5,
+        "width": 60,
+        "height": 21
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "id": "",
+      "role": null,
+      "label": null,
+      "title": null,
+      "type": null,
+      "text": "Increase",
+      "value": "",
+      "bounds": {
+        "x": 209.90625,
+        "y": 39.5,
+        "width": 20,
+        "height": 10.5
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "id": "",
+      "role": null,
+      "label": null,
+      "title": null,
+      "type": null,
+      "text": "Decrease",
+      "value": "",
+      "bounds": {
+        "x": 209.90625,
+        "y": 49,
+        "width": 20,
+        "height": 11.5
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "id": "pressure",
+      "role": null,
+      "label": null,
+      "title": null,
+      "type": "button",
+      "text": "Pressure",
+      "value": "",
+      "bounds": {
+        "x": 250.90625,
+        "y": 38.5,
+        "width": 91.34375,
+        "height": 23
+      }
+    },
+    {
+      "tag": "H2",
+      "id": "",
+      "role": null,
+      "label": null,
+      "title": null,
+      "type": null,
+      "text": "Preview",
+      "value": null,
+      "bounds": {
+        "x": 1236,
+        "y": 76,
+        "width": 186,
+        "height": 24.015625
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "id": "zoom_less",
+      "role": null,
+      "label": null,
+      "title": "Zoom out",
+      "type": null,
+      "text": "-",
+      "value": "",
+      "bounds": {
+        "x": 1241,
+        "y": 215.015625,
+        "width": 22.453125,
+        "height": 19
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "id": "zoom_100",
+      "role": null,
+      "label": null,
+      "title": "Reset zoom level",
+      "type": null,
+      "text": "100%",
+      "value": "",
+      "bounds": {
+        "x": 1267.078125,
+        "y": 215.015625,
+        "width": 52.09375,
+        "height": 19
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "id": "zoom_more",
+      "role": null,
+      "label": null,
+      "title": "Zoom in",
+      "type": null,
+      "text": "+",
+      "value": "",
+      "bounds": {
+        "x": 1322.796875,
+        "y": 215.015625,
+        "width": 25.796875,
+        "height": 19
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "id": "zoom_fit",
+      "role": null,
+      "label": null,
+      "title": "Fit window",
+      "type": null,
+      "text": "Fit",
+      "value": "",
+      "bounds": {
+        "x": 1352.21875,
+        "y": 215.015625,
+        "width": 32.8125,
+        "height": 19
+      }
+    },
+    {
+      "tag": "INPUT",
+      "id": "zoom_range",
+      "role": null,
+      "label": null,
+      "title": null,
+      "type": "range",
+      "text": "",
+      "value": "100",
+      "bounds": {
+        "x": 1241,
+        "y": 236.203125,
+        "width": 176,
+        "height": 16
+      }
+    },
+    {
+      "tag": "H2",
+      "id": "",
+      "role": null,
+      "label": null,
+      "title": null,
+      "type": null,
+      "text": "Colors",
+      "value": null,
+      "bounds": {
+        "x": 1236,
+        "y": 268.390625,
+        "width": 186,
+        "height": 24.015625
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "id": "toggle_color_picker_section_button",
+      "role": null,
+      "label": null,
+      "title": "Toggle Color Picker",
+      "type": null,
+      "text": "Toggle Color Picker",
+      "value": "",
+      "bounds": {
+        "x": 1329,
+        "y": 299.90625,
+        "width": 30,
+        "height": 28
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "id": "toggle_color_channels_section_button",
+      "role": null,
+      "label": null,
+      "title": "Toggle Color Channels",
+      "type": null,
+      "text": "Toggle Color Channels",
+      "value": "",
+      "bounds": {
+        "x": 1358,
+        "y": 299.90625,
+        "width": 30,
+        "height": 28
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "id": "toggle_color_swatches_section_button",
+      "role": null,
+      "label": null,
+      "title": "Toggle Swatches",
+      "type": null,
+      "text": "Toggle Swatches",
+      "value": "",
+      "bounds": {
+        "x": 1387,
+        "y": 299.90625,
+        "width": 30,
+        "height": 28
+      }
+    },
+    {
+      "tag": "LABEL",
+      "id": "color_hex_label",
+      "role": null,
+      "label": null,
+      "title": "Hex",
+      "type": null,
+      "text": "Hex",
+      "value": null,
+      "bounds": {
+        "x": 1241,
+        "y": 483.703125,
+        "width": 64,
+        "height": 24
+      }
+    },
+    {
+      "tag": "INPUT",
+      "id": "color_hex",
+      "role": null,
+      "label": null,
+      "title": null,
+      "type": "text",
+      "text": "",
+      "value": "#008000",
+      "bounds": {
+        "x": 1305,
+        "y": 483.703125,
+        "width": 112,
+        "height": 24
+      }
+    },
+    {
+      "tag": "H2",
+      "id": "",
+      "role": null,
+      "label": null,
+      "title": null,
+      "type": null,
+      "text": "Information",
+      "value": null,
+      "bounds": {
+        "x": 1236,
+        "y": 526.203125,
+        "width": 186,
+        "height": 24.015625
+      }
+    },
+    {
+      "tag": "H2",
+      "id": "",
+      "role": null,
+      "label": null,
+      "title": null,
+      "type": null,
+      "text": "Layer details",
+      "value": null,
+      "bounds": {
+        "x": 1236,
+        "y": 630.78125,
+        "width": 186,
+        "height": 24.015625
+      }
+    },
+    {
+      "tag": "INPUT",
+      "id": "detail_x",
+      "role": null,
+      "label": null,
+      "title": null,
+      "type": "number",
+      "text": "",
+      "value": "0",
+      "bounds": {
+        "x": 1335,
+        "y": 662.296875,
+        "width": 70,
+        "height": 23
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "id": "reset_x",
+      "role": null,
+      "label": null,
+      "title": "Reset",
+      "type": "button",
+      "text": "Reset",
+      "value": "",
+      "bounds": {
+        "x": 1307,
+        "y": 662.296875,
+        "width": 25,
+        "height": 23
+      }
+    },
+    {
+      "tag": "INPUT",
+      "id": "detail_y",
+      "role": null,
+      "label": null,
+      "title": null,
+      "type": "number",
+      "text": "",
+      "value": "0",
+      "bounds": {
+        "x": 1335,
+        "y": 689.296875,
+        "width": 70,
+        "height": 23
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "id": "reset_y",
+      "role": null,
+      "label": null,
+      "title": "Reset",
+      "type": "button",
+      "text": "Reset",
+      "value": "",
+      "bounds": {
+        "x": 1307,
+        "y": 689.296875,
+        "width": 25,
+        "height": 23
+      }
+    },
+    {
+      "tag": "INPUT",
+      "id": "detail_width",
+      "role": null,
+      "label": null,
+      "title": null,
+      "type": "number",
+      "text": "",
+      "value": "",
+      "bounds": {
+        "x": 1335,
+        "y": 716.296875,
+        "width": 70,
+        "height": 23
+      }
+    },
+    {
+      "tag": "INPUT",
+      "id": "detail_height",
+      "role": null,
+      "label": null,
+      "title": null,
+      "type": "number",
+      "text": "",
+      "value": "",
+      "bounds": {
+        "x": 1335,
+        "y": 743.296875,
+        "width": 70,
+        "height": 23
+      }
+    },
+    {
+      "tag": "INPUT",
+      "id": "detail_rotate",
+      "role": null,
+      "label": null,
+      "title": null,
+      "type": "number",
+      "text": "",
+      "value": "0",
+      "bounds": {
+        "x": 1335,
+        "y": 780.296875,
+        "width": 70,
+        "height": 23
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "id": "reset_rotate",
+      "role": null,
+      "label": null,
+      "title": "Reset",
+      "type": "button",
+      "text": "Reset",
+      "value": "",
+      "bounds": {
+        "x": 1307,
+        "y": 780.296875,
+        "width": 25,
+        "height": 23
+      }
+    },
+    {
+      "tag": "INPUT",
+      "id": "detail_opacity",
+      "role": null,
+      "label": null,
+      "title": null,
+      "type": "number",
+      "text": "",
+      "value": "100",
+      "bounds": {
+        "x": 1335,
+        "y": 807.296875,
+        "width": 70,
+        "height": 23
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "id": "reset_opacity",
+      "role": null,
+      "label": null,
+      "title": "Reset",
+      "type": "button",
+      "text": "Reset",
+      "value": "",
+      "bounds": {
+        "x": 1307,
+        "y": 807.296875,
+        "width": 25,
+        "height": 23
+      }
+    },
+    {
+      "tag": "INPUT",
+      "id": "",
+      "role": null,
+      "label": null,
+      "title": null,
+      "type": "color",
+      "text": "",
+      "value": "#008000",
+      "bounds": {
+        "x": 1335,
+        "y": 834.296875,
+        "width": 70,
+        "height": 23
+      }
+    },
+    {
+      "tag": "H2",
+      "id": "",
+      "role": null,
+      "label": null,
+      "title": null,
+      "type": null,
+      "text": "Layers",
+      "value": null,
+      "bounds": {
+        "x": 1236,
+        "y": 871.796875,
+        "width": 186,
+        "height": 24.015625
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "id": "insert_layer",
+      "role": null,
+      "label": null,
+      "title": "Insert new layer",
+      "type": "button",
+      "text": "+",
+      "value": "",
+      "bounds": {
+        "x": 1241,
+        "y": 903.3125,
+        "width": 25.796875,
+        "height": 19
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "id": "layer_duplicate",
+      "role": null,
+      "label": null,
+      "title": "Duplicate layer",
+      "type": "button",
+      "text": "D",
+      "value": "",
+      "bounds": {
+        "x": 1280.421875,
+        "y": 903.3125,
+        "width": 23.640625,
+        "height": 19
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "id": "layer_raster",
+      "role": null,
+      "label": null,
+      "title": "Convert layer to raster",
+      "type": "button",
+      "text": "R",
+      "value": "",
+      "bounds": {
+        "x": 1307.6875,
+        "y": 903.3125,
+        "width": 23.640625,
+        "height": 19
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "id": "layer_down",
+      "role": null,
+      "label": null,
+      "title": "Move layer down",
+      "type": "button",
+      "text": "\u2193",
+      "value": "",
+      "bounds": {
+        "x": 1393,
+        "y": 903.3125,
+        "width": 24,
+        "height": 18
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "id": "layer_up",
+      "role": null,
+      "label": null,
+      "title": "Move layer up",
+      "type": "button",
+      "text": "\u2191",
+      "value": "",
+      "bounds": {
+        "x": 1364,
+        "y": 903.3125,
+        "width": 24,
+        "height": 18
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "id": "visibility",
+      "role": null,
+      "label": null,
+      "title": "Hide",
+      "type": null,
+      "text": "",
+      "value": "",
+      "bounds": {
+        "x": 1241,
+        "y": 932.5,
+        "width": 20,
+        "height": 19
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "id": "delete",
+      "role": null,
+      "label": null,
+      "title": "Delete",
+      "type": null,
+      "text": "",
+      "value": "",
+      "bounds": {
+        "x": 1405,
+        "y": 932.5,
+        "width": 12,
+        "height": 19
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "id": "layer_name",
+      "role": null,
+      "label": null,
+      "title": null,
+      "type": null,
+      "text": "Brush #1",
+      "value": "",
+      "bounds": {
+        "x": 1266,
+        "y": 932.5,
+        "width": 132,
+        "height": 19
+      }
+    },
+    {
+      "tag": "TEXTAREA",
+      "id": "text_tool_keyboard_input",
+      "role": null,
+      "label": null,
+      "title": null,
+      "type": null,
+      "text": "",
+      "value": "",
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1
+      }
+    }
+  ],
+  "control_limit": 250
+}

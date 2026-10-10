@@ -1,0 +1,16 @@
+{
+  "name": "miniPaint",
+  "url": "https://viliusle.github.io/miniPaint/",
+  "visible_about_version": "4.14.3",
+  "collected_version": "4.14.3",
+  "version_discrepancy": false,
+  "build": "unknown; hosted URL is unpinned",
+  "observed_at": "2026-10-10T17:13:23.361031+00:00",
+  "chromium_version": "153.0.8010.12",
+  "headed": true,
+  "viewport": {
+    "width": 1440,
+    "height": 1000
+  },
+  "device_scale_factor": 1
+}

@@ -1,2 +1,5 @@
 .scratch/
 __pycache__/
+.venv/
+evidence/runs/
+evidence/latest-batch.json

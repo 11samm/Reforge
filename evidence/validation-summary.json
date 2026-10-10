@@ -1,0 +1,252 @@
+{
+  "run_id": "20261010-101321-32a5bc2c",
+  "started_at": "2026-10-10T17:13:21.567771+00:00",
+  "finished_at": "2026-10-10T17:13:45.182523+00:00",
+  "status": "passed",
+  "elapsed_seconds": 23.615,
+  "mode": "headed",
+  "repeat_comparisons": [
+    {
+      "case_id": "gb017",
+      "successful_fresh_exports": 3,
+      "repeat_rgba_equal": true,
+      "reference_equal_all": true
+    },
+    {
+      "case_id": "gb010",
+      "successful_fresh_exports": 3,
+      "repeat_rgba_equal": true,
+      "reference_equal_all": true
+    }
+  ],
+  "limitations": [
+    "Hosted target is unpinned; About version does not identify its exact build.",
+    "Only two development cases at Percentage 3 are validated.",
+    "Generated-app directory is a reserved boundary, not an OS sandbox.",
+    "No reference source, network response bodies, hidden state, or final evaluation material inspected."
+  ],
+  "summary_path": "runs/20261010-101321-32a5bc2c/summary.json",
+  "layout_path": "layout/initial-interface.png",
+  "target": {
+    "name": "miniPaint",
+    "url": "https://viliusle.github.io/miniPaint/",
+    "visible_about_version": "4.14.3",
+    "collected_version": "4.14.3",
+    "version_discrepancy": false,
+    "build": "unknown; hosted URL is unpinned",
+    "observed_at": "2026-10-10T17:13:25.286277+00:00",
+    "chromium_version": "153.0.8010.12",
+    "headed": true,
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "device_scale_factor": 1
+  },
+  "runs": [
+    {
+      "case_id": "gb017",
+      "repeat": 1,
+      "status": "passed",
+      "elapsed_seconds": 2.729,
+      "parameters": {
+        "Percentage": 3
+      },
+      "accepted_percentage": 3,
+      "original_confirmation": {
+        "dimensions_equal": true,
+        "rgba_equal": true,
+        "different_pixels": 0,
+        "max_channel_delta": 0
+      },
+      "output": {
+        "width": 129,
+        "height": 97,
+        "mode": "RGBA",
+        "png_sha256": "62d00414cebd348e9a9f628901176e7caf95d7ebff211b51b4ed06c03c821146",
+        "rgba_sha256": "256d4d564add4798ee82e410a33326848c33a05757df7d78b710c6d7e2c536a3",
+        "alpha_extrema": [
+          82,
+          255
+        ]
+      },
+      "reference_comparison": {
+        "dimensions_equal": true,
+        "rgba_equal": true,
+        "different_pixels": 0,
+        "max_channel_delta": 0
+      },
+      "infrastructure_errors": []
+    },
+    {
+      "case_id": "gb017",
+      "repeat": 2,
+      "status": "passed",
+      "elapsed_seconds": 2.887,
+      "parameters": {
+        "Percentage": 3
+      },
+      "accepted_percentage": 3,
+      "original_confirmation": {
+        "dimensions_equal": true,
+        "rgba_equal": true,
+        "different_pixels": 0,
+        "max_channel_delta": 0
+      },
+      "output": {
+        "width": 129,
+        "height": 97,
+        "mode": "RGBA",
+        "png_sha256": "62d00414cebd348e9a9f628901176e7caf95d7ebff211b51b4ed06c03c821146",
+        "rgba_sha256": "256d4d564add4798ee82e410a33326848c33a05757df7d78b710c6d7e2c536a3",
+        "alpha_extrema": [
+          82,
+          255
+        ]
+      },
+      "reference_comparison": {
+        "dimensions_equal": true,
+        "rgba_equal": true,
+        "different_pixels": 0,
+        "max_channel_delta": 0
+      },
+      "infrastructure_errors": []
+    },
+    {
+      "case_id": "gb017",
+      "repeat": 3,
+      "status": "passed",
+      "elapsed_seconds": 2.465,
+      "parameters": {
+        "Percentage": 3
+      },
+      "accepted_percentage": 3,
+      "original_confirmation": {
+        "dimensions_equal": true,
+        "rgba_equal": true,
+        "different_pixels": 0,
+        "max_channel_delta": 0
+      },
+      "output": {
+        "width": 129,
+        "height": 97,
+        "mode": "RGBA",
+        "png_sha256": "62d00414cebd348e9a9f628901176e7caf95d7ebff211b51b4ed06c03c821146",
+        "rgba_sha256": "256d4d564add4798ee82e410a33326848c33a05757df7d78b710c6d7e2c536a3",
+        "alpha_extrema": [
+          82,
+          255
+        ]
+      },
+      "reference_comparison": {
+        "dimensions_equal": true,
+        "rgba_equal": true,
+        "different_pixels": 0,
+        "max_channel_delta": 0
+      },
+      "infrastructure_errors": []
+    },
+    {
+      "case_id": "gb010",
+      "repeat": 1,
+      "status": "passed",
+      "elapsed_seconds": 2.486,
+      "parameters": {
+        "Percentage": 3
+      },
+      "accepted_percentage": 3,
+      "original_confirmation": {
+        "dimensions_equal": true,
+        "rgba_equal": true,
+        "different_pixels": 0,
+        "max_channel_delta": 0
+      },
+      "output": {
+        "width": 65,
+        "height": 49,
+        "mode": "RGBA",
+        "png_sha256": "dc50e48fe1a77026fda742bd26bcb87b2cc5061b351f32fdf0e455a1141d5500",
+        "rgba_sha256": "f3f78d93bab5f86db841e9e7681c93fe350f4c14d6ad8f5a7a5ce2d96fd0adc3",
+        "alpha_extrema": [
+          0,
+          255
+        ]
+      },
+      "reference_comparison": {
+        "dimensions_equal": true,
+        "rgba_equal": true,
+        "different_pixels": 0,
+        "max_channel_delta": 0
+      },
+      "infrastructure_errors": []
+    },
+    {
+      "case_id": "gb010",
+      "repeat": 2,
+      "status": "passed",
+      "elapsed_seconds": 2.482,
+      "parameters": {
+        "Percentage": 3
+      },
+      "accepted_percentage": 3,
+      "original_confirmation": {
+        "dimensions_equal": true,
+        "rgba_equal": true,
+        "different_pixels": 0,
+        "max_channel_delta": 0
+      },
+      "output": {
+        "width": 65,
+        "height": 49,
+        "mode": "RGBA",
+        "png_sha256": "dc50e48fe1a77026fda742bd26bcb87b2cc5061b351f32fdf0e455a1141d5500",
+        "rgba_sha256": "f3f78d93bab5f86db841e9e7681c93fe350f4c14d6ad8f5a7a5ce2d96fd0adc3",
+        "alpha_extrema": [
+          0,
+          255
+        ]
+      },
+      "reference_comparison": {
+        "dimensions_equal": true,
+        "rgba_equal": true,
+        "different_pixels": 0,
+        "max_channel_delta": 0
+      },
+      "infrastructure_errors": []
+    },
+    {
+      "case_id": "gb010",
+      "repeat": 3,
+      "status": "passed",
+      "elapsed_seconds": 2.484,
+      "parameters": {
+        "Percentage": 3
+      },
+      "accepted_percentage": 3,
+      "original_confirmation": {
+        "dimensions_equal": true,
+        "rgba_equal": true,
+        "different_pixels": 0,
+        "max_channel_delta": 0
+      },
+      "output": {
+        "width": 65,
+        "height": 49,
+        "mode": "RGBA",
+        "png_sha256": "dc50e48fe1a77026fda742bd26bcb87b2cc5061b351f32fdf0e455a1141d5500",
+        "rgba_sha256": "f3f78d93bab5f86db841e9e7681c93fe350f4c14d6ad8f5a7a5ce2d96fd0adc3",
+        "alpha_extrema": [
+          0,
+          255
+        ]
+      },
+      "reference_comparison": {
+        "dimensions_equal": true,
+        "rgba_equal": true,
+        "different_pixels": 0,
+        "max_channel_delta": 0
+      },
+      "infrastructure_errors": []
+    }
+  ]
+}
