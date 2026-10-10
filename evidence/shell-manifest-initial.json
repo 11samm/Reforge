@@ -1,0 +1,96 @@
+{
+  "recorded_at": "2026-10-10T17:44:24.898062+00:00",
+  "model": "gpt-6.1-sol",
+  "effort": "medium",
+  "model_requests": 1,
+  "repair_requests": 0,
+  "generation": "shell-generation/20261010-103640-cad88ad9/invocation.json",
+  "prompt": "shell-generation/20261010-103640-cad88ad9/prompt.txt",
+  "layout_packet": "layout-packet/observation.md",
+  "reference_screenshot": "layout-packet/reference.png",
+  "original_observations": "runs/20261010-103335-dbb864d9/layout/initial-visible-dom.json",
+  "generated_screenshot": "shell-verification/20261010-104110-9e237630/generated-initial.png",
+  "verification": "shell-verification/20261010-104110-9e237630/results.json",
+  "headless_validation": "headless-validation.json",
+  "source_sha256": {
+    "package.json": "ff176afeafd4edea6d3d084d8434e5c198649eae72a366c35a84764c9e26973c",
+    "package-lock.json": "8b3a5eb7b257f477fec193e36f970e23354bad82748d86882741fe34d441bd3c",
+    "tsconfig.json": "6d839ab5d73095297ef9128243838c093c616d55f454f73416cf0c9ac8c05da4",
+    "index.html": "386a23c1c3ff31abbdbc8b4fcafb2b76f3546ef31a22631ac2b9467138ed9ef8",
+    "vite.config.ts": "19f18fa380d4e9fa01cb38a62a130e40f88e7c4d33e1dcae00ad218e55463d27",
+    "src/main.tsx": "ac3349b3f0959301fa9eea1b82948d86609f193f243c0a1966687679b4cec990",
+    "src/style.css": "d21d0ef9945645793b02594bda53b1b66329a5d2819517c74a46342850da70d6",
+    "README.md": "2610828ccb6bea6cc260bbf6f368fbff4ef47d5ca0a35bcb3bcd12a8c3bd1221"
+  },
+  "host_sha256": {
+    "build_shell.py": "ab245967ef9ab72e983c723169d5050ec91eadc00917f38829a93ef591ac4081",
+    "verify_shell.py": "49c73d08d82ebf58a32fa29074696e7f693d24891cd72a87f64eadbaad09f6ed",
+    "test_shell_boundary.py": "36a91e318e8265ac790412892ffeca6253c79defec564ea58505dd60fc40e515"
+  },
+  "boundary_checks": {
+    "offline_tests": 14,
+    "result": "passed",
+    "real_junction_escape_denied": true,
+    "hard_link_escape_denied": true,
+    "root_junction_denied": true,
+    "traversal_and_absolute_paths_denied": true,
+    "read_only_packet": true,
+    "non_file_runtime_requests_denied": true,
+    "actual_invocation_only_allowlisted_dynamic_tools": true
+  },
+  "build": {
+    "command": "npm.cmd run build",
+    "type_check": "passed",
+    "production_build": "passed",
+    "vite": "7.3.7",
+    "install": "npm.cmd install --ignore-scripts --no-audit --no-fund"
+  },
+  "visual_inspection": {
+    "result": "No major layout difference at 1440x1000; no repair required",
+    "canvas_reference_approx": [
+      126,
+      152,
+      1024,
+      768
+    ],
+    "canvas_generated": [
+      126,
+      151,
+      1024,
+      768
+    ],
+    "panel_alignment": "Preview y76, Colors y268, Information y536, Layer details y640, Layers y881; widths198",
+    "approximations": [
+      "Unicode tool glyphs and CSS brand ornament",
+      "CSS color picker gradients",
+      "font metrics, control spacing and disabled styles",
+      "responsive behavior outside validated viewport"
+    ]
+  },
+  "functional": [
+    "PNG/JPEG upload",
+    "original-file preview",
+    "dimensions and single uploaded layer",
+    "transparency checkerboard",
+    "original-byte PNG download",
+    "browser-decoded JPEG to PNG",
+    "file menu and unavailable blur dialog open/close",
+    "visible invalid input states"
+  ],
+  "placeholders": [
+    "all editing tools",
+    "zoom controls",
+    "color picker controls",
+    "layer operations and property editing",
+    "Edit/View/Image/Layer/Tools/Help menus",
+    "Gaussian Blur Percentage and Apply"
+  ],
+  "limitations": [
+    "Trusted app-server host and build/verification subprocesses are not in an OS sandbox. Coding agent has only brokered file capabilities; no code execution.",
+    "Capability boundary assumes no concurrent hostile process modifies roots during invocation.",
+    "PNG export is exact bytes; JPEG uses Chromium decode and canvas, with metadata/profile and cross-decoder limitations.",
+    "Target hosted build remains unknown; headless blur differs; headed supported.",
+    "Only 1440x1000 desktop layout visually validated; small screens are approximate.",
+    "No blur, other operation, autonomous loop, evaluator or dashboard; no push."
+  ]
+}

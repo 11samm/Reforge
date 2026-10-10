@@ -1,0 +1,144 @@
+{
+  "recorded_at": "2026-10-10T17:57:59.757501+00:00",
+  "model": "gpt-6.1-sol",
+  "effort": "medium",
+  "model_requests": 1,
+  "repair_requests": 0,
+  "generation": "shell-generation/20261010-103640-cad88ad9/invocation.json",
+  "prompt": "shell-generation/20261010-103640-cad88ad9/prompt.txt",
+  "layout_packet": "layout-packet/observation.md",
+  "reference_screenshot": "layout-packet/reference.png",
+  "original_observations": "runs/20261010-103335-dbb864d9/layout/initial-visible-dom.json",
+  "generated_screenshot": "shell-verification/20261010-105502-3948761e/generated-initial.png",
+  "verification": "shell-verification/20261010-105502-3948761e/results.json",
+  "headless_validation": "headless-validation.json",
+  "source_sha256": {
+    "package.json": "882b343488c410bcc612b82c7dc14978384525cff43b4de5418a4a36e52277f9",
+    "package-lock.json": "0f0c6aa01564130d672f647bc293bba4a8e3893d36bfd3bf16ab39e6b0e0ef69",
+    "tsconfig.json": "6d839ab5d73095297ef9128243838c093c616d55f454f73416cf0c9ac8c05da4",
+    "index.html": "386a23c1c3ff31abbdbc8b4fcafb2b76f3546ef31a22631ac2b9467138ed9ef8",
+    "vite.config.ts": "19f18fa380d4e9fa01cb38a62a130e40f88e7c4d33e1dcae00ad218e55463d27",
+    "src/main.tsx": "141942106f6abe59509ee333e68443f47be3008c641cc1ab274b7cdc038c23d4",
+    "src/current-image.ts": "deb0c575a3fb79e3151eccde7a58232f2b724a666b90f07e071dfb7f527ed84f",
+    "src/style.css": "d21d0ef9945645793b02594bda53b1b66329a5d2819517c74a46342850da70d6",
+    "README.md": "cdf72793bff17e5bd7c0f4623bbc3c88ba62bbed2559c9bd1660bc91e6137a9d"
+  },
+  "host_sha256": {
+    "build_shell.py": "a4f38d2fa2dbc9727d73f44be8021d124e94c0ea23a8f2074472b9a415511a7f",
+    "verify_shell.py": "786b3769cd7f0baf14cea8cfcf1cfee1f331c51225013d338613833c7dfefda4",
+    "test_shell_boundary.py": "38d4f5a4421a167437e6b8cce9dcd22312089c67de38e10c5c4282a55aa1cf9f",
+    "adapter/minipaint.py": "776ef05ecb2d5e7843b2b1f4c87c881cb7f66150047fce34446456898837cb3d",
+    "adapter/validate.py": "d8b22aed116041d070474d546b3d976ee5065caa9d5cecff33076df918c4b9ad"
+  },
+  "boundary_checks": {
+    "offline_tests": 16,
+    "result": "passed",
+    "real_junction_escape_denied": true,
+    "hard_link_escape_denied": true,
+    "root_junction_denied": true,
+    "traversal_and_absolute_paths_denied": true,
+    "read_only_packet": true,
+    "non_file_runtime_requests_denied": true,
+    "actual_invocation_only_allowlisted_dynamic_tools": true,
+    "browser_evaluation_denied": true,
+    "no_unrestricted_shell_or_browser_evaluation": true,
+    "description": "Allowlisted tool access only; no OS sandbox claim"
+  },
+  "build": {
+    "command": "npm.cmd run build",
+    "type_check": "passed",
+    "production_build": "passed",
+    "vite": "7.3.7",
+    "install": "npm.cmd install --ignore-scripts --no-audit --no-fund"
+  },
+  "visual_inspection": {
+    "result": "No major layout difference at 1440x1000; no repair required",
+    "canvas_reference_approx": [
+      126,
+      152,
+      1024,
+      768
+    ],
+    "canvas_generated": [
+      126,
+      151,
+      1024,
+      768
+    ],
+    "panel_alignment": "Preview y76, Colors y268, Information y536, Layer details y640, Layers y881; widths198",
+    "approximations": [
+      "Unicode tool glyphs and CSS brand ornament",
+      "CSS color picker gradients",
+      "font metrics, control spacing and disabled styles",
+      "responsive behavior outside validated viewport"
+    ]
+  },
+  "functional": [
+    "PNG/JPEG upload",
+    "original-file preview",
+    "dimensions and single uploaded layer",
+    "transparency checkerboard",
+    "current-image RGBA PNG serialization",
+    "browser-decoded JPEG import then current-state PNG export",
+    "file menu and unavailable blur dialog open/close",
+    "visible invalid input states"
+  ],
+  "placeholders": [
+    "all editing tools",
+    "zoom controls",
+    "color picker controls",
+    "layer operations and property editing",
+    "Edit/View/Image/Layer/Tools/Help menus",
+    "Gaussian Blur Percentage and Apply"
+  ],
+  "limitations": [
+    "Trusted app-server host and build/verification subprocesses are not in an OS sandbox. Coding agent has only brokered file capabilities; no code execution.",
+    "Capability boundary assumes no concurrent hostile process modifies roots during invocation.",
+    "PNG export re-encodes current RGBA samples; byte identity and metadata/color-profile preservation are not promised. JPEG import uses browser decoding. 16-bit/interlaced/color-profile edge cases remain unvalidated.",
+    "Target hosted build remains unknown; headless blur differs; headed supported.",
+    "Only 1440x1000 desktop layout visually validated; small screens are approximate.",
+    "No blur, other operation, autonomous loop, evaluator or dashboard; no push.",
+    "Window positioning is a window-manager request; users must choose valid desktop coordinates and verify placement. It does not prevent human interaction."
+  ],
+  "previous_manifest": "shell-manifest-initial.json",
+  "followup_authorship": "Host-authored focused milestone 3 fixes; no further model request. Original invocation and observations retained unchanged.",
+  "positioned_headed_validation": "runs/20261010-105508-083356f7/summary.json",
+  "window_position_observation": "window-position-observation.json",
+  "current_state_export": {
+    "fixture_entry": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\shell-verification\\20261010-105502-3948761e\\current-state-fixture\\entry.tsx",
+    "input": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\shell-verification\\20261010-105502-3948761e\\current-state-input.png",
+    "output": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\shell-verification\\20261010-105502-3948761e\\current-state-export.png",
+    "expected": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\shell-verification\\20261010-105502-3948761e\\current-state-expected.png",
+    "mutation": {
+      "x": 2,
+      "y": 1,
+      "before": [
+        16,
+        46,
+        96,
+        1
+      ],
+      "after": [
+        17,
+        231,
+        83,
+        1
+      ]
+    },
+    "dimensions": [
+      4,
+      3
+    ],
+    "changed_pixels": 1,
+    "unaffected_pixels_equal": true,
+    "all_alpha_equal": true,
+    "comparison": {
+      "dimensions_equal": true,
+      "rgba_equal": true,
+      "different_pixels": 0,
+      "max_channel_delta": 0
+    },
+    "export_path": "Production File > Export PNG calling serializeCurrentImage; only mutation injection is fixture-specific",
+    "production_test_hook_absent": true
+  }
+}

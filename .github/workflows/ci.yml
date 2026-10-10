@@ -37,8 +37,10 @@ jobs:
       - name: Install adapter test dependencies
         run: python -m pip install -r requirements-adapter.txt
       - name: Check syntax
-        run: python -m compileall -q smoke.py test_smoke.py test_adapter.py adapter
+        run: python -m compileall -q smoke.py build_shell.py verify_shell.py test_smoke.py test_adapter.py test_shell_boundary.py adapter
       - name: Run offline tests
-        run: python -m unittest -v test_smoke test_adapter
+        run: python -m unittest -v test_smoke test_adapter test_shell_boundary
       - name: Check command help
         run: python smoke.py --help
+      - name: Check adapter mode help
+        run: python -m adapter.validate --help

@@ -24,7 +24,7 @@ def worker(args):
     directory=within(args.artifact_dir,EVIDENCE)
     directory.mkdir(parents=True,exist_ok=True)
     try:
-        with MiniPaintAdapter(directory,headed=not args.headless) as adapter:
+        with MiniPaintAdapter(directory,headed=not args.headless,window_position=args.window_position) as adapter:
             if args.worker=='observe':
                 identity=adapter.capture_initial_interface()
                 write_json(directory / 'report.json',{'status':'passed','target':identity,'actions':adapter.actions})
@@ -43,7 +43,9 @@ def worker(args):
 def run_worker(args, kind, repeat, directory):
     command=[sys.executable,'-m','adapter.validate','--worker',kind,'--repeat',str(repeat),
              '--artifact-dir',str(directory),'--import-route',args.import_route]
-    if args.headless: command.append('--headless')
+    command.append('--headless' if args.headless else '--headed')
+    if args.window_position is not None:
+        command.append('--window-position=' + ','.join(map(str,args.window_position)))
     directory.mkdir(parents=True)
     with (directory / 'worker.log').open('w',encoding='utf-8') as log:
         proc=subprocess.Popen(command,cwd=ROOT,stdout=log,stderr=subprocess.STDOUT,
@@ -68,15 +70,30 @@ def run_worker(args, kind, repeat, directory):
     return json.loads(path.read_text(encoding='utf-8'))
 
 
+def window_position(value):
+    import re
+    if not re.fullmatch(r'-?\d+,-?\d+', value):
+        raise argparse.ArgumentTypeError('Use desktop coordinates X,Y, e.g. --window-position=1600,0')
+    coordinates=tuple(map(int,value.split(',')))
+    if any(not -32768<=v<=32767 for v in coordinates):
+        raise argparse.ArgumentTypeError('Window coordinates must be -32768..32767')
+    return coordinates
+
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--headless',action='store_true',help='Optional; headed is the validated default')
+    mode=parser.add_mutually_exclusive_group()
+    mode.add_argument('--headless',action='store_true',help='Unverified for reference equivalence: previous exact comparisons failed; diagnostic only')
+    mode.add_argument('--headed',action='store_false',dest='headless',help='Use supported headed Chromium (default), also for debugging/presentation')
+    parser.set_defaults(headless=False)
+    parser.add_argument('--window-position',type=window_position,help='Headed browser desktop origin X,Y; use another monitor/away from workspace. Viewport remains 1440x1000.')
     parser.add_argument('--case-timeout',type=int,default=120)
     parser.add_argument('--import-route',choices=['auto','file_chooser','data_url'],default='auto')
     parser.add_argument('--worker',choices=['observe','gb010','gb017'],help=argparse.SUPPRESS)
     parser.add_argument('--repeat',type=int,default=1,help=argparse.SUPPRESS)
     parser.add_argument('--artifact-dir',type=Path,help=argparse.SUPPRESS)
     args=parser.parse_args()
+    if args.headless and args.window_position is not None: parser.error('--window-position requires headed mode')
     if not 30<=args.case_timeout<=180: parser.error('--case-timeout must be 30..180')
     if args.worker:
         if not args.artifact_dir: parser.error('Worker requires artifact directory')
@@ -86,11 +103,11 @@ def main():
     batch=EVIDENCE / 'runs' / run_id
     batch.mkdir(parents=True)
     started=time.monotonic()
-    summary={'run_id':run_id,'started_at':utc_now(),'mode':'headless' if args.headless else 'headed',
+    summary={'run_id':run_id,'started_at':utc_now(),'mode':'headless' if args.headless else 'headed','requested_window_position':args.window_position,
              'status':'infrastructure_failure','runs':[],'limitations':[
              'Hosted target is unpinned; About version does not identify its exact build.',
              'Only two development cases at Percentage 3 are validated.',
-             'Generated-app directory is a reserved boundary, not an OS sandbox.',
+             'Builder protection is allowlisted file tool access; the trusted host is not OS-sandboxed.',
              'No reference source, network response bodies, hidden state, or final evaluation material inspected.']}
     summary['layout_observation']=run_worker(args,'observe',0,batch / 'layout')
     for case in selected:

@@ -1,0 +1,27 @@
+{
+  "requested": [
+    1600,
+    0
+  ],
+  "visible_reference_windows": [
+    {
+      "title": "miniPaint - image editor - Google Chrome for Testing",
+      "window_bounds": [
+        1600,
+        0,
+        3056,
+        1088
+      ]
+    }
+  ],
+  "viewport": {
+    "width": 1440,
+    "height": 1000
+  },
+  "device_scale_factor": 1,
+  "screenshot_dimensions": [
+    1440,
+    1000
+  ],
+  "note": "OS top-level window geometry only; no reference application state read. Placement is a request to Chromium/window manager, not guaranteed on other display configurations."
+}

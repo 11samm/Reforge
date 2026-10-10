@@ -1,4 +1,4 @@
-# Reforge — connectivity milestone
+# Reforge â€” connectivity milestone
 
 Milestone 1 only, implemented during OCC Hacks on October 10, 2026. Design context:
 `reforge_prd_v1.3.md` in ReforgerData. No dataset files or collector code were read,
@@ -30,7 +30,7 @@ and saved in `.scratch/latest-report.json` and `.scratch/<run-id>/report.json`.
 Each invocation uses a new isolated scratch directory. Scratch files are Git-ignored.
 
 `smoke.config.json` controls executable, model, effort, check timeout (120 seconds),
-and RPC timeout (20 seconds). Timeouts must be 1–300 seconds. Startup, pagination,
+and RPC timeout (20 seconds). Timeouts must be 1â€“300 seconds. Startup, pagination,
 local execution, and teardown also have bounds. On turn timeout the process tree
 is terminated on Windows. Raw runtime stderr/error messages are suppressed; safe
 errors, error codes, completion status, elapsed time, and available usage are saved.
@@ -67,15 +67,15 @@ Successful run: `codex-cli 0.162.0-alpha.17.2`, exact model `gpt-6.1-sol`, reque
 and supported effort `medium`; managed ChatGPT account, reported plan `plus`.
 Both checks ran through `smoke.py` in 14.803 seconds total.
 
-- **Structured answer — passed, 8.266 seconds:** output schema plus application
+- **Structured answer â€” passed, 8.266 seconds:** output schema plus application
   validation of exactly `question`, `input_description`, `parameter_value`, and
   `competing_hypotheses`; finite numeric parameter and two distinct nonempty
   hypotheses required. Proposed a white image/radius 5 boundary experiment.
   `behavior_verified: false`: this is not verified miniPaint behavior.
-- **File edit — passed, 5.902 seconds:** agent invoked the file tool once, creating
+- **File edit â€” passed, 5.902 seconds:** agent invoked the file tool once, creating
   `add.py`. An AST allowlist rejects imports, calls, annotations, decorators,
   defaults, external names, and extra statements before execution. Python verified
-  `(2,3)`, `(-7,10)`, `(0,0)`, `(123456,-654321)` → `[5,3,0,-530865]`.
+  `(2,3)`, `(-7,10)`, `(0,0)`, `(123456,-654321)` â†’ `[5,3,0,-530865]`.
 - **Usage:** structured check 8,048 total tokens (7,921 input, 127 output); file
   check 15,968 (15,901 input, 67 output, 7,680 cached input). Cached tokens are
   included in input. Use `usage.total` across tool turns, not `usage.last`.
@@ -112,6 +112,11 @@ deferred until there is an application to deploy.
 
 ## Reference adapter milestone
 
-See [README-adapter.md](README-adapter.md) for separated workspaces, the headed
-miniPaint validation command, recorded results, and recovery. The model smoke
+See [README-adapter.md](README-adapter.md) for separated workspaces, the supported headed
+miniPaint validation command, headless mismatch results, and recovery. The model smoke
 command and authentication route above remain unchanged.
+
+## Editor shell milestone
+
+See [README-shell.md](README-shell.md) for the local editor, layout evidence,
+restricted generation invocation, exact upload/export checks, and limitations.

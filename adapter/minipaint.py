@@ -24,9 +24,12 @@ def write_json(path, value):
 
 class MiniPaintAdapter:
     """One synchronous Playwright owner per browser session; no parallel controllers."""
-    def __init__(self, artifact_dir, *, headed=True, timeout_ms=8000):
+    def __init__(self, artifact_dir, *, headed=True, timeout_ms=8000, window_position=None):
         self.artifact_dir = within(artifact_dir, EVIDENCE)
         self.artifact_dir.mkdir(parents=True, exist_ok=True)
+        if window_position is not None and (not headed or len(window_position) != 2 or any(type(v) is not int or not -32768 <= v <= 32767 for v in window_position)):
+            raise ValueError("Window position requires headed mode and two integer desktop coordinates")
+        self.window_position = tuple(window_position) if window_position is not None else None
         self.headed, self.timeout_ms = headed, timeout_ms
         self.actions = []
         self.identity = None
@@ -37,7 +40,10 @@ class MiniPaintAdapter:
     def __enter__(self):
         self.pw = sync_playwright().start()
         try:
-            self.browser = self.pw.chromium.launch(headless=not self.headed, timeout=30000)
+            launch_options = {"headless": not self.headed, "timeout": 30000}
+            if self.window_position is not None:
+                launch_options["args"] = ["--window-position=" + ",".join(map(str, self.window_position))]
+            self.browser = self.pw.chromium.launch(**launch_options)
         except Exception:
             self.pw.stop()
             raise
@@ -100,6 +106,7 @@ class MiniPaintAdapter:
             "collected_version":COLLECTED_VERSION, "version_discrepancy":version != COLLECTED_VERSION,
             "build":"unknown; hosted URL is unpinned", "observed_at":utc_now(),
             "chromium_version":self.browser.version, "headed":self.headed,
+            "requested_window_position":self.window_position,
             "viewport":{"width":1440,"height":1000}, "device_scale_factor":1}
         self.capture_screenshot(self.artifact_dir / "about.png")
         write_json(self.artifact_dir / "target.json", identity)

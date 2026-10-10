@@ -4,5 +4,8 @@
   "development_fixtures_root": "fixtures/development",
   "evidence_root": "evidence",
   "scratch_root": ".scratch",
-  "policy": "No runtime coding-agent access is added in this milestone. Future hosts must expose only generated-app, with restricted read roots and no symlink escapes. Directory separation alone is not an OS sandbox."
+  "policy": "Environment-disabled ephemeral app-server thread; only allowlisted dynamic app file reads/writes and read-only layout packet. No shell, built-in filesystem, execution, connectors, web, plugins, hooks or memories. Reject traversal, links/junctions and hardlinks. Trusted host and build/verification processes are not OS-sandboxed. Adapter, evaluation code, fixtures, and reference outputs are outside the model capability boundary.",
+  "layout_packet_read_root": "evidence/layout-packet",
+  "coding_agent_host": "build_shell.py",
+  "builder_protection": "Allowlisted file tools only; not OS sandboxing. No unrestricted shell, code execution or browser-evaluation capability. Verification hosts and isolated test fixtures are outside the builder tool surface."
 }

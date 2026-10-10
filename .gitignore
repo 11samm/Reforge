@@ -3,3 +3,6 @@ __pycache__/
 .venv/
 evidence/runs/
 evidence/latest-batch.json
+
+generated-app/node_modules/
+generated-app/dist/

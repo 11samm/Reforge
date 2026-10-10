@@ -1,0 +1,978 @@
+{
+  "selected_default": "headed",
+  "headless": {
+    "run_id": "20261010-103335-dbb864d9",
+    "status": "reference_mismatch_or_repeat_disagreement",
+    "runs": [
+      {
+        "case_id": "gb017",
+        "repeat": 1,
+        "status": "reference_mismatch",
+        "parameters": {
+          "Percentage": 3
+        },
+        "accepted_percentage": 3,
+        "original_confirmation": {
+          "dimensions_equal": true,
+          "rgba_equal": true,
+          "different_pixels": 0,
+          "max_channel_delta": 0
+        },
+        "output": {
+          "width": 129,
+          "height": 97,
+          "mode": "RGBA",
+          "png_sha256": "07405082df38b36c38255eebb42e43a3575613864b42e5c456e4a1a4d4cb9c4e",
+          "rgba_sha256": "1d68b76845b94b92dddd0a4fe9ce0166977b2b6575c5220123843d23466f1116",
+          "alpha_extrema": [
+            80,
+            255
+          ]
+        },
+        "reference_comparison": {
+          "dimensions_equal": true,
+          "rgba_equal": false,
+          "different_pixels": 9122,
+          "max_channel_delta": 9
+        },
+        "target": {
+          "name": "miniPaint",
+          "url": "https://viliusle.github.io/miniPaint/",
+          "visible_about_version": "4.14.3",
+          "collected_version": "4.14.3",
+          "version_discrepancy": false,
+          "build": "unknown; hosted URL is unpinned",
+          "observed_at": "2026-10-10T17:33:38.541503+00:00",
+          "chromium_version": "153.0.8010.12",
+          "headed": false,
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "device_scale_factor": 1
+        },
+        "output_path": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\runs\\20261010-103335-dbb864d9\\gb017-r1\\output.png"
+      },
+      {
+        "case_id": "gb017",
+        "repeat": 2,
+        "status": "reference_mismatch",
+        "parameters": {
+          "Percentage": 3
+        },
+        "accepted_percentage": 3,
+        "original_confirmation": {
+          "dimensions_equal": true,
+          "rgba_equal": true,
+          "different_pixels": 0,
+          "max_channel_delta": 0
+        },
+        "output": {
+          "width": 129,
+          "height": 97,
+          "mode": "RGBA",
+          "png_sha256": "07405082df38b36c38255eebb42e43a3575613864b42e5c456e4a1a4d4cb9c4e",
+          "rgba_sha256": "1d68b76845b94b92dddd0a4fe9ce0166977b2b6575c5220123843d23466f1116",
+          "alpha_extrema": [
+            80,
+            255
+          ]
+        },
+        "reference_comparison": {
+          "dimensions_equal": true,
+          "rgba_equal": false,
+          "different_pixels": 9122,
+          "max_channel_delta": 9
+        },
+        "target": {
+          "name": "miniPaint",
+          "url": "https://viliusle.github.io/miniPaint/",
+          "visible_about_version": "4.14.3",
+          "collected_version": "4.14.3",
+          "version_discrepancy": false,
+          "build": "unknown; hosted URL is unpinned",
+          "observed_at": "2026-10-10T17:33:41.304854+00:00",
+          "chromium_version": "153.0.8010.12",
+          "headed": false,
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "device_scale_factor": 1
+        },
+        "output_path": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\runs\\20261010-103335-dbb864d9\\gb017-r2\\output.png"
+      },
+      {
+        "case_id": "gb017",
+        "repeat": 3,
+        "status": "reference_mismatch",
+        "parameters": {
+          "Percentage": 3
+        },
+        "accepted_percentage": 3,
+        "original_confirmation": {
+          "dimensions_equal": true,
+          "rgba_equal": true,
+          "different_pixels": 0,
+          "max_channel_delta": 0
+        },
+        "output": {
+          "width": 129,
+          "height": 97,
+          "mode": "RGBA",
+          "png_sha256": "07405082df38b36c38255eebb42e43a3575613864b42e5c456e4a1a4d4cb9c4e",
+          "rgba_sha256": "1d68b76845b94b92dddd0a4fe9ce0166977b2b6575c5220123843d23466f1116",
+          "alpha_extrema": [
+            80,
+            255
+          ]
+        },
+        "reference_comparison": {
+          "dimensions_equal": true,
+          "rgba_equal": false,
+          "different_pixels": 9122,
+          "max_channel_delta": 9
+        },
+        "target": {
+          "name": "miniPaint",
+          "url": "https://viliusle.github.io/miniPaint/",
+          "visible_about_version": "4.14.3",
+          "collected_version": "4.14.3",
+          "version_discrepancy": false,
+          "build": "unknown; hosted URL is unpinned",
+          "observed_at": "2026-10-10T17:33:44.087621+00:00",
+          "chromium_version": "153.0.8010.12",
+          "headed": false,
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "device_scale_factor": 1
+        },
+        "output_path": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\runs\\20261010-103335-dbb864d9\\gb017-r3\\output.png"
+      },
+      {
+        "case_id": "gb010",
+        "repeat": 1,
+        "status": "reference_mismatch",
+        "parameters": {
+          "Percentage": 3
+        },
+        "accepted_percentage": 3,
+        "original_confirmation": {
+          "dimensions_equal": true,
+          "rgba_equal": true,
+          "different_pixels": 0,
+          "max_channel_delta": 0
+        },
+        "output": {
+          "width": 65,
+          "height": 49,
+          "mode": "RGBA",
+          "png_sha256": "28c134f5fd15abdc9db121469d15490bc6e29e177975b22b5dccc9379f98a282",
+          "rgba_sha256": "d59e164b9d80405207cb0b1e98b1e17c463a3028a18c08e04711a3ff20c05e21",
+          "alpha_extrema": [
+            0,
+            255
+          ]
+        },
+        "reference_comparison": {
+          "dimensions_equal": true,
+          "rgba_equal": false,
+          "different_pixels": 1977,
+          "max_channel_delta": 255
+        },
+        "target": {
+          "name": "miniPaint",
+          "url": "https://viliusle.github.io/miniPaint/",
+          "visible_about_version": "4.14.3",
+          "collected_version": "4.14.3",
+          "version_discrepancy": false,
+          "build": "unknown; hosted URL is unpinned",
+          "observed_at": "2026-10-10T17:33:46.920849+00:00",
+          "chromium_version": "153.0.8010.12",
+          "headed": false,
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "device_scale_factor": 1
+        },
+        "output_path": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\runs\\20261010-103335-dbb864d9\\gb010-r1\\output.png"
+      },
+      {
+        "case_id": "gb010",
+        "repeat": 2,
+        "status": "reference_mismatch",
+        "parameters": {
+          "Percentage": 3
+        },
+        "accepted_percentage": 3,
+        "original_confirmation": {
+          "dimensions_equal": true,
+          "rgba_equal": true,
+          "different_pixels": 0,
+          "max_channel_delta": 0
+        },
+        "output": {
+          "width": 65,
+          "height": 49,
+          "mode": "RGBA",
+          "png_sha256": "28c134f5fd15abdc9db121469d15490bc6e29e177975b22b5dccc9379f98a282",
+          "rgba_sha256": "d59e164b9d80405207cb0b1e98b1e17c463a3028a18c08e04711a3ff20c05e21",
+          "alpha_extrema": [
+            0,
+            255
+          ]
+        },
+        "reference_comparison": {
+          "dimensions_equal": true,
+          "rgba_equal": false,
+          "different_pixels": 1977,
+          "max_channel_delta": 255
+        },
+        "target": {
+          "name": "miniPaint",
+          "url": "https://viliusle.github.io/miniPaint/",
+          "visible_about_version": "4.14.3",
+          "collected_version": "4.14.3",
+          "version_discrepancy": false,
+          "build": "unknown; hosted URL is unpinned",
+          "observed_at": "2026-10-10T17:33:49.893802+00:00",
+          "chromium_version": "153.0.8010.12",
+          "headed": false,
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "device_scale_factor": 1
+        },
+        "output_path": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\runs\\20261010-103335-dbb864d9\\gb010-r2\\output.png"
+      },
+      {
+        "case_id": "gb010",
+        "repeat": 3,
+        "status": "reference_mismatch",
+        "parameters": {
+          "Percentage": 3
+        },
+        "accepted_percentage": 3,
+        "original_confirmation": {
+          "dimensions_equal": true,
+          "rgba_equal": true,
+          "different_pixels": 0,
+          "max_channel_delta": 0
+        },
+        "output": {
+          "width": 65,
+          "height": 49,
+          "mode": "RGBA",
+          "png_sha256": "28c134f5fd15abdc9db121469d15490bc6e29e177975b22b5dccc9379f98a282",
+          "rgba_sha256": "d59e164b9d80405207cb0b1e98b1e17c463a3028a18c08e04711a3ff20c05e21",
+          "alpha_extrema": [
+            0,
+            255
+          ]
+        },
+        "reference_comparison": {
+          "dimensions_equal": true,
+          "rgba_equal": false,
+          "different_pixels": 1977,
+          "max_channel_delta": 255
+        },
+        "target": {
+          "name": "miniPaint",
+          "url": "https://viliusle.github.io/miniPaint/",
+          "visible_about_version": "4.14.3",
+          "collected_version": "4.14.3",
+          "version_discrepancy": false,
+          "build": "unknown; hosted URL is unpinned",
+          "observed_at": "2026-10-10T17:33:52.621984+00:00",
+          "chromium_version": "153.0.8010.12",
+          "headed": false,
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "device_scale_factor": 1
+        },
+        "output_path": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\runs\\20261010-103335-dbb864d9\\gb010-r3\\output.png"
+      }
+    ],
+    "repeat_comparisons": [
+      {
+        "case_id": "gb017",
+        "successful_fresh_exports": 3,
+        "repeat_rgba_equal": true,
+        "reference_equal_all": false
+      },
+      {
+        "case_id": "gb010",
+        "successful_fresh_exports": 3,
+        "repeat_rgba_equal": true,
+        "reference_equal_all": false
+      }
+    ],
+    "full_summary": "runs/20261010-103335-dbb864d9/summary.json"
+  },
+  "headed_recheck": {
+    "run_id": "20261010-103724-0ce76cc5",
+    "status": "passed",
+    "runs": [
+      {
+        "case_id": "gb017",
+        "repeat": 1,
+        "status": "passed",
+        "parameters": {
+          "Percentage": 3
+        },
+        "accepted_percentage": 3,
+        "original_confirmation": {
+          "dimensions_equal": true,
+          "rgba_equal": true,
+          "different_pixels": 0,
+          "max_channel_delta": 0
+        },
+        "output": {
+          "width": 129,
+          "height": 97,
+          "mode": "RGBA",
+          "png_sha256": "62d00414cebd348e9a9f628901176e7caf95d7ebff211b51b4ed06c03c821146",
+          "rgba_sha256": "256d4d564add4798ee82e410a33326848c33a05757df7d78b710c6d7e2c536a3",
+          "alpha_extrema": [
+            82,
+            255
+          ]
+        },
+        "reference_comparison": {
+          "dimensions_equal": true,
+          "rgba_equal": true,
+          "different_pixels": 0,
+          "max_channel_delta": 0
+        },
+        "target": {
+          "name": "miniPaint",
+          "url": "https://viliusle.github.io/miniPaint/",
+          "visible_about_version": "4.14.3",
+          "collected_version": "4.14.3",
+          "version_discrepancy": false,
+          "build": "unknown; hosted URL is unpinned",
+          "observed_at": "2026-10-10T17:37:28.779328+00:00",
+          "chromium_version": "153.0.8010.12",
+          "headed": true,
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "device_scale_factor": 1
+        },
+        "output_path": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\runs\\20261010-103724-0ce76cc5\\gb017-r1\\output.png"
+      },
+      {
+        "case_id": "gb017",
+        "repeat": 2,
+        "status": "passed",
+        "parameters": {
+          "Percentage": 3
+        },
+        "accepted_percentage": 3,
+        "original_confirmation": {
+          "dimensions_equal": true,
+          "rgba_equal": true,
+          "different_pixels": 0,
+          "max_channel_delta": 0
+        },
+        "output": {
+          "width": 129,
+          "height": 97,
+          "mode": "RGBA",
+          "png_sha256": "62d00414cebd348e9a9f628901176e7caf95d7ebff211b51b4ed06c03c821146",
+          "rgba_sha256": "256d4d564add4798ee82e410a33326848c33a05757df7d78b710c6d7e2c536a3",
+          "alpha_extrema": [
+            82,
+            255
+          ]
+        },
+        "reference_comparison": {
+          "dimensions_equal": true,
+          "rgba_equal": true,
+          "different_pixels": 0,
+          "max_channel_delta": 0
+        },
+        "target": {
+          "name": "miniPaint",
+          "url": "https://viliusle.github.io/miniPaint/",
+          "visible_about_version": "4.14.3",
+          "collected_version": "4.14.3",
+          "version_discrepancy": false,
+          "build": "unknown; hosted URL is unpinned",
+          "observed_at": "2026-10-10T17:37:32.438722+00:00",
+          "chromium_version": "153.0.8010.12",
+          "headed": true,
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "device_scale_factor": 1
+        },
+        "output_path": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\runs\\20261010-103724-0ce76cc5\\gb017-r2\\output.png"
+      },
+      {
+        "case_id": "gb017",
+        "repeat": 3,
+        "status": "passed",
+        "parameters": {
+          "Percentage": 3
+        },
+        "accepted_percentage": 3,
+        "original_confirmation": {
+          "dimensions_equal": true,
+          "rgba_equal": true,
+          "different_pixels": 0,
+          "max_channel_delta": 0
+        },
+        "output": {
+          "width": 129,
+          "height": 97,
+          "mode": "RGBA",
+          "png_sha256": "62d00414cebd348e9a9f628901176e7caf95d7ebff211b51b4ed06c03c821146",
+          "rgba_sha256": "256d4d564add4798ee82e410a33326848c33a05757df7d78b710c6d7e2c536a3",
+          "alpha_extrema": [
+            82,
+            255
+          ]
+        },
+        "reference_comparison": {
+          "dimensions_equal": true,
+          "rgba_equal": true,
+          "different_pixels": 0,
+          "max_channel_delta": 0
+        },
+        "target": {
+          "name": "miniPaint",
+          "url": "https://viliusle.github.io/miniPaint/",
+          "visible_about_version": "4.14.3",
+          "collected_version": "4.14.3",
+          "version_discrepancy": false,
+          "build": "unknown; hosted URL is unpinned",
+          "observed_at": "2026-10-10T17:37:35.918937+00:00",
+          "chromium_version": "153.0.8010.12",
+          "headed": true,
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "device_scale_factor": 1
+        },
+        "output_path": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\runs\\20261010-103724-0ce76cc5\\gb017-r3\\output.png"
+      },
+      {
+        "case_id": "gb010",
+        "repeat": 1,
+        "status": "passed",
+        "parameters": {
+          "Percentage": 3
+        },
+        "accepted_percentage": 3,
+        "original_confirmation": {
+          "dimensions_equal": true,
+          "rgba_equal": true,
+          "different_pixels": 0,
+          "max_channel_delta": 0
+        },
+        "output": {
+          "width": 65,
+          "height": 49,
+          "mode": "RGBA",
+          "png_sha256": "dc50e48fe1a77026fda742bd26bcb87b2cc5061b351f32fdf0e455a1141d5500",
+          "rgba_sha256": "f3f78d93bab5f86db841e9e7681c93fe350f4c14d6ad8f5a7a5ce2d96fd0adc3",
+          "alpha_extrema": [
+            0,
+            255
+          ]
+        },
+        "reference_comparison": {
+          "dimensions_equal": true,
+          "rgba_equal": true,
+          "different_pixels": 0,
+          "max_channel_delta": 0
+        },
+        "target": {
+          "name": "miniPaint",
+          "url": "https://viliusle.github.io/miniPaint/",
+          "visible_about_version": "4.14.3",
+          "collected_version": "4.14.3",
+          "version_discrepancy": false,
+          "build": "unknown; hosted URL is unpinned",
+          "observed_at": "2026-10-10T17:37:39.453458+00:00",
+          "chromium_version": "153.0.8010.12",
+          "headed": true,
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "device_scale_factor": 1
+        },
+        "output_path": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\runs\\20261010-103724-0ce76cc5\\gb010-r1\\output.png"
+      },
+      {
+        "case_id": "gb010",
+        "repeat": 2,
+        "status": "passed",
+        "parameters": {
+          "Percentage": 3
+        },
+        "accepted_percentage": 3,
+        "original_confirmation": {
+          "dimensions_equal": true,
+          "rgba_equal": true,
+          "different_pixels": 0,
+          "max_channel_delta": 0
+        },
+        "output": {
+          "width": 65,
+          "height": 49,
+          "mode": "RGBA",
+          "png_sha256": "dc50e48fe1a77026fda742bd26bcb87b2cc5061b351f32fdf0e455a1141d5500",
+          "rgba_sha256": "f3f78d93bab5f86db841e9e7681c93fe350f4c14d6ad8f5a7a5ce2d96fd0adc3",
+          "alpha_extrema": [
+            0,
+            255
+          ]
+        },
+        "reference_comparison": {
+          "dimensions_equal": true,
+          "rgba_equal": true,
+          "different_pixels": 0,
+          "max_channel_delta": 0
+        },
+        "target": {
+          "name": "miniPaint",
+          "url": "https://viliusle.github.io/miniPaint/",
+          "visible_about_version": "4.14.3",
+          "collected_version": "4.14.3",
+          "version_discrepancy": false,
+          "build": "unknown; hosted URL is unpinned",
+          "observed_at": "2026-10-10T17:37:42.919512+00:00",
+          "chromium_version": "153.0.8010.12",
+          "headed": true,
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "device_scale_factor": 1
+        },
+        "output_path": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\runs\\20261010-103724-0ce76cc5\\gb010-r2\\output.png"
+      },
+      {
+        "case_id": "gb010",
+        "repeat": 3,
+        "status": "passed",
+        "parameters": {
+          "Percentage": 3
+        },
+        "accepted_percentage": 3,
+        "original_confirmation": {
+          "dimensions_equal": true,
+          "rgba_equal": true,
+          "different_pixels": 0,
+          "max_channel_delta": 0
+        },
+        "output": {
+          "width": 65,
+          "height": 49,
+          "mode": "RGBA",
+          "png_sha256": "dc50e48fe1a77026fda742bd26bcb87b2cc5061b351f32fdf0e455a1141d5500",
+          "rgba_sha256": "f3f78d93bab5f86db841e9e7681c93fe350f4c14d6ad8f5a7a5ce2d96fd0adc3",
+          "alpha_extrema": [
+            0,
+            255
+          ]
+        },
+        "reference_comparison": {
+          "dimensions_equal": true,
+          "rgba_equal": true,
+          "different_pixels": 0,
+          "max_channel_delta": 0
+        },
+        "target": {
+          "name": "miniPaint",
+          "url": "https://viliusle.github.io/miniPaint/",
+          "visible_about_version": "4.14.3",
+          "collected_version": "4.14.3",
+          "version_discrepancy": false,
+          "build": "unknown; hosted URL is unpinned",
+          "observed_at": "2026-10-10T17:37:46.552597+00:00",
+          "chromium_version": "153.0.8010.12",
+          "headed": true,
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "device_scale_factor": 1
+        },
+        "output_path": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\runs\\20261010-103724-0ce76cc5\\gb010-r3\\output.png"
+      }
+    ],
+    "repeat_comparisons": [
+      {
+        "case_id": "gb017",
+        "successful_fresh_exports": 3,
+        "repeat_rgba_equal": true,
+        "reference_equal_all": true
+      },
+      {
+        "case_id": "gb010",
+        "successful_fresh_exports": 3,
+        "repeat_rgba_equal": true,
+        "reference_equal_all": true
+      }
+    ],
+    "full_summary": "runs/20261010-103724-0ce76cc5/summary.json"
+  },
+  "criteria": "Exact dimensions and all decoded RGBA bytes, including transparent RGB; unchanged fixtures and comparisons.",
+  "positioned_headed_recheck": {
+    "run_id": "20261010-105508-083356f7",
+    "status": "passed",
+    "requested_window_position": [
+      1600,
+      0
+    ],
+    "runs": [
+      {
+        "case_id": "gb017",
+        "repeat": 1,
+        "status": "passed",
+        "parameters": {
+          "Percentage": 3
+        },
+        "accepted_percentage": 3,
+        "original_confirmation": {
+          "dimensions_equal": true,
+          "rgba_equal": true,
+          "different_pixels": 0,
+          "max_channel_delta": 0
+        },
+        "output": {
+          "width": 129,
+          "height": 97,
+          "mode": "RGBA",
+          "png_sha256": "62d00414cebd348e9a9f628901176e7caf95d7ebff211b51b4ed06c03c821146",
+          "rgba_sha256": "256d4d564add4798ee82e410a33326848c33a05757df7d78b710c6d7e2c536a3",
+          "alpha_extrema": [
+            82,
+            255
+          ]
+        },
+        "reference_comparison": {
+          "dimensions_equal": true,
+          "rgba_equal": true,
+          "different_pixels": 0,
+          "max_channel_delta": 0
+        },
+        "target": {
+          "name": "miniPaint",
+          "url": "https://viliusle.github.io/miniPaint/",
+          "visible_about_version": "4.14.3",
+          "collected_version": "4.14.3",
+          "version_discrepancy": false,
+          "build": "unknown; hosted URL is unpinned",
+          "observed_at": "2026-10-10T17:55:12.673798+00:00",
+          "chromium_version": "153.0.8010.12",
+          "headed": true,
+          "requested_window_position": [
+            1600,
+            0
+          ],
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "device_scale_factor": 1
+        },
+        "output_path": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\runs\\20261010-105508-083356f7\\gb017-r1\\output.png"
+      },
+      {
+        "case_id": "gb017",
+        "repeat": 2,
+        "status": "passed",
+        "parameters": {
+          "Percentage": 3
+        },
+        "accepted_percentage": 3,
+        "original_confirmation": {
+          "dimensions_equal": true,
+          "rgba_equal": true,
+          "different_pixels": 0,
+          "max_channel_delta": 0
+        },
+        "output": {
+          "width": 129,
+          "height": 97,
+          "mode": "RGBA",
+          "png_sha256": "62d00414cebd348e9a9f628901176e7caf95d7ebff211b51b4ed06c03c821146",
+          "rgba_sha256": "256d4d564add4798ee82e410a33326848c33a05757df7d78b710c6d7e2c536a3",
+          "alpha_extrema": [
+            82,
+            255
+          ]
+        },
+        "reference_comparison": {
+          "dimensions_equal": true,
+          "rgba_equal": true,
+          "different_pixels": 0,
+          "max_channel_delta": 0
+        },
+        "target": {
+          "name": "miniPaint",
+          "url": "https://viliusle.github.io/miniPaint/",
+          "visible_about_version": "4.14.3",
+          "collected_version": "4.14.3",
+          "version_discrepancy": false,
+          "build": "unknown; hosted URL is unpinned",
+          "observed_at": "2026-10-10T17:55:16.424886+00:00",
+          "chromium_version": "153.0.8010.12",
+          "headed": true,
+          "requested_window_position": [
+            1600,
+            0
+          ],
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "device_scale_factor": 1
+        },
+        "output_path": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\runs\\20261010-105508-083356f7\\gb017-r2\\output.png"
+      },
+      {
+        "case_id": "gb017",
+        "repeat": 3,
+        "status": "passed",
+        "parameters": {
+          "Percentage": 3
+        },
+        "accepted_percentage": 3,
+        "original_confirmation": {
+          "dimensions_equal": true,
+          "rgba_equal": true,
+          "different_pixels": 0,
+          "max_channel_delta": 0
+        },
+        "output": {
+          "width": 129,
+          "height": 97,
+          "mode": "RGBA",
+          "png_sha256": "62d00414cebd348e9a9f628901176e7caf95d7ebff211b51b4ed06c03c821146",
+          "rgba_sha256": "256d4d564add4798ee82e410a33326848c33a05757df7d78b710c6d7e2c536a3",
+          "alpha_extrema": [
+            82,
+            255
+          ]
+        },
+        "reference_comparison": {
+          "dimensions_equal": true,
+          "rgba_equal": true,
+          "different_pixels": 0,
+          "max_channel_delta": 0
+        },
+        "target": {
+          "name": "miniPaint",
+          "url": "https://viliusle.github.io/miniPaint/",
+          "visible_about_version": "4.14.3",
+          "collected_version": "4.14.3",
+          "version_discrepancy": false,
+          "build": "unknown; hosted URL is unpinned",
+          "observed_at": "2026-10-10T17:55:20.026398+00:00",
+          "chromium_version": "153.0.8010.12",
+          "headed": true,
+          "requested_window_position": [
+            1600,
+            0
+          ],
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "device_scale_factor": 1
+        },
+        "output_path": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\runs\\20261010-105508-083356f7\\gb017-r3\\output.png"
+      },
+      {
+        "case_id": "gb010",
+        "repeat": 1,
+        "status": "passed",
+        "parameters": {
+          "Percentage": 3
+        },
+        "accepted_percentage": 3,
+        "original_confirmation": {
+          "dimensions_equal": true,
+          "rgba_equal": true,
+          "different_pixels": 0,
+          "max_channel_delta": 0
+        },
+        "output": {
+          "width": 65,
+          "height": 49,
+          "mode": "RGBA",
+          "png_sha256": "dc50e48fe1a77026fda742bd26bcb87b2cc5061b351f32fdf0e455a1141d5500",
+          "rgba_sha256": "f3f78d93bab5f86db841e9e7681c93fe350f4c14d6ad8f5a7a5ce2d96fd0adc3",
+          "alpha_extrema": [
+            0,
+            255
+          ]
+        },
+        "reference_comparison": {
+          "dimensions_equal": true,
+          "rgba_equal": true,
+          "different_pixels": 0,
+          "max_channel_delta": 0
+        },
+        "target": {
+          "name": "miniPaint",
+          "url": "https://viliusle.github.io/miniPaint/",
+          "visible_about_version": "4.14.3",
+          "collected_version": "4.14.3",
+          "version_discrepancy": false,
+          "build": "unknown; hosted URL is unpinned",
+          "observed_at": "2026-10-10T17:55:23.535924+00:00",
+          "chromium_version": "153.0.8010.12",
+          "headed": true,
+          "requested_window_position": [
+            1600,
+            0
+          ],
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "device_scale_factor": 1
+        },
+        "output_path": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\runs\\20261010-105508-083356f7\\gb010-r1\\output.png"
+      },
+      {
+        "case_id": "gb010",
+        "repeat": 2,
+        "status": "passed",
+        "parameters": {
+          "Percentage": 3
+        },
+        "accepted_percentage": 3,
+        "original_confirmation": {
+          "dimensions_equal": true,
+          "rgba_equal": true,
+          "different_pixels": 0,
+          "max_channel_delta": 0
+        },
+        "output": {
+          "width": 65,
+          "height": 49,
+          "mode": "RGBA",
+          "png_sha256": "dc50e48fe1a77026fda742bd26bcb87b2cc5061b351f32fdf0e455a1141d5500",
+          "rgba_sha256": "f3f78d93bab5f86db841e9e7681c93fe350f4c14d6ad8f5a7a5ce2d96fd0adc3",
+          "alpha_extrema": [
+            0,
+            255
+          ]
+        },
+        "reference_comparison": {
+          "dimensions_equal": true,
+          "rgba_equal": true,
+          "different_pixels": 0,
+          "max_channel_delta": 0
+        },
+        "target": {
+          "name": "miniPaint",
+          "url": "https://viliusle.github.io/miniPaint/",
+          "visible_about_version": "4.14.3",
+          "collected_version": "4.14.3",
+          "version_discrepancy": false,
+          "build": "unknown; hosted URL is unpinned",
+          "observed_at": "2026-10-10T17:55:27.008507+00:00",
+          "chromium_version": "153.0.8010.12",
+          "headed": true,
+          "requested_window_position": [
+            1600,
+            0
+          ],
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "device_scale_factor": 1
+        },
+        "output_path": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\runs\\20261010-105508-083356f7\\gb010-r2\\output.png"
+      },
+      {
+        "case_id": "gb010",
+        "repeat": 3,
+        "status": "passed",
+        "parameters": {
+          "Percentage": 3
+        },
+        "accepted_percentage": 3,
+        "original_confirmation": {
+          "dimensions_equal": true,
+          "rgba_equal": true,
+          "different_pixels": 0,
+          "max_channel_delta": 0
+        },
+        "output": {
+          "width": 65,
+          "height": 49,
+          "mode": "RGBA",
+          "png_sha256": "dc50e48fe1a77026fda742bd26bcb87b2cc5061b351f32fdf0e455a1141d5500",
+          "rgba_sha256": "f3f78d93bab5f86db841e9e7681c93fe350f4c14d6ad8f5a7a5ce2d96fd0adc3",
+          "alpha_extrema": [
+            0,
+            255
+          ]
+        },
+        "reference_comparison": {
+          "dimensions_equal": true,
+          "rgba_equal": true,
+          "different_pixels": 0,
+          "max_channel_delta": 0
+        },
+        "target": {
+          "name": "miniPaint",
+          "url": "https://viliusle.github.io/miniPaint/",
+          "visible_about_version": "4.14.3",
+          "collected_version": "4.14.3",
+          "version_discrepancy": false,
+          "build": "unknown; hosted URL is unpinned",
+          "observed_at": "2026-10-10T17:55:30.482521+00:00",
+          "chromium_version": "153.0.8010.12",
+          "headed": true,
+          "requested_window_position": [
+            1600,
+            0
+          ],
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "device_scale_factor": 1
+        },
+        "output_path": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\runs\\20261010-105508-083356f7\\gb010-r3\\output.png"
+      }
+    ],
+    "repeat_comparisons": [
+      {
+        "case_id": "gb017",
+        "successful_fresh_exports": 3,
+        "repeat_rgba_equal": true,
+        "reference_equal_all": true
+      },
+      {
+        "case_id": "gb010",
+        "successful_fresh_exports": 3,
+        "repeat_rgba_equal": true,
+        "reference_equal_all": true
+      }
+    ],
+    "full_summary": "runs/20261010-105508-083356f7/summary.json"
+  },
+  "headless_equivalence": "Unverified/not supported; prior six-run validation failed exact agreement. Retained only as an explicit diagnostic option."
+}
