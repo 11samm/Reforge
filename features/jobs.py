@@ -14,7 +14,7 @@ from .spec import request_id
 
 TERMINAL={'accepted','unresolved','failed','cancelled'}
 STAGES=['Discover','Validate procedure','Investigate','Reconstruct','Verify']
-ARTIFACTS={'spec.json','discovery-summary.json','validation.json','visible-report.json','final-summary.json','repair-summary.json'}
+ARTIFACTS={'spec.json','discovery-summary.json','validation.json','visible-report.json','final-summary.json','repair-summary.json','preparation.json'}
 
 def scrub(value):
     s=str(value)[:1500]

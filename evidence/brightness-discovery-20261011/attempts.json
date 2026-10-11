@@ -1,0 +1,165 @@
+{
+  "kind": "real model/browser learning attempts; not synthetic fixtures",
+  "attempts": [
+    {
+      "job": "de3c5c64f434456eae1e3a904c10759a",
+      "status": "unresolved",
+      "elapsed_seconds": 172.417,
+      "stop_reason": "procedure_infrastructure_failure",
+      "experiments_admitted": 2,
+      "candidate_attempts": [],
+      "model_invocations": 2,
+      "usage": {
+        "totalTokens": 71878,
+        "inputTokens": 69659,
+        "cachedInputTokens": 41728,
+        "outputTokens": 2219
+      },
+      "stage_entries": [
+        {
+          "stage": "Discover",
+          "elapsed_seconds": 0.929
+        },
+        {
+          "stage": "Validate procedure",
+          "elapsed_seconds": 38.061
+        },
+        {
+          "stage": "Investigate",
+          "elapsed_seconds": 91.06
+        }
+      ],
+      "promoted": false,
+      "prior_target_artifacts_available": false,
+      "developer_changes_between_attempts": false
+    },
+    {
+      "job": "69730c0aeaa64b10a8e03aaa1b84f8eb",
+      "status": "unresolved",
+      "elapsed_seconds": 288.171,
+      "stop_reason": "procedure_infrastructure_failure",
+      "experiments_admitted": 3,
+      "candidate_attempts": [
+        {
+          "id": "candidate-1",
+          "status": "rejected"
+        },
+        {
+          "id": "candidate-2",
+          "status": "failed"
+        }
+      ],
+      "model_invocations": 5,
+      "usage": {
+        "totalTokens": 375884,
+        "inputTokens": 368512,
+        "cachedInputTokens": 265344,
+        "outputTokens": 7372
+      },
+      "stage_entries": [
+        {
+          "stage": "Discover",
+          "elapsed_seconds": 1.051
+        },
+        {
+          "stage": "Validate procedure",
+          "elapsed_seconds": 35.57
+        },
+        {
+          "stage": "Investigate",
+          "elapsed_seconds": 57.605
+        },
+        {
+          "stage": "Reconstruct",
+          "elapsed_seconds": 133.468
+        },
+        {
+          "stage": "Verify",
+          "elapsed_seconds": 199.767
+        },
+        {
+          "stage": "Reconstruct",
+          "elapsed_seconds": 219.381
+        }
+      ],
+      "promoted": false,
+      "prior_target_artifacts_available": false,
+      "developer_changes_between_attempts": true
+    },
+    {
+      "job": "82b68e6daf5e41ddb7c03c13a91ba1f9",
+      "status": "accepted",
+      "elapsed_seconds": 297.46,
+      "stop_reason": "all_frozen_visible_and_baseline_gates",
+      "experiments_admitted": 4,
+      "candidate_attempts": [
+        {
+          "id": "candidate-1",
+          "status": "rejected"
+        },
+        {
+          "id": "candidate-2",
+          "status": "accepted"
+        }
+      ],
+      "model_invocations": 5,
+      "usage": {
+        "totalTokens": 409928,
+        "inputTokens": 402821,
+        "cachedInputTokens": 297088,
+        "outputTokens": 7107
+      },
+      "stage_entries": [
+        {
+          "stage": "Discover",
+          "elapsed_seconds": 0.874
+        },
+        {
+          "stage": "Validate procedure",
+          "elapsed_seconds": 33.218
+        },
+        {
+          "stage": "Investigate",
+          "elapsed_seconds": 55.395
+        },
+        {
+          "stage": "Reconstruct",
+          "elapsed_seconds": 146.589
+        },
+        {
+          "stage": "Verify",
+          "elapsed_seconds": 203.892
+        },
+        {
+          "stage": "Reconstruct",
+          "elapsed_seconds": 211.529
+        },
+        {
+          "stage": "Verify",
+          "elapsed_seconds": 263.757
+        },
+        {
+          "stage": "Verify",
+          "elapsed_seconds": 283.66
+        }
+      ],
+      "promoted": false,
+      "prior_target_artifacts_available": false,
+      "developer_changes_between_attempts": true,
+      "final_cases": [
+        {
+          "id": "final-0",
+          "status": "passed",
+          "different_pixels": 0
+        },
+        {
+          "id": "final-1",
+          "status": "passed",
+          "different_pixels": 0
+        }
+      ]
+    }
+  ],
+  "repeatability_claim": false,
+  "cash_cost": "not reported; configured ChatGPT subscription runtime"
+}

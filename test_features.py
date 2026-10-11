@@ -158,7 +158,7 @@ class LearningIntegrationTests(unittest.TestCase):
             for name in ('src/brightness.ts','src/current-image.ts','package.json','../evaluator/compare.py','layout-packet/reference.png'):
                 with self.assertRaises(ValueError): b.path(name,True)
             with self.assertRaises(ValueError): b.path('src/brightness.ts')
-            self.assertEqual(b.path('src/contrast.ts',True),Path(d)/'src/contrast.ts')
+            self.assertEqual(b.path('src/contrast.ts',True),(Path(d)/'src/contrast.ts').resolve())
     def test_validated_procedure_required_before_learning(self):
         from features.learning import AdjustmentHarness
         with self.assertRaisesRegex(ValueError,'validation required'):
@@ -176,7 +176,8 @@ class LearningIntegrationTests(unittest.TestCase):
                 h.spec=specification(); h.domain=h.spec['controls'][0]; h.notify=lambda *a,**k:None
                 h.config={**DEFAULTS,'fresh_experiments':2,'candidates':1}; h.budget=Budget(h.config)
                 h.evidence=[]; h.events=[]; h.attempts=[]; h.first_acceptance=None; h.claims=[]; h.stop='not_started'
-                h.op={'id':'contrast'}; h.guard=lambda:None
+                from learning.operations import operation_spec
+                h.op=operation_spec('contrast',h.spec); h.guard=lambda:None
                 h.checkpoints=Checkpoints(app,h.directory/'checkpoints',{'src/main.tsx','src/contrast.ts'})
                 h.best=h.checkpoints.snapshot('start'); h.emit=lambda kind,**data:h.events.append({'event':kind,**data})
                 h.baseline=lambda *a,**k:True
