@@ -1,0 +1,27 @@
+[
+  {
+    "target": "candidate-1",
+    "text": "Recorded independent=false also reflects the later UI-selector failure; candidate 1's input-only batch had succeeded. The baseline verifier stopped because it expected an accessible 'Percentage:' label. This infrastructure failure establishes no baseline pixel regression.",
+    "source": "evidence/milestone5-results.md"
+  },
+  {
+    "target": "candidate-2",
+    "text": "First independently executable, feasible blur candidate: build, guarded batch, production UI export agreement and all four exact baselines passed. Not an accepted compatibility implementation; 3 of 6 frozen blur cases failed on genuine pixel errors.",
+    "source": "evidence/milestone5-results.md"
+  },
+  {
+    "target": "candidate-3",
+    "text": "The builder turn reached the 500-second learning-work deadline, preserving the 100-second cleanup reserve. It did not complete or receive an evaluation; no success or improvement is assigned.",
+    "source": "evidence/milestone5-results.md"
+  },
+  {
+    "target": "incumbent-v1",
+    "text": "The unavailable no-blur incumbent's objective [0,255] is a bookkeeping sentinel, not scored pixels or passing blur cases. The dashboard leaves it unscored.",
+    "source": "evidence/milestone5-results.md"
+  },
+  {
+    "target": "run",
+    "text": "No candidate was promoted. The app was restored to its genuine no-blur starting checkpoint; production build and all four exact baseline regressions passed afterwards.",
+    "source": "evidence/milestone5-results.md"
+  }
+]

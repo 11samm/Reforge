@@ -1,0 +1,14 @@
+[
+  {
+    "id": "recorded-20261010T184129Z-78c8e934",
+    "title": "Gaussian Blur · integrated attempt 2 (Oct 10, 2026)",
+    "kind": "recorded",
+    "manifest": "runs/recorded-20261010T184129Z-78c8e934/manifest.json"
+  },
+  {
+    "id": "synthetic-render-check",
+    "title": "SYNTHETIC render check (not project results)",
+    "kind": "synthetic",
+    "manifest": "runs/synthetic-render-check/manifest.json"
+  }
+]
