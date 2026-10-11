@@ -1,0 +1,714 @@
+{
+  "base_commit": "db4894e2ba022a8731774a2dc76cc00fbb90741b",
+  "frozen_learning_inventory": {
+    "adapter/__init__.py": "1d25d3bffbe9d2fda517c737ffa80514b4251258ff8ffdd86d6d5d4d286fa358",
+    "adapter/brightness.py": "847daca851f46ec79b1c0677bcdd7b2503459510e4938d43f6c6bf968d7c5671",
+    "adapter/minipaint.py": "1fea5d36b946761634384e95e4e2360561acec8442f008731bcaff3bc49a4db3",
+    "adapter/png.py": "f68afa40a39220c56df96f7528ea3fd0b24637414153a431ad743fd1e29e4f68",
+    "adapter/validate.py": "d8b22aed116041d070474d546b3d976ee5065caa9d5cecff33076df918c4b9ad",
+    "brightness.config.json": "4d490a432bcd7558385644cff0c6fda65de6f78612b99ee6447518853f9c688a",
+    "features/__init__.py": "e2d1fcd9e7df64fe417c103863ae18c9d5af53cd72bc39c92ceaacbb613c88f7",
+    "features/browser.py": "f2026b8d10e3e857100091d3ea1976398a95fc7f68a7e11e6255eba98b77d8db",
+    "features/child.py": "66babc6ee9d7384d14c48af53741145bb35664ba9436680346653edb87eaef06",
+    "features/demos.py": "24d241404ea67609a91470bb031e7c7024714bbd5bdc0cb59ce415e4f939c8bc",
+    "features/discovery.py": "4900e1d19d63d07d1dad9925a2da1ad3165e351c12bcd1b5501c20fff4e49f79",
+    "features/feature-spec.schema.json": "2d8e5c937332ad877232f3f3959edc791df2cc406292aedd490f891e8ba22d43",
+    "features/inspection.py": "fd9ff2fa6a6ad3f05c7baeb266ab82c0ae16a5575c38f06a5401d888a6e635bb",
+    "features/interaction_map.py": "082daea1a756553cb9d5b0d05340a3bffb9a5f257b065d8ef4e228fc934aa0f6",
+    "features/jobs.py": "147f6c7d9b4d426183e43ec7f6d99c419fc356f6e4266ebb996f529bcde46acc",
+    "features/learning.py": "9b7478cf4c1642c50873e8d0cfed36bde6a3c4b6ac0f537aef4dd9a8c5251248",
+    "features/live.py": "99292fa72a9fd11dbfecd0341716f2f72c9453bb8f50f7d744918f04261af28c",
+    "features/live_demo.py": "797ed8642c28c5f336ebb57008ea9f5af4196dfcd508a49f4931d7c1bdebf257",
+    "features/pipeline.py": "7d1cf54b59af87abd670ac98837d8e61ce181498e1fea533742cdb11cc8c680d",
+    "features/preparation.py": "0d1162cc1aa0ecbf66f77cc630f8775a7ce23e7af8045862a1ad35cd8333ef3d",
+    "features/presentation.py": "21ee752322a39dc6977ce492ee92c4143b4a6ba7c4163dd7de4918e7c29c5343",
+    "features/processes.py": "050189952404840b5b10a1aa86d33951f15447a67d3b4fb3baade3a7c7fb17e5",
+    "features/recovery.py": "3cd5c98c8c690ec72be642582064cbb2f32e81d5831b6fb4b8976f011293469a",
+    "features/repair.py": "b978666db5b3aa749d90d1b0709cabc14369a237139cbd27fbbc580970576913",
+    "features/repair_checks.py": "0ae3771a8ef21ef87a1f3a1d8a009c3098034566eb29bddb58d89a8a293afa12",
+    "features/service.py": "3666103d1e0c58ea458a3e87a9ee032b46499e64f97dda28edd5ce3303a57129",
+    "features/sessions.py": "65d13c1552d078bf93597e90acf34843df9bf9ea8ca285ab421bcf31d8f9cddf",
+    "features/spec.py": "8d8590c4e6b5d24992dce1157359db87ebeac3dbf8951e32d127f53a32a898fd",
+    "features/templates/brightness/main.tsx": "55448583fd9b2ed39f447f8b1e08206d839005d8c37ea4b699805e5eee26c6be",
+    "features/templates/contrast/main.tsx": "d14400591393ef4d84154fb0f39dd0beb394a723a5551c17718851eecf01a91a",
+    "learning/__init__.py": "7602e881ac04b6c522c7584950c4876b5f1d50be6884ae7d803ac6f04a1e768d",
+    "learning/brightness.py": "bb96db08025a9ae15081ebffeca6fa42a8fa98da9b6545189071f529658027e5",
+    "learning/ci_fixtures.py": "dc9a203e45191f82ff8ceedda43ef4e0391916b830df0bc57179785b786492e0",
+    "learning/core.py": "5a6b54f7209352e07eab27706586b451755c6d4b13073f4de1466fb2ec4b1459",
+    "learning/developer_precision_patterns.py": "94f46794ef12ec93d1441e3a8e82a759ff361a0b1f217e44fa862bbaeed5f5f7",
+    "learning/diagnostics.py": "85ad545703eea403f6ec49d5d5d44e0e7170853329a079465794d7a8d6c39eda",
+    "learning/followup.py": "9ce03b61a6bd4e06bed31aa5f491692769e8d53e943cbc6dc6805641a678f23f",
+    "learning/guidance.py": "6cca1180fa4832663f79e9809516917a1da3fac5c9db12dedf9cd938d769f773",
+    "learning/investigation-guidance.json": "d8ed872721aa089c9c33c1cdfa4df1267a63b07fdb3aaf7d6b5ea1c7c762808c",
+    "learning/model.py": "6f0bbfc8ab48b6602004eac8471d7dbf142211074e3c0881c13b90083de7ba1a",
+    "learning/operations.py": "99b29c3c144bc7515c288b8b6d7155dc37995b434e23b65d99b36026f941ebcc",
+    "learning/packet_report.py": "707566ec96996b323372abb66daa44b8070df6711f82d2ba4a894ae1011d3a24",
+    "learning/packets.py": "ef01397ab8029f4b24b3dc312ed77697195826dbc8b935a1ae0b8f7c2bf1bf4c",
+    "learning/run.py": "503625741be6c7167da78897ad6ce2142fe76d7054bbf83af2873979f153a37f",
+    "learning/worker.py": "526c2679ea468f9a4f90084eb0c67f5180ea548155e49a01906b02f64420a65e",
+    "learning.config.json": "00fe3fb276bcda1cbccf806cb9e27b0041aabbaf101d3560eef1ebc5695af03d",
+    "smoke.config.json": "73f53a7ef50b6f3c87431954cd0ee6e25abdfc4030629973ee6e6feaf9e7f57b"
+  },
+  "frozen_learning_sha256": "4419d8094381515eaa83f0adfec2a144498487ac48ddbd6b8f718fa18fa2e86f",
+  "unchanged_learning_inventory": true,
+  "attempts": [
+    {
+      "attempt": 1,
+      "job_id": "ce98ea1b4ea74e6f9499047bffa8ada7",
+      "status": "unresolved",
+      "total_elapsed_seconds": 91.332,
+      "activity": "procedure_infrastructure_failure",
+      "stage_timings": [
+        {
+          "stage": "Discover",
+          "start_seconds": 0.577,
+          "seconds": 35.789
+        },
+        {
+          "stage": "Validate procedure",
+          "start_seconds": 36.366,
+          "seconds": 17.898
+        },
+        {
+          "stage": "Investigate",
+          "start_seconds": 54.264,
+          "seconds": 37.068
+        }
+      ],
+      "model_invocations": [
+        {
+          "status": "passed",
+          "model": "gpt-6.1-sol",
+          "effort": "medium",
+          "runtime_version": "codex-cli 0.162.0-alpha.17.2",
+          "elapsed_seconds": 32.535,
+          "usage": {
+            "total": {
+              "totalTokens": 90140,
+              "inputTokens": 88805,
+              "cachedInputTokens": 72064,
+              "cacheWriteInputTokens": 0,
+              "outputTokens": 1335,
+              "reasoningOutputTokens": 74
+            },
+            "last": {
+              "totalTokens": 25019,
+              "inputTokens": 23906,
+              "cachedInputTokens": 22272,
+              "cacheWriteInputTokens": 0,
+              "outputTokens": 1113,
+              "reasoningOutputTokens": 74
+            },
+            "modelContextWindow": 258400
+          },
+          "error": null,
+          "path": "evidence/learning/feature-ce98ea1b4ea74e6f9499047bffa8ada7/discovery/attempt/model/invocation.json",
+          "sha256": "115dde99e392db4dd37841e27a768366169166c89b7e3faf2ccd2e9ba482db72"
+        },
+        {
+          "status": "passed",
+          "model": "gpt-6.1-sol",
+          "effort": "medium",
+          "runtime_version": "codex-cli 0.162.0-alpha.17.2",
+          "elapsed_seconds": 27.687,
+          "usage": {
+            "total": {
+              "totalTokens": 10027,
+              "inputTokens": 9034,
+              "cachedInputTokens": 0,
+              "cacheWriteInputTokens": 0,
+              "outputTokens": 993,
+              "reasoningOutputTokens": 259
+            },
+            "last": {
+              "totalTokens": 10027,
+              "inputTokens": 9034,
+              "cachedInputTokens": 0,
+              "cacheWriteInputTokens": 0,
+              "outputTokens": 993,
+              "reasoningOutputTokens": 259
+            },
+            "modelContextWindow": 258400
+          },
+          "error": null,
+          "path": "evidence/learning/20261011T203326Z-273d7f90-dev-resume/model/planner/invocation.json",
+          "sha256": "8002b4ed1461242a9d0a8f70088a904a062fa7f90717b8d46bd36f18d3b4170c"
+        }
+      ],
+      "model_usage": {
+        "totalTokens": 100167,
+        "inputTokens": 97839,
+        "cachedInputTokens": 72064,
+        "outputTokens": 2328,
+        "reasoningOutputTokens": 333
+      },
+      "candidate_attempts": [],
+      "fresh_experiments": 0,
+      "failures": [
+        {
+          "sequence": 4,
+          "event": "failure",
+          "elapsed_seconds": 36.576,
+          "budget": {
+            "remaining_seconds": 563.424,
+            "fresh_experiments_remaining": 4,
+            "candidates_remaining": 2
+          },
+          "classification": "procedure_infrastructure_failure",
+          "error": {
+            "type": "ValueError",
+            "message": "Expected integer in 3..257"
+          }
+        }
+      ],
+      "archive": "evidence/learning/20261011T203326Z-273d7f90-dev-resume",
+      "presentation": "evidence/learning/feature-ce98ea1b4ea74e6f9499047bffa8ada7",
+      "workspace": "dev-workspaces/feature-ce98ea1b4ea74e6f9499047bffa8ada7",
+      "configuration_sha256": "4d490a432bcd7558385644cff0c6fda65de6f78612b99ee6447518853f9c688a",
+      "preparation": {
+        "id": "ce98ea1b4ea74e6f9499047bffa8ada7",
+        "preparation": {
+          "feature": "brightness",
+          "app": "D:\\Samuel\\Downloads\\Code\\ReforgerData\\demo-rehearsal\\dev-workspaces\\feature-ce98ea1b4ea74e6f9499047bffa8ada7",
+          "target_absent": true,
+          "files": {
+            "index.html": "386a23c1c3ff31abbdbc8b4fcafb2b76f3546ef31a22631ac2b9467138ed9ef8",
+            "package-lock.json": "0f0c6aa01564130d672f647bc293bba4a8e3893d36bfd3bf16ab39e6b0e0ef69",
+            "package.json": "882b343488c410bcc612b82c7dc14978384525cff43b4de5418a4a36e52277f9",
+            "README.md": "93dc16eec39436b8a1fd942f41f912d70e0165a5a080896236da099cec778412",
+            "tsconfig.json": "6d839ab5d73095297ef9128243838c093c616d55f454f73416cf0c9ac8c05da4",
+            "vite.config.ts": "19f18fa380d4e9fa01cb38a62a130e40f88e7c4d33e1dcae00ad218e55463d27",
+            "src/current-image.ts": "79e5dfe215aae27184d9049d552dfa3adfd54978bfdd0a13d053d946b3a7ea5e",
+            "src/main.tsx": "55448583fd9b2ed39f447f8b1e08206d839005d8c37ea4b699805e5eee26c6be",
+            "src/style.css": "d21d0ef9945645793b02594bda53b1b66329a5d2819517c74a46342850da70d6"
+          },
+          "memory": {
+            "prior_target_code": false,
+            "prior_target_contracts": false,
+            "prior_target_experiments": false,
+            "prior_target_procedures": false,
+            "discovery_memory": "job-local empty",
+            "shared_io_procedures": true,
+            "general_investigation_guidance": true,
+            "model_pretraining": "unchanged; not knowledge-free"
+          },
+          "model_invoked": false
+        }
+      },
+      "final_summary": null,
+      "report": {
+        "status": "unresolved",
+        "first_acceptance": null,
+        "stop_reason": "procedure_infrastructure_failure",
+        "final_build": {
+          "status": "passed"
+        },
+        "final_baseline_pass": true,
+        "candidate_attempts": [],
+        "evidence_ids": [],
+        "suite_sha256": null,
+        "budget": {
+          "remaining_seconds": 554.854,
+          "fresh_experiments_remaining": 4,
+          "candidates_remaining": 2
+        },
+        "promoted": false,
+        "scope": "frozen visible suite only; final evaluation separate"
+      }
+    },
+    {
+      "attempt": 2,
+      "job_id": "fdbbb76c1ef9482dbb9d8981ccf07f4d",
+      "status": "unresolved",
+      "total_elapsed_seconds": 260.772,
+      "activity": "candidate_budget_exhausted",
+      "stage_timings": [
+        {
+          "stage": "Discover",
+          "start_seconds": 0.544,
+          "seconds": 33.34
+        },
+        {
+          "stage": "Validate procedure",
+          "start_seconds": 33.884,
+          "seconds": 17.269
+        },
+        {
+          "stage": "Investigate",
+          "start_seconds": 51.153,
+          "seconds": 80.393
+        },
+        {
+          "stage": "Reconstruct",
+          "start_seconds": 131.546,
+          "seconds": 54.071
+        },
+        {
+          "stage": "Verify",
+          "start_seconds": 185.617,
+          "seconds": 7.473
+        },
+        {
+          "stage": "Reconstruct",
+          "start_seconds": 193.09,
+          "seconds": 49.414
+        },
+        {
+          "stage": "Verify",
+          "start_seconds": 242.504,
+          "seconds": 18.268
+        }
+      ],
+      "model_invocations": [
+        {
+          "status": "passed",
+          "model": "gpt-6.1-sol",
+          "effort": "medium",
+          "runtime_version": "codex-cli 0.162.0-alpha.17.2",
+          "elapsed_seconds": 30.263,
+          "usage": {
+            "total": {
+              "totalTokens": 62135,
+              "inputTokens": 60892,
+              "cachedInputTokens": 41856,
+              "cacheWriteInputTokens": 0,
+              "outputTokens": 1243,
+              "reasoningOutputTokens": 53
+            },
+            "last": {
+              "totalTokens": 19608,
+              "inputTokens": 18514,
+              "cachedInputTokens": 16896,
+              "cacheWriteInputTokens": 0,
+              "outputTokens": 1094,
+              "reasoningOutputTokens": 53
+            },
+            "modelContextWindow": 258400
+          },
+          "error": null,
+          "path": "evidence/learning/feature-fdbbb76c1ef9482dbb9d8981ccf07f4d/discovery/attempt/model/invocation.json",
+          "sha256": "fce009f5ea3b7846b80ec4bd0bb07bd7e3d3d4e2e25b2c328957af9530bab710"
+        },
+        {
+          "status": "passed",
+          "model": "gpt-6.1-sol",
+          "effort": "medium",
+          "runtime_version": "codex-cli 0.162.0-alpha.17.2",
+          "elapsed_seconds": 53.949,
+          "usage": {
+            "total": {
+              "totalTokens": 190915,
+              "inputTokens": 188949,
+              "cachedInputTokens": 154880,
+              "cacheWriteInputTokens": 0,
+              "outputTokens": 1966,
+              "reasoningOutputTokens": 196
+            },
+            "last": {
+              "totalTokens": 33154,
+              "inputTokens": 33099,
+              "cachedInputTokens": 31616,
+              "cacheWriteInputTokens": 0,
+              "outputTokens": 55,
+              "reasoningOutputTokens": 0
+            },
+            "modelContextWindow": 258400
+          },
+          "error": null,
+          "path": "evidence/learning/20261011T203549Z-3bcd93d3-dev-resume/model/builder-1/invocation.json",
+          "sha256": "9bd2c703dc43fb22aefb828568f24a78a2335211c03dafc085dbd8e5ae85141d"
+        },
+        {
+          "status": "passed",
+          "model": "gpt-6.1-sol",
+          "effort": "medium",
+          "runtime_version": "codex-cli 0.162.0-alpha.17.2",
+          "elapsed_seconds": 49.149,
+          "usage": {
+            "total": {
+              "totalTokens": 204013,
+              "inputTokens": 202201,
+              "cachedInputTokens": 165888,
+              "cacheWriteInputTokens": 0,
+              "outputTokens": 1812,
+              "reasoningOutputTokens": 129
+            },
+            "last": {
+              "totalTokens": 35205,
+              "inputTokens": 35157,
+              "cachedInputTokens": 33792,
+              "cacheWriteInputTokens": 0,
+              "outputTokens": 48,
+              "reasoningOutputTokens": 0
+            },
+            "modelContextWindow": 258400
+          },
+          "error": null,
+          "path": "evidence/learning/20261011T203549Z-3bcd93d3-dev-resume/model/builder-2/invocation.json",
+          "sha256": "23c91f974401aaea0ef38dd389262e6c0ddd66611b0298396e5e2306c44dbf90"
+        },
+        {
+          "status": "passed",
+          "model": "gpt-6.1-sol",
+          "effort": "medium",
+          "runtime_version": "codex-cli 0.162.0-alpha.17.2",
+          "elapsed_seconds": 29.804,
+          "usage": {
+            "total": {
+              "totalTokens": 16407,
+              "inputTokens": 15331,
+              "cachedInputTokens": 0,
+              "cacheWriteInputTokens": 0,
+              "outputTokens": 1076,
+              "reasoningOutputTokens": 85
+            },
+            "last": {
+              "totalTokens": 16407,
+              "inputTokens": 15331,
+              "cachedInputTokens": 0,
+              "cacheWriteInputTokens": 0,
+              "outputTokens": 1076,
+              "reasoningOutputTokens": 85
+            },
+            "modelContextWindow": 258400
+          },
+          "error": null,
+          "path": "evidence/learning/20261011T203549Z-3bcd93d3-dev-resume/model/contract/invocation.json",
+          "sha256": "902de47471e395a8ad9e2a6309658efe08f62ba897928c6efee96afbc198ffd2"
+        },
+        {
+          "status": "passed",
+          "model": "gpt-6.1-sol",
+          "effort": "medium",
+          "runtime_version": "codex-cli 0.162.0-alpha.17.2",
+          "elapsed_seconds": 37.883,
+          "usage": {
+            "total": {
+              "totalTokens": 10025,
+              "inputTokens": 9036,
+              "cachedInputTokens": 0,
+              "cacheWriteInputTokens": 0,
+              "outputTokens": 989,
+              "reasoningOutputTokens": 231
+            },
+            "last": {
+              "totalTokens": 10025,
+              "inputTokens": 9036,
+              "cachedInputTokens": 0,
+              "cacheWriteInputTokens": 0,
+              "outputTokens": 989,
+              "reasoningOutputTokens": 231
+            },
+            "modelContextWindow": 258400
+          },
+          "error": null,
+          "path": "evidence/learning/20261011T203549Z-3bcd93d3-dev-resume/model/planner/invocation.json",
+          "sha256": "401295f8cb1a56c14c2c69c07772bbf2f094eb0cc7cd060c3e4afede2f0b003c"
+        }
+      ],
+      "model_usage": {
+        "totalTokens": 483495,
+        "inputTokens": 476409,
+        "cachedInputTokens": 362624,
+        "outputTokens": 7086,
+        "reasoningOutputTokens": 694
+      },
+      "candidate_attempts": [
+        {
+          "id": "candidate-1",
+          "status": "rejected",
+          "reason": "baseline_regression",
+          "checkpoint": "D:\\Samuel\\Downloads\\Code\\ReforgerData\\demo-rehearsal\\evidence\\learning\\20261011T203549Z-3bcd93d3-dev-resume\\checkpoints\\candidate-1"
+        },
+        {
+          "id": "candidate-2",
+          "status": "rejected",
+          "reason": "baseline_regression",
+          "checkpoint": "D:\\Samuel\\Downloads\\Code\\ReforgerData\\demo-rehearsal\\evidence\\learning\\20261011T203549Z-3bcd93d3-dev-resume\\checkpoints\\candidate-2"
+        }
+      ],
+      "fresh_experiments": 4,
+      "failures": [
+        {
+          "sequence": 18,
+          "event": "rejection",
+          "elapsed_seconds": 150.547,
+          "budget": {
+            "remaining_seconds": 449.453,
+            "fresh_experiments_remaining": 0,
+            "candidates_remaining": 1
+          },
+          "candidate_id": "candidate-1",
+          "reason": "baseline_regression"
+        },
+        {
+          "sequence": 22,
+          "event": "rejection",
+          "elapsed_seconds": 207.627,
+          "budget": {
+            "remaining_seconds": 392.373,
+            "fresh_experiments_remaining": 0,
+            "candidates_remaining": 0
+          },
+          "candidate_id": "candidate-2",
+          "reason": "baseline_regression"
+        },
+        {
+          "event": "baseline_detail",
+          "candidate": "candidate-1-gates",
+          "error": {
+            "type": "AssertionError",
+            "message": "Locator expected to be visible\nActual value: None\nError: strict mode violation: get_by_text(\"No image loaded\", exact=True) resolved to 2 elements:\n    1) <span>No image loaded</span> aka get_by_role(\"region\", name=\"Image workspace\").get_by_text(\"No image loaded\")\n    2) <p id=\"corrections-description\">No image loaded</p> aka locator(\"#corrections-description\")\n \nCall log:\n  - Expect \"to_be_visible\" get_by_text(\"No image loaded\", exact=True) with timeout 5000ms\n  - waiting for get_by_text(\"No image loaded\", exact=True)\n"
+          }
+        },
+        {
+          "event": "baseline_detail",
+          "candidate": "candidate-2-gates",
+          "error": {
+            "type": "AssertionError",
+            "message": "Locator expected to be visible\nActual value: None\nError: strict mode violation: get_by_text(\"No image loaded\", exact=True) resolved to 2 elements:\n    1) <span>No image loaded</span> aka get_by_role(\"region\", name=\"Image workspace\").get_by_text(\"No image loaded\")\n    2) <p>No image loaded</p> aka get_by_label(\"Color Corrections\").locator(\"p\")\n \nCall log:\n  - Expect \"to_be_visible\" get_by_text(\"No image loaded\", exact=True) with timeout 5000ms\n  - waiting for get_by_text(\"No image loaded\", exact=True)\n"
+          }
+        }
+      ],
+      "archive": "evidence/learning/20261011T203549Z-3bcd93d3-dev-resume",
+      "presentation": "evidence/learning/feature-fdbbb76c1ef9482dbb9d8981ccf07f4d",
+      "workspace": "dev-workspaces/feature-fdbbb76c1ef9482dbb9d8981ccf07f4d",
+      "configuration_sha256": "4d490a432bcd7558385644cff0c6fda65de6f78612b99ee6447518853f9c688a",
+      "preparation": {
+        "id": "fdbbb76c1ef9482dbb9d8981ccf07f4d",
+        "preparation": {
+          "feature": "brightness",
+          "app": "D:\\Samuel\\Downloads\\Code\\ReforgerData\\demo-rehearsal\\dev-workspaces\\feature-fdbbb76c1ef9482dbb9d8981ccf07f4d",
+          "target_absent": true,
+          "files": {
+            "index.html": "386a23c1c3ff31abbdbc8b4fcafb2b76f3546ef31a22631ac2b9467138ed9ef8",
+            "package-lock.json": "0f0c6aa01564130d672f647bc293bba4a8e3893d36bfd3bf16ab39e6b0e0ef69",
+            "package.json": "882b343488c410bcc612b82c7dc14978384525cff43b4de5418a4a36e52277f9",
+            "README.md": "93dc16eec39436b8a1fd942f41f912d70e0165a5a080896236da099cec778412",
+            "tsconfig.json": "6d839ab5d73095297ef9128243838c093c616d55f454f73416cf0c9ac8c05da4",
+            "vite.config.ts": "19f18fa380d4e9fa01cb38a62a130e40f88e7c4d33e1dcae00ad218e55463d27",
+            "src/current-image.ts": "79e5dfe215aae27184d9049d552dfa3adfd54978bfdd0a13d053d946b3a7ea5e",
+            "src/main.tsx": "55448583fd9b2ed39f447f8b1e08206d839005d8c37ea4b699805e5eee26c6be",
+            "src/style.css": "d21d0ef9945645793b02594bda53b1b66329a5d2819517c74a46342850da70d6"
+          },
+          "memory": {
+            "prior_target_code": false,
+            "prior_target_contracts": false,
+            "prior_target_experiments": false,
+            "prior_target_procedures": false,
+            "discovery_memory": "job-local empty",
+            "shared_io_procedures": true,
+            "general_investigation_guidance": true,
+            "model_pretraining": "unchanged; not knowledge-free"
+          },
+          "model_invoked": false
+        }
+      },
+      "final_summary": null,
+      "report": {
+        "status": "unresolved",
+        "first_acceptance": null,
+        "stop_reason": "candidate_budget_exhausted",
+        "final_build": {
+          "status": "passed"
+        },
+        "final_baseline_pass": true,
+        "candidate_attempts": [
+          {
+            "id": "candidate-1",
+            "status": "rejected",
+            "reason": "baseline_regression",
+            "checkpoint": "D:\\Samuel\\Downloads\\Code\\ReforgerData\\demo-rehearsal\\evidence\\learning\\20261011T203549Z-3bcd93d3-dev-resume\\checkpoints\\candidate-1"
+          },
+          {
+            "id": "candidate-2",
+            "status": "rejected",
+            "reason": "baseline_regression",
+            "checkpoint": "D:\\Samuel\\Downloads\\Code\\ReforgerData\\demo-rehearsal\\evidence\\learning\\20261011T203549Z-3bcd93d3-dev-resume\\checkpoints\\candidate-2"
+          }
+        ],
+        "evidence_ids": [
+          "adjustment-1",
+          "adjustment-2",
+          "adjustment-3",
+          "adjustment-4"
+        ],
+        "suite_sha256": "5f2c24b57b609a596ee95076e0ebd13f4534a0b5c4a90af434a180d39f0082ed",
+        "budget": {
+          "remaining_seconds": 382.842,
+          "fresh_experiments_remaining": 0,
+          "candidates_remaining": 0
+        },
+        "promoted": false,
+        "scope": "frozen visible suite only; final evaluation separate"
+      }
+    },
+    {
+      "attempt": 3,
+      "job_id": "b0c13d30441a42a5993c15f35c002c2b",
+      "status": "unresolved",
+      "total_elapsed_seconds": 99.547,
+      "activity": "procedure_infrastructure_failure",
+      "stage_timings": [
+        {
+          "stage": "Discover",
+          "start_seconds": 0.549,
+          "seconds": 31.667
+        },
+        {
+          "stage": "Validate procedure",
+          "start_seconds": 32.216,
+          "seconds": 17.572
+        },
+        {
+          "stage": "Investigate",
+          "start_seconds": 49.788,
+          "seconds": 49.759
+        }
+      ],
+      "model_invocations": [
+        {
+          "status": "passed",
+          "model": "gpt-6.1-sol",
+          "effort": "medium",
+          "runtime_version": "codex-cli 0.162.0-alpha.17.2",
+          "elapsed_seconds": 28.605,
+          "usage": {
+            "total": {
+              "totalTokens": 62158,
+              "inputTokens": 60889,
+              "cachedInputTokens": 41856,
+              "cacheWriteInputTokens": 0,
+              "outputTokens": 1269,
+              "reasoningOutputTokens": 79
+            },
+            "last": {
+              "totalTokens": 19634,
+              "inputTokens": 18512,
+              "cachedInputTokens": 16896,
+              "cacheWriteInputTokens": 0,
+              "outputTokens": 1122,
+              "reasoningOutputTokens": 79
+            },
+            "modelContextWindow": 258400
+          },
+          "error": null,
+          "path": "evidence/learning/feature-b0c13d30441a42a5993c15f35c002c2b/discovery/attempt/model/invocation.json",
+          "sha256": "370ee93f93c5585daf2721bf258005be05bde21c0e774660530bfff40d834cec"
+        },
+        {
+          "status": "passed",
+          "model": "gpt-6.1-sol",
+          "effort": "medium",
+          "runtime_version": "codex-cli 0.162.0-alpha.17.2",
+          "elapsed_seconds": 33.712,
+          "usage": {
+            "total": {
+              "totalTokens": 10129,
+              "inputTokens": 9038,
+              "cachedInputTokens": 0,
+              "cacheWriteInputTokens": 0,
+              "outputTokens": 1091,
+              "reasoningOutputTokens": 361
+            },
+            "last": {
+              "totalTokens": 10129,
+              "inputTokens": 9038,
+              "cachedInputTokens": 0,
+              "cacheWriteInputTokens": 0,
+              "outputTokens": 1091,
+              "reasoningOutputTokens": 361
+            },
+            "modelContextWindow": 258400
+          },
+          "error": null,
+          "path": "evidence/learning/20261011T204052Z-e4367d7e-dev-resume/model/planner/invocation.json",
+          "sha256": "9086e4dcec5b3e3ef8498e9533e8322e80277f284cb2b2a6e89ed856c1a0ea22"
+        }
+      ],
+      "model_usage": {
+        "totalTokens": 72287,
+        "inputTokens": 69927,
+        "cachedInputTokens": 41856,
+        "outputTokens": 2360,
+        "reasoningOutputTokens": 440
+      },
+      "candidate_attempts": [],
+      "fresh_experiments": 2,
+      "failures": [
+        {
+          "sequence": 9,
+          "event": "failure",
+          "elapsed_seconds": 48.933,
+          "budget": {
+            "remaining_seconds": 551.067,
+            "fresh_experiments_remaining": 1,
+            "candidates_remaining": 2
+          },
+          "classification": "procedure_infrastructure_failure",
+          "error": {
+            "type": "PermissionError",
+            "message": "[WinError 5] Access is denied: 'D:\\\\Samuel\\\\Downloads\\\\Code\\\\ReforgerData\\\\demo-rehearsal\\\\evidence\\\\learning\\\\feature-b0c13d30441a42a5993c15f35c002c2b\\\\presentation\\\\results.tmp' -> 'D:\\\\Samuel\\\\Downloads\\\\Code\\\\ReforgerData\\\\demo-rehearsal\\\\evidence\\\\learning\\\\feature-b0c13d30441a42a5993c15f35c002c2b\\\\presentation\\\\results.json'"
+          }
+        }
+      ],
+      "archive": "evidence/learning/20261011T204052Z-e4367d7e-dev-resume",
+      "presentation": "evidence/learning/feature-b0c13d30441a42a5993c15f35c002c2b",
+      "workspace": "dev-workspaces/feature-b0c13d30441a42a5993c15f35c002c2b",
+      "configuration_sha256": "4d490a432bcd7558385644cff0c6fda65de6f78612b99ee6447518853f9c688a",
+      "preparation": {
+        "id": "b0c13d30441a42a5993c15f35c002c2b",
+        "preparation": {
+          "feature": "brightness",
+          "app": "D:\\Samuel\\Downloads\\Code\\ReforgerData\\demo-rehearsal\\dev-workspaces\\feature-b0c13d30441a42a5993c15f35c002c2b",
+          "target_absent": true,
+          "files": {
+            "index.html": "386a23c1c3ff31abbdbc8b4fcafb2b76f3546ef31a22631ac2b9467138ed9ef8",
+            "package-lock.json": "0f0c6aa01564130d672f647bc293bba4a8e3893d36bfd3bf16ab39e6b0e0ef69",
+            "package.json": "882b343488c410bcc612b82c7dc14978384525cff43b4de5418a4a36e52277f9",
+            "README.md": "93dc16eec39436b8a1fd942f41f912d70e0165a5a080896236da099cec778412",
+            "tsconfig.json": "6d839ab5d73095297ef9128243838c093c616d55f454f73416cf0c9ac8c05da4",
+            "vite.config.ts": "19f18fa380d4e9fa01cb38a62a130e40f88e7c4d33e1dcae00ad218e55463d27",
+            "src/current-image.ts": "79e5dfe215aae27184d9049d552dfa3adfd54978bfdd0a13d053d946b3a7ea5e",
+            "src/main.tsx": "55448583fd9b2ed39f447f8b1e08206d839005d8c37ea4b699805e5eee26c6be",
+            "src/style.css": "d21d0ef9945645793b02594bda53b1b66329a5d2819517c74a46342850da70d6"
+          },
+          "memory": {
+            "prior_target_code": false,
+            "prior_target_contracts": false,
+            "prior_target_experiments": false,
+            "prior_target_procedures": false,
+            "discovery_memory": "job-local empty",
+            "shared_io_procedures": true,
+            "general_investigation_guidance": true,
+            "model_pretraining": "unchanged; not knowledge-free"
+          },
+          "model_invoked": false
+        }
+      },
+      "final_summary": null,
+      "report": {
+        "status": "unresolved",
+        "first_acceptance": null,
+        "stop_reason": "procedure_infrastructure_failure",
+        "final_build": {
+          "status": "passed"
+        },
+        "final_baseline_pass": true,
+        "candidate_attempts": [],
+        "evidence_ids": [
+          "adjustment-1",
+          "adjustment-2"
+        ],
+        "suite_sha256": null,
+        "budget": {
+          "remaining_seconds": 542.325,
+          "fresh_experiments_remaining": 1,
+          "candidates_remaining": 2
+        },
+        "promoted": false,
+        "scope": "frozen visible suite only; final evaluation separate"
+      }
+    }
+  ]
+}

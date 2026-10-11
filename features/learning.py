@@ -14,7 +14,7 @@ from .spec import validate, parameter, value_in_domain
 class AdjustmentBroker(BrightnessBroker):
     writable={'src/main.tsx','src/contrast.ts','README.md'}
 
-PLAN=model.obj({'question':model.S,'hypotheses':model.arr(model.S),'input':model.obj({'kind':{'type':'string','enum':list(DEFINITIONS)},'width':model.I,'height':model.I}),'value':{'type':'number'},'predictions':model.arr(model.S),'usefulness':model.S})
+PLAN=model.obj({'question':model.S,'hypotheses':model.arr(model.S),'input':model.obj({'kind':{'type':'string','enum':list(DEFINITIONS)},'width':{'type':'integer','minimum':3,'maximum':257},'height':{'type':'integer','minimum':3,'maximum':257}}),'value':{'type':'number'},'predictions':model.arr(model.S),'usefulness':model.S})
 
 def contract_schema(evidence_ids,case_ids):
     schema=copy.deepcopy(model.CONTRACT)
@@ -105,6 +105,7 @@ class AdjustmentHarness(Harness):
         name=self.operation.title()
         prompt='Implement '+name+' independently from only supplied evidence and contract. Do not assume a formula or neutral behavior. Write '+self.op['source']+' exporting '+self.op['export']+'(raster: Raster, value: number): Raster. Preserve input immutability, dimensions, codec and every existing baseline. Wire Image -> '+self.op['ui_item']+' with accessible '+name+' slider and Apply/Close; disable with no image and unsupported depth16. Source/config/dependency restrictions apply. No reference internals, execution or other tools. Only src/main.tsx, '+self.op['source']+' and README.md writable. '+json.dumps({'observed_domain':self.domain,'claims':self.claims,'evidence':self.compact(),'previous':previous,'policy':self.suite['policy']},separators=(',',':'))
         prompt += ' Make minimal changes to the supplied shell. Preserve all existing accessible names exactly, including Original image preview: <filename>, Original image thumbnail: <filename>, and No image loaded. The operation menu must open on an empty document; disable its slider and Apply, not its menu item. The target module is absent in this starting/restored workspace: do not read a missing file. Write the complete module. A denied tool request invalidates the invocation. Preserve original PNG/JPEG import/export and all unavailable tools.'
+        prompt += ' Keep existing shell labels unique in the DOM, including hidden dialogs. Do not repeat No image loaded as dialog guidance; use distinct text for the disabled operation. Original shell regressions still apply when the operation dialog is open on an empty document.'
         reader=packets.EvidenceReader({e['id']:{'input':e['input'],'export':e['expected']} for e in self.evidence},self.config['evidence_reads'])
         self.ask(prompt,'builder-'+str(index),None,True,role='repair' if previous else 'builder',supplied=sources,reader=reader)
     def finish(self,final,final_baseline):
@@ -171,7 +172,7 @@ class AdjustmentHarness(Harness):
                 self.reuse_evidence(self.resume_source)
             else:
                 # Supplied generators are probes, not Contrast evidence.
-                answer=self.ask('Plan 2..4 bounded experiments distinguishing competing '+self.operation.title()+' hypotheses. Choose values from the observed domain; at least two distinct values. '+json.dumps({'spec':self.spec,'generators':DEFINITIONS,'budget':self.budget.snapshot()}),'planner',model.obj({'plans':model.arr(PLAN)}),role='planner')
+                answer=self.ask('Plan 2..4 bounded experiments distinguishing competing '+self.operation.title()+' hypotheses. Choose values from the observed domain; at least two distinct values. Both input width and height must be integers in 3..257, including ramps and patches; one-pixel dimensions are unsupported. '+json.dumps({'spec':self.spec,'generators':DEFINITIONS,'budget':self.budget.snapshot()}),'planner',model.obj({'plans':model.arr(PLAN)}),role='planner')
                 plans=answer['plans']
                 if not 2<=len(plans)<=self.config['fresh_experiments'] or len({p['value'] for p in plans})<2: raise ValueError('Require distinguishing bounded experiments')
                 for p in plans: self.experiment(p)

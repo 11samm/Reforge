@@ -1,5 +1,9 @@
 # Reforge â€” connectivity milestone
 
+For the current presentation, use the [demo launch guide](docs/demo-launch.md) and
+[three-attempt rehearsal report](docs/demo-rehearsal-20261011.md). The October 11
+rehearsal recommends recorded replay; the historical milestone notes below remain preserved.
+
 Milestone 1 only, implemented during OCC Hacks on October 10, 2026. Design context:
 `reforge_prd_v1.3.md` in ReforgerData. No dataset files or collector code were read,
 copied, or changed. The editor and learning loop are deferred. Deterministic reference browser replay

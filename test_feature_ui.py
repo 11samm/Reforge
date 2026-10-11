@@ -86,6 +86,12 @@ class IntegrationUI(unittest.TestCase):
                 expect(page.get_by_role('button',name='Learn Brightness',exact=True)).to_be_enabled()
                 page.get_by_role('button',name='Learn Brightness',exact=True).click()
                 expect(page.get_by_text('queued',exact=True)).to_be_visible()
+                # Preparation scrolls presenters to the editor; starting a run
+                # must bring the actual browser panes back into the viewport.
+                live=page.locator('.live-execution').bounding_box()
+                content=page.locator('.content').bounding_box()
+                self.assertGreaterEqual(live['y'],content['y']-2)
+                self.assertLess(live['y'],content['y']+content['height']/2)
                 expect(page.get_by_role('button',name='Learn Brightness',exact=True)).to_be_disabled()
                 page.get_by_role('button',name='Cancel run',exact=True).click()
                 expect(page.get_by_role('button',name='Cancelling…',exact=True)).to_be_disabled()

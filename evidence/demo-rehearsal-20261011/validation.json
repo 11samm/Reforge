@@ -1,0 +1,147 @@
+{
+  "python_distinct_tests": 158,
+  "dashboard_data_tests": 19,
+  "relocated_fixture_tests": 75,
+  "checks": [
+    {
+      "check": "existing_python_contracts",
+      "status": "passed",
+      "count": 145,
+      "command": "python -m unittest -v test_smoke test_adapter test_shell_boundary test_evaluator test_learning test_brightness test_interaction_map test_harness_repair test_fresh_brightness test_live_results test_features test_live_sessions",
+      "log": ".scratch/rehearsal/python-contracts.log",
+      "log_sha256": "e663c8d476a0bd4a2487424a967a71f2e0091c95da7fd29f4015a517fff20abd"
+    },
+    {
+      "check": "focused_post_rehearsal_regressions",
+      "status": "passed",
+      "count": 5,
+      "command": "python -m unittest -v test_presentation_atomic test_adjustment_contract",
+      "log": ".scratch/rehearsal/focused-final.log",
+      "log_sha256": "dfd0f0b3ac16f28f1ed1ce0327add5c37ef4cf508c9a522d95bbf54e21edea94"
+    },
+    {
+      "check": "dashboard_browser_checks",
+      "status": "passed",
+      "count": 5,
+      "command": "python -m unittest -v test_feature_ui test_live_ui test_live_results_ui test_portable_ui",
+      "log": ".scratch/rehearsal/python-ui.log",
+      "log_sha256": "4e5eccbd68428a60900be3b817a22e20bda9a00029603388f8872bd72fc280d7"
+    },
+    {
+      "check": "real_browser_lifecycle",
+      "status": "passed",
+      "count": 3,
+      "command": "python -m unittest -v test_live_browser",
+      "log": ".scratch/rehearsal/python-live-browser.log",
+      "log_sha256": "66711ef60d9457660c95c2c321369c31ef9a743919128b1d02b73f544c2b34dc"
+    },
+    {
+      "check": "relocated_fixtures",
+      "status": "passed",
+      "count": 75,
+      "command": "python -m learning.ci_fixtures --check",
+      "log": ".scratch/rehearsal/relocated-fixtures.log",
+      "log_sha256": "71ba5877cbe08ac684d7231d60ecf8e6bc7be5b75918cc150f1876ab821d5e85"
+    },
+    {
+      "check": "dashboard_data",
+      "status": "passed",
+      "count": 19,
+      "command": "npm.cmd --prefix dashboard test",
+      "log": ".scratch/rehearsal/final-dashboard-tests.log",
+      "log_sha256": "8f1f875489f58b6edaa9f86db9e9819069c29ab4b87242a6d0908f589dac3fe7"
+    },
+    {
+      "check": "dashboard_typecheck",
+      "status": "passed",
+      "count": null,
+      "command": "npm.cmd --prefix dashboard run typecheck",
+      "log": ".scratch/rehearsal/final-typecheck.log",
+      "log_sha256": "169aa3bf72d68ce8004d661e6732b58b51de756b1692a6cc9be25fe08ac5cd08"
+    },
+    {
+      "check": "dashboard_production_build",
+      "status": "passed",
+      "count": null,
+      "command": "npm.cmd --prefix dashboard run build",
+      "log": ".scratch/rehearsal/final-dashboard-build.log",
+      "log_sha256": "06a088d318ca49b402faa100656011bb8e727423bd3e5740178ceaaf2eeabc24"
+    },
+    {
+      "check": "editor_production_build",
+      "status": "passed",
+      "count": null,
+      "command": "npm.cmd --prefix generated-app run build",
+      "log": ".scratch/rehearsal/final-editor-build.log",
+      "log_sha256": "0a11a2ecaead9bb55867a55472afde5b723d73683ec0d0dbb49058f116369b97"
+    },
+    {
+      "check": "saved_brightness_contrast_editor_regressions",
+      "status": "passed",
+      "count": null,
+      "command": "python .scratch/rehearsal/regressions.py",
+      "log": ".scratch/rehearsal/editor-regressions.log",
+      "log_sha256": "37e730569e4fcec9379b59ff36c32c8c8008349c1c5193b06270cab7051bda12"
+    },
+    {
+      "check": "brightness_recording_source",
+      "status": "passed",
+      "count": null,
+      "command": "python verify_portable_source.py --repo D:/Samuel/Downloads/Code/ReforgerData/contrast-brightness-worktree --archive D:/Samuel/Downloads/Code/ReforgerData/contrast-brightness-worktree/evidence/learning/20261011T183641Z-73504a72-dev-resume --job D:/Samuel/Downloads/Code/ReforgerData/contrast-brightness-worktree/evidence/learning/feature-82b68e6daf5e41ddb7c03c13a91ba1f9 --bundle dashboard/public/runs/brightness-success.reforge.json",
+      "log": ".scratch/rehearsal/brightness-recording-source.log",
+      "log_sha256": "d68a993f24389474e0939513385c88ed9e6b0dd2b63315eb875c38c65ea4779d"
+    },
+    {
+      "check": "contrast_recording_source",
+      "status": "passed",
+      "count": null,
+      "command": "python verify_portable_source.py --repo D:/Samuel/Downloads/Code/ReforgerData/feature-discovery-worktree --archive D:/Samuel/Downloads/Code/ReforgerData/feature-discovery-worktree/evidence/learning/20261011T083511Z-2d1ccba6-dev-resume --job D:/Samuel/Downloads/Code/ReforgerData/feature-discovery-worktree/evidence/learning/feature-9df7c33da7a5425db3934e2cd928c5ee --bundle dashboard/public/runs/contrast-success.reforge.json",
+      "log": ".scratch/rehearsal/contrast-recording-source.log",
+      "log_sha256": "83e1ca88b2f7bf7d31eb889e0b84bbe4bce2226b4edc711d327e130b4b048d62"
+    }
+  ],
+  "real_browser_verification": {
+    "job_id": "f18e000244d947e4896ed2b6c98bd941",
+    "real_frames_seen": [
+      "candidate",
+      "reference"
+    ],
+    "simultaneously_visible": true,
+    "distinct_actions_seen": 60,
+    "headed_headless_exact_parity": true,
+    "model_calls": 0
+  },
+  "cancelled_real_owner_job": "5423efb2649c4ccc8ba1570cbb5b0cee",
+  "saved_numerical_cases": {
+    "brightness": 11,
+    "contrast": 4,
+    "original_editor": 4
+  },
+  "bundled_recordings": {
+    "brightness-success.reforge.json": {
+      "bytes": 7164565,
+      "sha256": "e24dc3804d2948afc4eb4969bf2f919baf4a9deacae0c01c06edab9efed9c277"
+    },
+    "contrast-success.reforge.json": {
+      "bytes": 7137393,
+      "sha256": "e9f8a9dc3f4b146f94154c1d5413d100a5ea79b0c92ab7c4d2657af81c836558"
+    }
+  },
+  "new_successful_recordings": [],
+  "initial_failed_fix_logs": [
+    ".scratch/rehearsal/atomic-tests.log",
+    ".scratch/rehearsal/atomic-tests-fixed.log"
+  ],
+  "generated_reports_preserved": ".scratch/rehearsal/generated-test-reports",
+  "startup_and_shutdown": {
+    "candidates": 2,
+    "model_invoked": false,
+    "pilot_enabled": false,
+    "dashboard_restart": "passed",
+    "service_start": "passed",
+    "served_job": "fdbbb76c1ef9482dbb9d8981ccf07f4d",
+    "owned_service_stopped": true,
+    "owned_dashboard_clean_stop_verified": true,
+    "dashboard_restarted_for_offline_presentation": true
+  }
+}

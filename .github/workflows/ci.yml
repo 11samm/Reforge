@@ -41,7 +41,7 @@ jobs:
       - name: Check syntax
         run: python -m compileall -q smoke.py build_shell.py verify_shell.py test_smoke.py test_adapter.py test_shell_boundary.py test_evaluator.py baseline_regressions.py test_learning.py test_brightness.py test_live_results.py test_portable_ui.py verify_portable_source.py verify_adjustments.py evaluator adapter learning features
       - name: Run offline tests
-        run: python -m unittest -v test_smoke test_adapter test_shell_boundary test_evaluator test_learning test_brightness test_features test_interaction_map test_harness_repair test_fresh_brightness test_live_sessions test_live_results
+        run: python -m unittest -v test_smoke test_adapter test_shell_boundary test_evaluator test_learning test_brightness test_features test_interaction_map test_harness_repair test_fresh_brightness test_live_sessions test_live_results test_presentation_atomic test_adjustment_contract
       - name: Verify relocatable CI fixtures
         run: python -m learning.ci_fixtures --check
       - name: Check command help
