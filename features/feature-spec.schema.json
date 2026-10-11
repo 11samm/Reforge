@@ -1,0 +1,305 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Reforge discovered feature v1",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "request": {
+      "type": "string"
+    },
+    "feature_id": {
+      "type": "string",
+      "const": "contrast"
+    },
+    "target": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "visible_version": {
+          "type": "string"
+        },
+        "build": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "visible_version",
+        "build"
+      ],
+      "additionalProperties": false
+    },
+    "scope": {
+      "type": "string"
+    },
+    "navigation": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "by": {
+            "type": "string",
+            "enum": [
+              "role",
+              "label",
+              "row"
+            ]
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "button",
+              "heading",
+              "menuitem",
+              "slider",
+              "spinbutton",
+              "textbox"
+            ]
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "by",
+          "role",
+          "name"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "dialog": {
+      "type": "string"
+    },
+    "controls": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "slider",
+              "spinbutton"
+            ]
+          },
+          "locator": {
+            "type": "object",
+            "properties": {
+              "by": {
+                "type": "string",
+                "enum": [
+                  "role",
+                  "label",
+                  "row"
+                ]
+              },
+              "role": {
+                "type": "string",
+                "enum": [
+                  "button",
+                  "heading",
+                  "menuitem",
+                  "slider",
+                  "spinbutton",
+                  "textbox"
+                ]
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "by",
+              "role",
+              "name"
+            ],
+            "additionalProperties": false
+          },
+          "min": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "max": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "step": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "default": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "neutral": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "Optional neutral hypothesis. Null is permitted with observed defaults; trusted orchestration verifies the combined default setup on a diagnostic export before learning."
+          },
+          "observation_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "label",
+          "type",
+          "locator",
+          "min",
+          "max",
+          "step",
+          "default",
+          "neutral",
+          "observation_ids"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "parameter": {
+      "type": "string"
+    },
+    "apply": {
+      "type": "object",
+      "properties": {
+        "by": {
+          "type": "string",
+          "enum": [
+            "role",
+            "label",
+            "row"
+          ]
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "button",
+            "heading",
+            "menuitem",
+            "slider",
+            "spinbutton",
+            "textbox"
+          ]
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "by",
+        "role",
+        "name"
+      ],
+      "additionalProperties": false
+    },
+    "cancel": {
+      "type": "object",
+      "properties": {
+        "by": {
+          "type": "string",
+          "enum": [
+            "role",
+            "label",
+            "row"
+          ]
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "button",
+            "heading",
+            "menuitem",
+            "slider",
+            "spinbutton",
+            "textbox"
+          ]
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "by",
+        "role",
+        "name"
+      ],
+      "additionalProperties": false
+    },
+    "completion": {
+      "type": "string"
+    },
+    "import_procedure": {
+      "type": "string"
+    },
+    "export_procedure": {
+      "type": "string"
+    },
+    "observation_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "hypotheses": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "unresolved": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "discovered",
+        "unresolved",
+        "unsupported"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "request",
+    "feature_id",
+    "target",
+    "scope",
+    "navigation",
+    "dialog",
+    "controls",
+    "parameter",
+    "apply",
+    "cancel",
+    "completion",
+    "import_procedure",
+    "export_procedure",
+    "observation_ids",
+    "hypotheses",
+    "unresolved",
+    "status"
+  ],
+  "additionalProperties": false
+}

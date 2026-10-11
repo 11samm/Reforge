@@ -111,7 +111,20 @@ What the exporter does:
 The bundled recorded sample (`public/runs/recorded-20261010T184129Z-78c8e934`,
 about 205 KB) was produced this way. It is not the full archive.
 
-## Future live integration (not implemented)
+## Local feature jobs (implemented; live pilot not run)
+
+The separate Implement a feature view polls the loopback job service via Vite's
+same-origin `/api/jobs` proxy. It does not convert a recorded run into live data.
+`data/jobs.ts` validates sequenced/timed job events, deduplicates reconnects through
+`appendEvents`, and derives replay snapshots only from facts available at the cursor.
+Evidence is served only after an availability event, from allowlisted sanitized JSON
+copies. Future terminal state and evidence cannot populate earlier snapshots. Job
+events and outcomes persist across refresh; interrupted hosts never imply acceptance.
+See `../README-features.md` for setup, bounds, disabled-by-default execution and the
+unexecuted Contrast pilot. Private observations and final expected images are not
+served by this API.
+
+## General harness SSE integration (not implemented)
 
 `src/data/live.ts` defines `RunEventSource`, `parseEventLine`, `appendEvents`
 and an untested `SseRunEventSource`. Nothing in the UI uses them yet. To

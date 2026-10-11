@@ -74,7 +74,7 @@ def candidate(request,directory):
     op=None
     if request.get('operation'):
         from .operations import operation_spec
-        op=operation_spec(request['operation'])
+        op=operation_spec(request['operation'],request.get('spec'))
     source=op['source'] if op else 'src/gaussian-blur.ts'
     function=op['export'] if op else 'applyGaussianBlur'
     key=op['parameter']['key'] if op else 'percentage'
@@ -127,7 +127,7 @@ def candidate(request,directory):
         result['evaluator_suspect']=any(r['classification'] in ['infrastructure_error','invalid_region'] or
                                       r.get('reference_path') is None for r in result['cases'])
         # Check the shell applies to current image state and matches the same batch operation.
-        first=next((c for c in suite['cases'] if c[key]!=0),suite['cases'][0]) if op else suite['cases'][0]
+        first=next((c for c in suite['cases'] if c[key]!=op['parameter']['default']),suite['cases'][0]) if op else suite['cases'][0]
         server=ThreadingHTTPServer(('127.0.0.1',0),partial(QuietHandler,directory=str(app/'dist')))
         threading.Thread(target=server.serve_forever,daemon=True).start()
         try:
@@ -142,15 +142,21 @@ def candidate(request,directory):
                 page.goto(f'http://127.0.0.1:{server.server_port}',wait_until='networkidle')
                 if op:
                     page.get_by_role('menuitem',name=op['ui_menu'],exact=True).click()
-                    page.get_by_role('menuitem',name=op['ui_item'],exact=True).click()
-                    empty=page.get_by_role('dialog')
-                    expect(empty.get_by_role('slider',name='Brightness',exact=False)).to_be_disabled()
-                    expect(empty.get_by_role('button',name='Apply',exact=True)).to_be_disabled()
-                    empty.get_by_role('button',name='Close',exact=True).click()
+                    item=page.get_by_role('menuitem',name=op['ui_item'],exact=True)
+                    # An unavailable operation may disable its menu item or its dialog controls.
+                    if item.is_disabled():
+                        expect(item).to_be_disabled()
+                        page.get_by_role('menuitem',name=op['ui_menu'],exact=True).click()
+                    else:
+                        item.click()
+                        empty=page.get_by_role('dialog')
+                        expect(empty.get_by_role('slider',name=op['ui_parameter'],exact=False)).to_be_disabled()
+                        expect(empty.get_by_role('button',name='Apply',exact=True)).to_be_disabled()
+                        empty.get_by_role('button',name='Close',exact=True).click()
                 page.locator('input[type=file]').set_input_files(first['input'])
                 expect(page.get_by_role('img',name='Original image preview: '+Path(first['input']).name,exact=True)).to_be_visible()
                 page.get_by_role('menuitem',name=op['ui_menu'] if op else 'Effects',exact=True).click()
-                page.get_by_role('menuitem',name=op['ui_item'] if op else 'Gaussian Blur…',exact=True).click()
+                page.get_by_role('menuitem',name=op['ui_item'] if op else 'Gaussian Blurâ€¦',exact=True).click()
                 import re
                 dialog=page.get_by_role('dialog'); slider=dialog.get_by_role('slider',name=re.compile('^'+(op['ui_parameter'] if op else 'Percentage')+r'(?::.*)?$'))
                 slider.press('Home')
@@ -184,22 +190,32 @@ def selfcheck(directory):
     return {'status':'passed','equal':equal,'unequal':unequal}
 
 def main():
-    parser=argparse.ArgumentParser(); parser.add_argument('kind',choices=['reference','brightness-reference','devreference','candidate','build','selfcheck'])
+    parser=argparse.ArgumentParser(); parser.add_argument('kind',choices=['reference','brightness-reference','feature-reference','feature-discovery','devreference','candidate','build','selfcheck'])
     parser.add_argument('request',type=Path); parser.add_argument('directory',type=Path); args=parser.parse_args()
     d=within(args.directory,EVIDENCE/'learning'); d.mkdir(parents=True,exist_ok=True)
     try:
         request=json.loads(args.request.read_text())
+        if request.get('harness_patch'):
+            if args.kind not in ('feature-discovery','feature-reference'): raise ValueError('Harness patches restricted to feature reference workers')
+            from features.repair import install_file
+            install_file(request['harness_patch'])
         result={'status':'passed'}
         if args.kind=='reference': result=reference(request,d)
         elif args.kind=='brightness-reference':
             from adapter.brightness import reference_brightness
             result=reference_brightness(request,d)
+        elif args.kind=='feature-reference':
+            from features.browser import reference as feature_reference
+            result=feature_reference(request,d)
+        elif args.kind=='feature-discovery':
+            from features.discovery import discover
+            result=discover(request,d)
         elif args.kind=='devreference': result=developer_reference(request,d)
         elif args.kind=='candidate': result=candidate(request,d)
         elif args.kind=='selfcheck': result=selfcheck(d)
         else: build(d,request.get('app'))
     except Exception as error: result={'status':'infrastructure_failure','error':{'type':type(error).__name__,'message':str(error)[:2000]}}
     save(d/'result.json',result)
-    return 0 if result.get('status') in ['passed','observed'] or result.get('build_valid') else 1
+    return 0 if result.get('status') in ['passed','observed','discovered'] or result.get('build_valid') else 1
 
 if __name__=='__main__': raise SystemExit(main())

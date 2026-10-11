@@ -58,6 +58,20 @@ class SmokeTests(unittest.TestCase):
         self.assertNotIn('sensitive', str(error.exception))
         self.assertEqual(runtime.usage['t']['total']['totalTokens'], 5)
 
+    def test_runtime_error_message_retained_and_redacted(self):
+        from smoke import runtime_diagnostic
+        runtime=self.bare_runtime()
+        runtime.events.put({'method':'error','params':{'threadId':'t','willRetry':False,
+            'error':{'codexErrorInfo':'other','message':'Invalid schema at https://private.example/path?token=abc Bearer abc123 api_key=secret123 sk-privatekey'}}})
+        runtime.receive(time.monotonic()+1)
+        record=runtime.turn_errors['t'][0]
+        self.assertEqual(record['code'],'other')
+        self.assertIn('Invalid schema',record['message'])
+        for secret in ('private.example','abc123','secret123','sk-privatekey'):
+            self.assertNotIn(secret,record['message'])
+        self.assertLessEqual(len(runtime_diagnostic({'message':'x'*9000})['message']),1500)
+        self.assertIsNone(runtime_diagnostic(None)['message'])
+
     def test_file_tool_has_no_path_argument_and_cannot_overwrite(self):
         runtime = self.bare_runtime()
         scratch_root = Path(__file__).parent / '.scratch'

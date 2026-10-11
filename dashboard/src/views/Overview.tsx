@@ -81,7 +81,7 @@ export function Overview({ run, snap, t, onOpenCandidate, onOpenEvidence }: {
       </div>
 
       <div className="two-col two-col-outcome">
-        <Card title="Current question" aside={snap.questionAt !== null && <small className="muted">recorded at {clock(snap.questionAt)}</small>}>
+        <Card className="question-card" title="Current question" aside={snap.questionAt !== null && <small className="muted">recorded at {clock(snap.questionAt)}</small>}>
           {snap.question ? <p className="question">“{snap.question}”</p> : <p className="muted">No question recorded yet at this point of the replay.</p>}
           {snap.question && snap.phase !== 'experiment' && snap.phase !== 'not_started' && <p className="muted small q-note">Last question recorded by the planner; later phases record no new question.</p>}
           <div className="activity">

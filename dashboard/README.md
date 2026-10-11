@@ -60,12 +60,23 @@ steps are in [DATA-CONTRACT.md](DATA-CONTRACT.md).
 ## Design notes
 
 - **Layout** follows the reference admin dashboard: a left sidebar with a run
-  picker and identity card, a page title with a mode badge, a provenance
-  banner, filter chips and segmented tabs, and tables with a detail panel.
-- **Style** is restrained glassmorphism: frosted white panels over a soft
-  blue/violet gradient with blurred light orbs, dark navy text for contrast,
-  thin borders, and soft shadows. Colors carry meaning only: green passed,
-  red failed/rejected, amber missing or synthetic, blue pending/info.
+  picker and identity card, a page title with a mode badge, a warning
+  banner for synthetic or unlabeled bundles, filter chips and segmented
+  tabs, and tables with a detail panel.
+- **Style** is restrained glassmorphism: translucent frosted panels over a
+  pastel gradient with blurred light orbs, dark navy text for contrast,
+  thin translucent white borders, and soft tinted shadows. Colors carry
+  meaning only: green passed, red failed/rejected, amber missing or
+  synthetic, blue pending/info.
+- **Tokens:** every color, glass opacity, blur, gradient, shadow, radius,
+  spacing step and type style comes from `../design-system/tokens.css`, which
+  the design system owns and documents in `../design-system/index.html`. Vite
+  inlines it into the dashboard CSS at build time, so nothing outside
+  `dashboard/` is served. `styles.css` maps dashboard roles (`--good`,
+  `--muted`, ...) onto those tokens. The only raw colors left are white, the
+  opaque image checkerboard, and the region overlay colors.
+- **Fonts:** Inter and JetBrains Mono load from Google Fonts, as on the design
+  system page. Offline, the token font stacks fall back to system fonts.
 - **Target sizes:** sized for a 1440×1000 judging screen. The overview fits
   the outcome and history above the fold. Breakpoints at 1280 px and 980 px
   keep it usable on laptops.
@@ -86,12 +97,19 @@ artifacts.
 
 ## Limitations
 
-- **Live mode is not implemented.** `src/data/live.ts` is only an interface
-  plus an untested SSE adapter. The harness does not emit live events.
+- **Local feature jobs are supported.** Start `python -m features.service` from the repository root and open **Implement a feature**. Dev/preview proxy `/api/jobs` to loopback port 5190. Pilot execution is disabled by default; enabling it is a separate explicit action. Supported request: `Implement Contrast`. The UI polls persisted jobs and provides submission, cancellation, history, stage status, usage, evidence and events. These jobs are distinct from recorded playback. The generic replay SSE adapter is not a live job transport.
 - **Only one recorded run is bundled.** Later runs (for example the
   brightness milestone) need `npm run export-run` and an index entry. The
   exporter has only been run against the blur run layout.
 - **The reference build is unknown and unpinned**, as recorded by the
   harness. The dashboard reports it and does not resolve it.
-- **The dev server serves only `dashboard/`.** There is no backend, and
-  artifacts must be exported into `public/runs/` first.
+- **Recorded artifacts are static exports in `public/runs/`.** Local jobs use the separate loopback service; a static deployed dashboard cannot execute them.
+
+
+## Dashboard and feature integration
+
+Branch: `codex/dashboard-feature-integration`, worktree `D:/Samuel/Downloads/Code/Reforge-integration`. It combines `codex/feature-discovery` through `ce01d7e` and `cursor/dashboard-glass-tokens` through `b0d24ad`. Feature controls follow the Aurora Glass tokens and composition rules; navigation remains available below 980px, and the reference/candidate inspector is preserved.
+
+Preview: `http://127.0.0.1:5181/` (`npm run preview`). The review service has pilot execution disabled, so no paid learning run starts from the preview. Screenshots under `docs/screenshots/integration/` use explicit local test fixtures; their accepted/running job states are synthetic browser-test data, not additional Reforge results. The inspector screenshot shows the existing recorded Blur run.
+
+Verification: 11 dashboard tests, TypeScript check and production build; 128 Python tests; expanded browser checks for submission, cancellation, queued/running/cancelling/accepted/unresolved/failed/cancelled states, history surviving refresh, evidence links, service outage, navigation at 980/390px, and side-by-side/difference inspector controls. The final visual refinement was verified by rerunning both browser tests. No model runs, candidate promotion, or merge into main were performed for this integration.

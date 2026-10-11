@@ -8,3 +8,9 @@ generated-app/node_modules/
 generated-app/dist/
 dev-workspaces/*/node_modules/
 dev-workspaces/*/dist/
+evidence/feature-jobs/
+evidence/learning/feature-*/
+evidence/learning/offline-export-*/
+evidence/learning/offline-feature-*/
+dev-workspaces/feature-*/
+evidence/feature-memory/
