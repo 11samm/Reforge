@@ -97,6 +97,7 @@ class DiscoveryBroker:
         self.page=page; self.directory=Path(directory); self.limits=limits; self.clock=clock; self.start=clock()
         self.actions=0; self.observations={}; self.audit=[]; self.bytes=0
         self.notify=notify
+        self.recoverable_errors=0; self.recovery_enabled=False; self.memory=None
     def check(self):
         if self.clock()-self.start >= self.limits['seconds']: raise TimeoutError('Discovery time budget exhausted')
     def call(self, tool, args):
@@ -112,6 +113,16 @@ class DiscoveryBroker:
                     entry.pop('arguments', None)
             self.audit.append(entry)
             save(self.directory/'failed-actions.json', [row for row in self.audit if row.get('status') == 'failed'])
+            from .recovery import category, LESSONS
+            kind = category(error) if isinstance(error, ValueError) else None
+            if self.recovery_enabled and kind and self.recoverable_errors < 2:
+                self.recoverable_errors += 1
+                if self.memory: self.memory.record(kind)
+                self.notify(activity='Recoverable discovery action failed; inspect and correct within existing budget')
+                return [{'type': 'inputText', 'text': json.dumps({'action_status': 'failed',
+                        'error': entry['error'], 'guidance': LESSONS[kind],
+                        'remaining_corrections': 2-self.recoverable_errors,
+                        'instruction': 'This is not a successful observation. Inspect current visible state before correction.'})}]
             raise
 
     def _call(self, tool, args):

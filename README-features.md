@@ -72,7 +72,7 @@ Browser tests use local mock pages. They do not establish real-reference Contras
 behavior. Original evaluator policies, expected fixtures, collected data and
 protected holdouts are unchanged.
 
-## Future authorized Contrast pilot — do not run during implementation
+## Future authorized Contrast pilot â€” do not run during implementation
 
 From this worktree with dependencies and managed sign-in ready, exactly one CLI job:
 
@@ -80,12 +80,12 @@ From this worktree with dependencies and managed sign-in ready, exactly one CLI 
 python -m features.pipeline --pilot --request "Implement Contrast"
 ```
 
-Fixed budget: 600 seconds total; one discovery invocation / 90 seconds / 20 UI
-actions / 24 observations; zero discovery/reference retries; one diagnostic default
+Fixed budget: 600 seconds total; at most two discovery invocations sharing 90 seconds / 20 UI
+actions / 24 observations; at most two recoverable UI-action corrections and one specification correction; zero fresh-browser/reference retries; one diagnostic default
 setup check and two fresh-document procedure replays; at most four fresh investigation
 experiments; two candidates; 12 builder calls and six evidence reads per candidate;
 two final cases evaluated once, with no further repair. Headed reference configuration
-remains 1440×1000, scale 1, en-US, America/Los_Angeles, window position 1600,0.
+remains 1440Ã—1000, scale 1, en-US, America/Los_Angeles, window position 1600,0.
 Per-model packet and worker limits remain the existing harness defaults. Actual
 provider tokens are recorded, without a promised hard token/cost ceiling.
 

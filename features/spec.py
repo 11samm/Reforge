@@ -60,7 +60,7 @@ def validate(spec, observations=None, ready=False):
         if ready and any(c[k] is None for k in ('min','max','step','default')): raise ValueError('Missing observed control domain/default')
         if ready and c['label'] != spec['parameter'] and c['neutral'] is None: raise ValueError('Other control neutrality unresolved')
         if ready and c['label'] != spec['parameter'] and c['neutral'] != c['default']: raise ValueError('Only observed defaults can freeze other controls')
-    if len(set(names)) != len(names) or spec['parameter'] not in names or spec['parameter'].casefold() != 'contrast': raise ValueError('Ambiguous/missing requested control')
+    if len(set(names)) != len(names) or spec['parameter'] not in names or spec['parameter'].rstrip().removesuffix(':').rstrip().casefold() != 'contrast': raise ValueError('Ambiguous/missing requested control')
     if spec['status'] not in ('discovered','unresolved','unsupported'): raise ValueError('Unknown discovery status')
     if ready and (spec['status'] != 'discovered' or spec['unresolved']): raise ValueError('Discovery remains unresolved')
     return spec

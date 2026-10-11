@@ -1,4 +1,4 @@
-# Bounded feature pipeline — implementation note
+# Bounded feature pipeline â€” implementation note
 
 The feature entry point adds visible workflow discovery before the existing
 investigation/reconstruction/evaluation loop. Contrast is the only accepted new
@@ -33,7 +33,7 @@ as Contrast evidence. Existing brightness source is read-only and hash-protected
 its six original visible cases and UI/batch agreement are regression gates. Their
 expected pixels stay outside the Contrast model context.
 
-## Evidence and discovery (steps 2–4)
+## Evidence and discovery (steps 2â€“4)
 
 `features/feature-spec.schema.json` and `spec.py` define the versioned structure and
 semantic validation. Facts cite observation IDs; hypotheses and unresolved questions
@@ -49,7 +49,7 @@ source/network response requests, hidden state or canvas extraction. Page text i
 explicitly untrusted. Observation evidence and concise returned decisions are stored;
 raw reasoning is not retained.
 
-Discovery: one invocation, zero retries, 90 seconds, 20 UI actions, 24 observations/
+Discovery: at most two invocations sharing 90 seconds, one invalid-specification correction, at most two recoverable UI-action errors, zero fresh-browser retries, 20 UI actions, 24 observations/
 tool calls including initial inspection. An inspection is at most 16 KB; screenshots
 are at most 800 KB each, with a 1.8 MB cumulative observation limit. Oversized data
 stops discovery rather than silently discarding facts. Provider/tool/process deadlines
@@ -72,7 +72,7 @@ and is never promoted or edited. The builder may write only `src/main.tsx`,
 `src/contrast.ts` and its README; the inherited file broker rejects escaping paths,
 links, streams and hardlinks. It cannot read reference output files or final outputs.
 
-The planner selects 2–4 bounded distinguishing experiments from the discovered integer
+The planner selects 2â€“4 bounded distinguishing experiments from the discovered integer
 domain, including two different values. Evidence-backed claims precede building.
 There are at most two candidates, 12 builder calls each and six bounded evidence reads.
 Each candidate is independently executed and evaluated on the same frozen exact-RGBA
@@ -108,7 +108,7 @@ event. The API serves only allowlisted scrubbed JSON presentation copies, not mo
 packets, reference/final expected PNGs or arbitrary files. Full action diagnostics
 remain local in the archive; no general archive browser was added.
 
-## Offline results and live limitations (steps 7–8)
+## Offline results and live limitations (steps 7â€“8)
 
 No discovery, reference learning or reconstruction model invocation was run during
 implementation. Local Playwright mock pages test control ambiguity, changed domains,
@@ -129,3 +129,21 @@ those as a guaranteed subscription-token quota.
 Acceptance of a live Contrast feature has not been established. The deliverable is
 offline-tested infrastructure and a bounded future pilot, not a working Contrast
 implementation or an autonomous-success demonstration.
+
+## Autonomous discovery recovery
+
+Recoverable missing/ambiguous locators and rejected numeric readback return structured
+failure results to the discovery model, which can inspect and correct its procedure
+within the same action, observation and elapsed limits. These are not successful
+observations. Forbidden capabilities, exhausted limits and all other exceptions still
+fail closed. One invalid specification may be corrected in a second invocation sharing
+the original 90-second deadline and tool budget. Every decision and failed action is
+retained; grounding and all evaluation gates still apply.
+
+A local versioned memory under evidence/feature-memory records only allowlisted
+procedural categories and counts. Future discoveries receive the associated fixed
+strategies as guidance, never as target behavior evidence or executable instructions.
+Specification recoveries are counted only after validation. Arbitrary learned code,
+reference algorithms, final outputs and evaluator modifications are not accepted.
+The model does not modify the trusted harness; unknown host defects still stop and
+require a separately tested code repair. Recovery is offline-tested, not live-validated.

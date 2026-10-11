@@ -55,6 +55,38 @@ class SpecTests(unittest.TestCase):
         c['neutral']=1
         with self.assertRaises(ValueError): validate(s,ready=True)
 
+class RecoveryTests(unittest.TestCase):
+    def test_invalid_specification_corrected_and_reused_next_run(self):
+        from features.recovery import Memory, validated_decision
+        with tempfile.TemporaryDirectory() as d:
+            memory = Memory(Path(d)/'memory.json'); calls=[]
+            def invoke(index, previous):
+                calls.append(previous)
+                value=specification()
+                if index == 0: value['parameter']='Instructions instead of label'
+                return value
+            result, failures=validated_decision(invoke, validate, memory)
+            self.assertEqual(result['parameter'], 'Contrast')
+            self.assertEqual(len(failures), 1)
+            self.assertIn('previous_specification', calls[1])
+            fresh=Memory(memory.path).guidance()['specification']
+            self.assertEqual(fresh['failures'], 1)
+            self.assertEqual(fresh['successful_recoveries'], 1)
+    def test_specification_corrections_stop_at_limit(self):
+        from features.recovery import Memory, validated_decision
+        with tempfile.TemporaryDirectory() as d:
+            calls=[]
+            def invoke(index, previous):
+                calls.append(index); return {}
+            with self.assertRaises(ValueError):
+                validated_decision(invoke, validate, Memory(Path(d)/'memory.json'))
+            self.assertEqual(calls, [0, 1])
+    def test_memory_rejects_arbitrary_lessons(self):
+        from features.recovery import Memory
+        with tempfile.TemporaryDirectory() as d:
+            p=Path(d)/'memory.json'; p.write_text(json.dumps({'schema':1,'lessons':{'execute code':{}}}))
+            with self.assertRaises(ValueError): Memory(p).guidance()
+
 class ProcedureTests(unittest.TestCase):
     def test_exact_import_readback_and_replay_gates(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -189,6 +221,23 @@ class BrowserTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 broker.call('evaluate', {'code': 'private payload'})
             self.assertNotIn('arguments', broker.audit[-1])
+
+    def test_autonomous_action_correction_and_fatal_limits(self):
+        from features.recovery import Memory
+        with tempfile.TemporaryDirectory() as d:
+            broker=DiscoveryBroker(self.page, Path(d), LIMITS)
+            broker.recovery_enabled=True; broker.memory=Memory(Path(d)/'memory.json')
+            bad={'locator':strategy('slider','Missing','row'),'dialog':'Adjust','value':3}
+            response=broker.call('visible_set',bad)
+            self.assertEqual(json.loads(response[0]['text'])['action_status'], 'failed')
+            broker.call('visible_set',{'locator':strategy('slider','Contrast:','row'),'dialog':'Adjust','value':3})
+            self.assertEqual(self.page.locator('input').input_value(),'3')
+            broker.call('visible_set',bad)
+            with self.assertRaises(ValueError): broker.call('visible_set',bad)
+            with self.assertRaises(ValueError): broker.call('evaluate',{'code':'secret'})
+            self.assertEqual(broker.memory.load()['locator']['failures'],2)
+            broker.start -= 100
+            with self.assertRaises(TimeoutError): broker.call('visible_inspect',{})
 
     def test_existing_fresh_export_download(self):
         # Local mock of the existing export dialog; use the unchanged MiniPaint fresh-download code.

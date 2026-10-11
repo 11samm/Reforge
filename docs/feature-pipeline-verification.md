@@ -15,7 +15,7 @@ not moved, staged or edited. No merge or push was performed.
 - All four original exact editor baseline cases passed, with brightness UI allowed.
 - 11/11 saved brightness visible/fresh cases reproduced exactly; source and fixture
   hashes were verified by the unchanged reproduction script.
-- Production dashboard browser smoke passed at 1440×1000 with a clearly labeled
+- Production dashboard browser smoke passed at 1440Ã—1000 with a clearly labeled
   local fixture. Local jobs and recorded playback remained distinct, Run respected
   disabled pilot execution, and unsupported-request errors survived polling.
 - Windows job-object ownership was tested with a waiting local child: closing the
@@ -37,3 +37,14 @@ interaction, real dialog compatibility, sufficient experimental coverage and com
 within the combined 600-second budget remain pilot questions. A documented failure is
 an acceptable pipeline outcome. Setup and the fully specified unexecuted command are
 in [README-features.md](../README-features.md).
+
+## Recovery follow-up verification
+
+104 Python tests and 11 dashboard tests passed after recovery integration; dashboard
+TypeScript checking/build and diff checks passed. Tests cover correcting invalid
+specifications, retaining cross-run lessons, stopping after one correction, handling
+recoverable UI errors without marking them observations, and keeping capability/time
+violations fatal. These tests use mocks, not live model recovery. The third live pilot
+preceded these changes and is documented separately. Existing confirmed locator and
+specification mistakes seeded the local procedural memory; no algorithm evidence was
+copied into it. No new live pilot validated recovery in this turn.

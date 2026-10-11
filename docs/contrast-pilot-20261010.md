@@ -34,3 +34,14 @@ colon. Offline regression checks both forms and preserves duplicate rejection.
 This establishes the second run's cause; the first run's missing arguments cannot
 be retrospectively recovered. No further live run or candidate promotion occurred.
 Provider usage: 88,847 total; 87,436 input including 57,984 cached; 1,411 output.
+
+## Third authorized pilot and recovery integration
+
+Job 7b1996eca8fa484cb4dfaaeaee5fd81b, implementation 1e22d1f.
+Contrast numeric setting succeeded. Discovery stopped after 38.423 seconds because
+the model returned request "Discover the visible workflow for Implement Contrast"
+and a prose parameter field, violating the structured specification contract.
+Usage: 93,338 total; 91,891 input including 57,984 cached; 1,447 output.
+The subsequent offline implementation constrains these fields, adds bounded action
+and specification correction, and persistent procedural lessons. No further live
+pilot was launched in this turn; no Contrast candidate was constructed or promoted.

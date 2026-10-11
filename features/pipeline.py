@@ -13,7 +13,7 @@ from learning.core import DEFAULTS, save, digest, decide
 from .spec import request_id, parameter, value_in_domain
 from .learning import AdjustmentHarness
 
-BUDGET={'seconds':600,'discovery_seconds':90,'discovery_actions':20,'observations':24,'validation_replays':2,'default_check':1,'experiments':4,'candidates':2,'reference_retries':0,'builder_tool_calls':12,'evidence_reads':6,'final_cases':2}
+BUDGET={'seconds':600,'discovery_seconds':90,'discovery_invocations':2,'action_corrections':2,'discovery_actions':20,'observations':24,'validation_replays':2,'default_check':1,'experiments':4,'candidates':2,'reference_retries':0,'builder_tool_calls':12,'evidence_reads':6,'final_cases':2}
 
 def diagnostic(path):
     im=Image.new('RGBA',(17,9)); im.putdata([(v,v,v,255) for y in range(9) for v in (0,1,2,15,31,63,64,127,128,129,191,223,239,253,254,255,32)])
