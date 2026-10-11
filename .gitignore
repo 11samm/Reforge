@@ -6,3 +6,5 @@ evidence/latest-batch.json
 
 generated-app/node_modules/
 generated-app/dist/
+dev-workspaces/*/node_modules/
+dev-workspaces/*/dist/

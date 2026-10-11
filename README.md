@@ -126,3 +126,15 @@ restricted generation invocation, exact upload/export checks, and limitations.
 See [README-evaluator.md](README-evaluator.md) for independent raw-RGBA metrics,
 versioned exact/provisional policies, controlled examples, and the four-case baseline
 command. Blur implementation and the learning loop remain deferred.
+
+## Bounded learning harness milestone
+
+See [README-learning.md](README-learning.md) for the sequential Gaussian Blur harness,
+actual model responsibilities, supplied procedures, hard budgets, frozen visible
+evaluation, restricted builder and checkpoint/restore behavior. Run
+`.venv\Scripts\python.exe -m learning.run` from a genuinely unavailable blur start.
+All real attempts, including rejected contracts/candidates, remain in evidence/learning.
+The latest pointer is evidence/latest-learning.json. No final holdout or push.
+
+Actual results: [milestone 5 report](evidence/milestone5-results.md). The bounded
+integrated attempt completed, but blur compatibility did not pass; baseline preserved.

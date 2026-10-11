@@ -1,0 +1,11 @@
+{
+  "id": "candidate-3",
+  "suite_sha256": "f00e2998b1c5359b90e9bb1944836b37fc66b86425b44f670dbb06f385549214",
+  "status": "failed",
+  "started_seconds": 398.553,
+  "accepted": false,
+  "error": {
+    "type": "TimeoutError",
+    "message": "Codex execution deadline exceeded"
+  }
+}

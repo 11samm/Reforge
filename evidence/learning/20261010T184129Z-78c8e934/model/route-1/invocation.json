@@ -1,0 +1,68 @@
+{
+  "status": "passed",
+  "model": "gpt-6.1-sol",
+  "effort": "medium",
+  "boundary": "environment-disabled; allowlisted broker; trusted host is not OS sandboxed",
+  "authentication": {
+    "type": "chatgpt",
+    "plan": "plus"
+  },
+  "thread_start": {
+    "model": "gpt-6.1-sol",
+    "modelProvider": "openai",
+    "allowProviderModelFallback": false,
+    "cwd": "D:\\Samuel\\Downloads\\Code\\Reforge\\generated-app",
+    "runtimeWorkspaceRoots": [
+      "D:\\Samuel\\Downloads\\Code\\Reforge\\generated-app"
+    ],
+    "approvalPolicy": "never",
+    "sandbox": "read-only",
+    "ephemeral": true,
+    "environments": [],
+    "selectedCapabilityRoots": [],
+    "baseInstructions": "Make bounded evidence-based decisions for miniPaint Gaussian Blur. Do not delegate.",
+    "developerInstructions": "No environment, shell, execution, browser, web, plugins, skills or other files. Use concise decisions and evidence; do not reveal chain-of-thought. Only supplied dynamic tools if present."
+  },
+  "thread_id": "01a12722-8ea0-7970-afd1-e03c646d7bbd",
+  "completion_status": "completed",
+  "completed_item_types": [
+    "userMessage",
+    "reasoning",
+    "agentMessage"
+  ],
+  "answer": {
+    "classification": "procedure_infrastructure",
+    "evidence_ids": [
+      "gb010",
+      "fresh-03",
+      "fresh-04"
+    ],
+    "explanation": "Baseline validation timed out waiting for dialog slider \u201cPercentage:\u201d (8000 ms); baseline_pass=false and independent=false prevent reliable regression attribution. Recorded failures remain real: gb010 RGB MAE 1.1857; fresh-03 center RGB MAE 3.8512; fresh-04 RGB tolerance fraction 0.97645. Restore the dialog/slider interaction and rerun the trusted baseline before choosing a blur repair; leave acceptance unchanged.",
+    "next_action": "repair",
+    "plans": []
+  },
+  "runtime_version": "codex-cli 0.162.0-alpha.17.2",
+  "requests": [],
+  "audit": [],
+  "usage": {
+    "total": {
+      "totalTokens": 45319,
+      "inputTokens": 45028,
+      "cachedInputTokens": 0,
+      "cacheWriteInputTokens": 0,
+      "outputTokens": 291,
+      "reasoningOutputTokens": 155
+    },
+    "last": {
+      "totalTokens": 45319,
+      "inputTokens": 45028,
+      "cachedInputTokens": 0,
+      "cacheWriteInputTokens": 0,
+      "outputTokens": 291,
+      "reasoningOutputTokens": 155
+    },
+    "modelContextWindow": 258400
+  },
+  "runtime_errors": [],
+  "elapsed_seconds": 12.66
+}

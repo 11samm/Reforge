@@ -1,0 +1,773 @@
+{
+  "comparison": "No implementation changed; prior metrics reproduced exactly on all ten cases. No new-candidate evaluation exists.",
+  "cases": [
+    {
+      "id": "gb017",
+      "before": "passed",
+      "after": "not run: no new candidate",
+      "full_metrics": {
+        "pixel_count": 12513,
+        "rgb_mae_per_channel": [
+          0.04834971629505314,
+          0.08790857508191481,
+          0.06505234556061695
+        ],
+        "rgb_mae": 0.06710354564586164,
+        "rgb_max": 3,
+        "alpha_mae": 0.0383601054902901,
+        "alpha_max": 1,
+        "rgb_fraction_within_tolerance": 1.0,
+        "alpha_fraction_within_tolerance": 1.0,
+        "different_pixels": 2507
+      },
+      "regions": {
+        "center": {
+          "box": [
+            59,
+            43,
+            70,
+            54
+          ],
+          "metrics": {
+            "pixel_count": 121,
+            "rgb_mae_per_channel": [
+              0.09090909090909091,
+              0.09090909090909091,
+              0.10743801652892562
+            ],
+            "rgb_mae": 0.09641873278236915,
+            "rgb_max": 1,
+            "alpha_mae": 0.0,
+            "alpha_max": 0,
+            "rgb_fraction_within_tolerance": 1.0,
+            "alpha_fraction_within_tolerance": 1.0,
+            "different_pixels": 33
+          },
+          "passed": true,
+          "reasons": []
+        },
+        "boundary": {
+          "box": [
+            0,
+            0,
+            4,
+            97
+          ],
+          "metrics": {
+            "pixel_count": 388,
+            "rgb_mae_per_channel": [
+              0.10309278350515463,
+              0.2706185567010309,
+              0.11597938144329897
+            ],
+            "rgb_mae": 0.16323024054982818,
+            "rgb_max": 3,
+            "alpha_mae": 0.2654639175257732,
+            "alpha_max": 1,
+            "rgb_fraction_within_tolerance": 1.0,
+            "alpha_fraction_within_tolerance": 1.0,
+            "different_pixels": 205
+          },
+          "passed": true,
+          "reasons": []
+        }
+      },
+      "reasons": []
+    },
+    {
+      "id": "gb010",
+      "before": "failed",
+      "after": "not run: no new candidate",
+      "full_metrics": {
+        "pixel_count": 3185,
+        "rgb_mae_per_channel": [
+          0.8662480376766091,
+          1.5902668759811618,
+          2.5271585557299843
+        ],
+        "rgb_mae": 1.6612244897959183,
+        "rgb_max": 255,
+        "alpha_mae": 0.08131868131868132,
+        "alpha_max": 1,
+        "rgb_fraction_within_tolerance": 0.9416012558869702,
+        "alpha_fraction_within_tolerance": 1.0,
+        "different_pixels": 613
+      },
+      "regions": {
+        "center": {
+          "box": [
+            27,
+            19,
+            38,
+            30
+          ],
+          "metrics": {
+            "pixel_count": 121,
+            "rgb_mae_per_channel": [
+              0.2644628099173554,
+              0.18181818181818182,
+              0.14049586776859505
+            ],
+            "rgb_mae": 0.19559228650137742,
+            "rgb_max": 1,
+            "alpha_mae": 0.008264462809917356,
+            "alpha_max": 1,
+            "rgb_fraction_within_tolerance": 1.0,
+            "alpha_fraction_within_tolerance": 1.0,
+            "different_pixels": 54
+          },
+          "passed": true,
+          "reasons": []
+        },
+        "boundary": {
+          "box": [
+            0,
+            0,
+            4,
+            49
+          ],
+          "metrics": {
+            "pixel_count": 196,
+            "rgb_mae_per_channel": [
+              7.8061224489795915,
+              0.0,
+              3.5714285714285716
+            ],
+            "rgb_mae": 3.792517006802721,
+            "rgb_max": 255,
+            "alpha_mae": 0.15306122448979592,
+            "alpha_max": 1,
+            "rgb_fraction_within_tolerance": 0.826530612244898,
+            "alpha_fraction_within_tolerance": 1.0,
+            "different_pixels": 34
+          },
+          "passed": false,
+          "reasons": [
+            "rgb_mae=3.792517006802721 violates rgb_mean_max=1",
+            "rgb_fraction_within_tolerance=0.826530612244898 violates rgb_fraction_min=0.99"
+          ]
+        }
+      },
+      "reasons": [
+        "full_image: rgb_mae=1.6612244897959183 violates rgb_mean_max=1",
+        "full_image: rgb_fraction_within_tolerance=0.9416012558869702 violates rgb_fraction_min=0.99",
+        "boundary: rgb_mae=3.792517006802721 violates rgb_mean_max=1",
+        "boundary: rgb_fraction_within_tolerance=0.826530612244898 violates rgb_fraction_min=0.99"
+      ]
+    },
+    {
+      "id": "fresh-01",
+      "before": "passed",
+      "after": "not run: no new candidate",
+      "full_metrics": {
+        "pixel_count": 3185,
+        "rgb_mae_per_channel": [
+          0.0006279434850863422,
+          0.0006279434850863422,
+          0.0006279434850863422
+        ],
+        "rgb_mae": 0.0006279434850863422,
+        "rgb_max": 1,
+        "alpha_mae": 0.0012558869701726845,
+        "alpha_max": 1,
+        "rgb_fraction_within_tolerance": 1.0,
+        "alpha_fraction_within_tolerance": 1.0,
+        "different_pixels": 6
+      },
+      "regions": {
+        "center": {
+          "box": [
+            27,
+            19,
+            38,
+            30
+          ],
+          "metrics": {
+            "pixel_count": 121,
+            "rgb_mae_per_channel": [
+              0.01652892561983471,
+              0.01652892561983471,
+              0.01652892561983471
+            ],
+            "rgb_mae": 0.01652892561983471,
+            "rgb_max": 1,
+            "alpha_mae": 0.0,
+            "alpha_max": 0,
+            "rgb_fraction_within_tolerance": 1.0,
+            "alpha_fraction_within_tolerance": 1.0,
+            "different_pixels": 2
+          },
+          "passed": true,
+          "reasons": []
+        },
+        "boundary": {
+          "box": [
+            0,
+            0,
+            4,
+            49
+          ],
+          "metrics": {
+            "pixel_count": 196,
+            "rgb_mae_per_channel": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "rgb_mae": 0.0,
+            "rgb_max": 0,
+            "alpha_mae": 0.01020408163265306,
+            "alpha_max": 1,
+            "rgb_fraction_within_tolerance": 1.0,
+            "alpha_fraction_within_tolerance": 1.0,
+            "different_pixels": 2
+          },
+          "passed": true,
+          "reasons": []
+        }
+      },
+      "reasons": []
+    },
+    {
+      "id": "fresh-02",
+      "before": "passed",
+      "after": "not run: no new candidate",
+      "full_metrics": {
+        "pixel_count": 3185,
+        "rgb_mae_per_channel": [
+          0.0012558869701726845,
+          0.0012558869701726845,
+          0.0012558869701726845
+        ],
+        "rgb_mae": 0.0012558869701726845,
+        "rgb_max": 1,
+        "alpha_mae": 0.08037676609105181,
+        "alpha_max": 1,
+        "rgb_fraction_within_tolerance": 1.0,
+        "alpha_fraction_within_tolerance": 1.0,
+        "different_pixels": 260
+      },
+      "regions": {
+        "center": {
+          "box": [
+            27,
+            19,
+            38,
+            30
+          ],
+          "metrics": {
+            "pixel_count": 121,
+            "rgb_mae_per_channel": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "rgb_mae": 0.0,
+            "rgb_max": 0,
+            "alpha_mae": 0.0,
+            "alpha_max": 0,
+            "rgb_fraction_within_tolerance": 1.0,
+            "alpha_fraction_within_tolerance": 1.0,
+            "different_pixels": 0
+          },
+          "passed": true,
+          "reasons": []
+        },
+        "boundary": {
+          "box": [
+            0,
+            0,
+            4,
+            49
+          ],
+          "metrics": {
+            "pixel_count": 196,
+            "rgb_mae_per_channel": [
+              0.02040816326530612,
+              0.02040816326530612,
+              0.02040816326530612
+            ],
+            "rgb_mae": 0.02040816326530612,
+            "rgb_max": 1,
+            "alpha_mae": 0.28061224489795916,
+            "alpha_max": 1,
+            "rgb_fraction_within_tolerance": 1.0,
+            "alpha_fraction_within_tolerance": 1.0,
+            "different_pixels": 59
+          },
+          "passed": true,
+          "reasons": []
+        }
+      },
+      "reasons": []
+    },
+    {
+      "id": "fresh-03",
+      "before": "failed",
+      "after": "not run: no new candidate",
+      "full_metrics": {
+        "pixel_count": 3185,
+        "rgb_mae_per_channel": [
+          1.1513343799058084,
+          1.1513343799058084,
+          1.1513343799058084
+        ],
+        "rgb_mae": 1.1513343799058084,
+        "rgb_max": 6,
+        "alpha_mae": 0.5488226059654631,
+        "alpha_max": 2,
+        "rgb_fraction_within_tolerance": 0.8718995290423862,
+        "alpha_fraction_within_tolerance": 1.0,
+        "different_pixels": 2512
+      },
+      "regions": {
+        "center": {
+          "box": [
+            27,
+            19,
+            38,
+            30
+          ],
+          "metrics": {
+            "pixel_count": 121,
+            "rgb_mae_per_channel": [
+              3.8181818181818183,
+              3.8181818181818183,
+              3.8181818181818183
+            ],
+            "rgb_mae": 3.8181818181818183,
+            "rgb_max": 5,
+            "alpha_mae": 0.0,
+            "alpha_max": 0,
+            "rgb_fraction_within_tolerance": 0.2727272727272727,
+            "alpha_fraction_within_tolerance": 1.0,
+            "different_pixels": 121
+          },
+          "passed": false,
+          "reasons": [
+            "rgb_mae=3.8181818181818183 violates rgb_mean_max=1",
+            "rgb_fraction_within_tolerance=0.2727272727272727 violates rgb_fraction_min=0.99"
+          ]
+        },
+        "boundary": {
+          "box": [
+            0,
+            0,
+            4,
+            49
+          ],
+          "metrics": {
+            "pixel_count": 196,
+            "rgb_mae_per_channel": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "rgb_mae": 0.0,
+            "rgb_max": 0,
+            "alpha_mae": 0.3010204081632653,
+            "alpha_max": 2,
+            "rgb_fraction_within_tolerance": 1.0,
+            "alpha_fraction_within_tolerance": 1.0,
+            "different_pixels": 57
+          },
+          "passed": true,
+          "reasons": []
+        }
+      },
+      "reasons": [
+        "full_image: rgb_mae=1.1513343799058084 violates rgb_mean_max=1",
+        "full_image: rgb_fraction_within_tolerance=0.8718995290423862 violates rgb_fraction_min=0.99",
+        "center: rgb_mae=3.8181818181818183 violates rgb_mean_max=1",
+        "center: rgb_fraction_within_tolerance=0.2727272727272727 violates rgb_fraction_min=0.99"
+      ]
+    },
+    {
+      "id": "fresh-04",
+      "before": "failed",
+      "after": "not run: no new candidate",
+      "full_metrics": {
+        "pixel_count": 3185,
+        "rgb_mae_per_channel": [
+          0.38335949764521193,
+          0.1510204081632653,
+          0.6062794348508634
+        ],
+        "rgb_mae": 0.3802197802197802,
+        "rgb_max": 255,
+        "alpha_mae": 0.07912087912087912,
+        "alpha_max": 1,
+        "rgb_fraction_within_tolerance": 0.9701726844583988,
+        "alpha_fraction_within_tolerance": 1.0,
+        "different_pixels": 641
+      },
+      "regions": {
+        "center": {
+          "box": [
+            27,
+            19,
+            38,
+            30
+          ],
+          "metrics": {
+            "pixel_count": 121,
+            "rgb_mae_per_channel": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "rgb_mae": 0.0,
+            "rgb_max": 0,
+            "alpha_mae": 0.0,
+            "alpha_max": 0,
+            "rgb_fraction_within_tolerance": 1.0,
+            "alpha_fraction_within_tolerance": 1.0,
+            "different_pixels": 0
+          },
+          "passed": true,
+          "reasons": []
+        },
+        "boundary": {
+          "box": [
+            0,
+            0,
+            4,
+            49
+          ],
+          "metrics": {
+            "pixel_count": 196,
+            "rgb_mae_per_channel": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "rgb_mae": 0.0,
+            "rgb_max": 0,
+            "alpha_mae": 0.0,
+            "alpha_max": 0,
+            "rgb_fraction_within_tolerance": 1.0,
+            "alpha_fraction_within_tolerance": 1.0,
+            "different_pixels": 0
+          },
+          "passed": true,
+          "reasons": []
+        }
+      },
+      "reasons": [
+        "full_image: rgb_fraction_within_tolerance=0.9701726844583988 violates rgb_fraction_min=0.99"
+      ]
+    },
+    {
+      "id": "dev-01",
+      "before": "passed",
+      "after": "not run: no new candidate",
+      "full_metrics": {
+        "pixel_count": 4225,
+        "rgb_mae_per_channel": [
+          0.035266272189349114,
+          0.035266272189349114,
+          0.035266272189349114
+        ],
+        "rgb_mae": 0.035266272189349114,
+        "rgb_max": 1,
+        "alpha_mae": 0.3323076923076923,
+        "alpha_max": 2,
+        "rgb_fraction_within_tolerance": 1.0,
+        "alpha_fraction_within_tolerance": 1.0,
+        "different_pixels": 1537
+      },
+      "regions": {
+        "center": {
+          "box": [
+            27,
+            27,
+            38,
+            38
+          ],
+          "metrics": {
+            "pixel_count": 121,
+            "rgb_mae_per_channel": [
+              0.9669421487603306,
+              0.9669421487603306,
+              0.9669421487603306
+            ],
+            "rgb_mae": 0.9669421487603306,
+            "rgb_max": 1,
+            "alpha_mae": 0.0,
+            "alpha_max": 0,
+            "rgb_fraction_within_tolerance": 1.0,
+            "alpha_fraction_within_tolerance": 1.0,
+            "different_pixels": 117
+          },
+          "passed": true,
+          "reasons": []
+        },
+        "boundary": {
+          "box": [
+            0,
+            0,
+            4,
+            65
+          ],
+          "metrics": {
+            "pixel_count": 260,
+            "rgb_mae_per_channel": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "rgb_mae": 0.0,
+            "rgb_max": 0,
+            "alpha_mae": 0.23461538461538461,
+            "alpha_max": 1,
+            "rgb_fraction_within_tolerance": 1.0,
+            "alpha_fraction_within_tolerance": 1.0,
+            "different_pixels": 61
+          },
+          "passed": true,
+          "reasons": []
+        }
+      },
+      "reasons": []
+    },
+    {
+      "id": "dev-02",
+      "before": "failed",
+      "after": "not run: no new candidate",
+      "full_metrics": {
+        "pixel_count": 4225,
+        "rgb_mae_per_channel": [
+          1.1382248520710059,
+          1.1382248520710059,
+          1.1382248520710059
+        ],
+        "rgb_mae": 1.1382248520710059,
+        "rgb_max": 5,
+        "alpha_mae": 0.3323076923076923,
+        "alpha_max": 2,
+        "rgb_fraction_within_tolerance": 0.8816568047337278,
+        "alpha_fraction_within_tolerance": 1.0,
+        "different_pixels": 2962
+      },
+      "regions": {
+        "center": {
+          "box": [
+            27,
+            27,
+            38,
+            38
+          ],
+          "metrics": {
+            "pixel_count": 121,
+            "rgb_mae_per_channel": [
+              3.8181818181818183,
+              3.8181818181818183,
+              3.8181818181818183
+            ],
+            "rgb_mae": 3.8181818181818183,
+            "rgb_max": 5,
+            "alpha_mae": 0.0,
+            "alpha_max": 0,
+            "rgb_fraction_within_tolerance": 0.2727272727272727,
+            "alpha_fraction_within_tolerance": 1.0,
+            "different_pixels": 121
+          },
+          "passed": false,
+          "reasons": [
+            "rgb_mae=3.8181818181818183 violates rgb_mean_max=1",
+            "rgb_fraction_within_tolerance=0.2727272727272727 violates rgb_fraction_min=0.99"
+          ]
+        },
+        "boundary": {
+          "box": [
+            0,
+            0,
+            4,
+            65
+          ],
+          "metrics": {
+            "pixel_count": 260,
+            "rgb_mae_per_channel": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "rgb_mae": 0.0,
+            "rgb_max": 0,
+            "alpha_mae": 0.23461538461538461,
+            "alpha_max": 1,
+            "rgb_fraction_within_tolerance": 1.0,
+            "alpha_fraction_within_tolerance": 1.0,
+            "different_pixels": 61
+          },
+          "passed": true,
+          "reasons": []
+        }
+      },
+      "reasons": [
+        "full_image: rgb_mae=1.1382248520710059 violates rgb_mean_max=1",
+        "full_image: rgb_fraction_within_tolerance=0.8816568047337278 violates rgb_fraction_min=0.99",
+        "center: rgb_mae=3.8181818181818183 violates rgb_mean_max=1",
+        "center: rgb_fraction_within_tolerance=0.2727272727272727 violates rgb_fraction_min=0.99"
+      ]
+    },
+    {
+      "id": "dev-04",
+      "before": "failed",
+      "after": "not run: no new candidate",
+      "full_metrics": {
+        "pixel_count": 1089,
+        "rgb_mae_per_channel": [
+          0.3039485766758494,
+          0.0,
+          0.19651056014692378
+        ],
+        "rgb_mae": 0.16681971227425774,
+        "rgb_max": 9,
+        "alpha_mae": 0.10560146923783287,
+        "alpha_max": 1,
+        "rgb_fraction_within_tolerance": 0.9614325068870524,
+        "alpha_fraction_within_tolerance": 1.0,
+        "different_pixels": 241
+      },
+      "regions": {
+        "center": {
+          "box": [
+            11,
+            11,
+            22,
+            22
+          ],
+          "metrics": {
+            "pixel_count": 121,
+            "rgb_mae_per_channel": [
+              0.2727272727272727,
+              0.0,
+              0.0
+            ],
+            "rgb_mae": 0.09090909090909091,
+            "rgb_max": 2,
+            "alpha_mae": 0.0,
+            "alpha_max": 0,
+            "rgb_fraction_within_tolerance": 1.0,
+            "alpha_fraction_within_tolerance": 1.0,
+            "different_pixels": 22
+          },
+          "passed": true,
+          "reasons": []
+        },
+        "boundary": {
+          "box": [
+            0,
+            0,
+            4,
+            33
+          ],
+          "metrics": {
+            "pixel_count": 132,
+            "rgb_mae_per_channel": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "rgb_mae": 0.0,
+            "rgb_max": 0,
+            "alpha_mae": 0.29545454545454547,
+            "alpha_max": 1,
+            "rgb_fraction_within_tolerance": 1.0,
+            "alpha_fraction_within_tolerance": 1.0,
+            "different_pixels": 39
+          },
+          "passed": true,
+          "reasons": []
+        }
+      },
+      "reasons": [
+        "full_image: rgb_fraction_within_tolerance=0.9614325068870524 violates rgb_fraction_min=0.99"
+      ]
+    },
+    {
+      "id": "dev-06",
+      "before": "passed",
+      "after": "not run: no new candidate",
+      "full_metrics": {
+        "pixel_count": 63,
+        "rgb_mae_per_channel": [
+          0.12698412698412698,
+          0.12698412698412698,
+          0.12698412698412698
+        ],
+        "rgb_mae": 0.12698412698412698,
+        "rgb_max": 2,
+        "alpha_mae": 0.14285714285714285,
+        "alpha_max": 1,
+        "rgb_fraction_within_tolerance": 1.0,
+        "alpha_fraction_within_tolerance": 1.0,
+        "different_pixels": 9
+      },
+      "regions": {
+        "center": {
+          "box": [
+            0,
+            0,
+            9,
+            7
+          ],
+          "metrics": {
+            "pixel_count": 63,
+            "rgb_mae_per_channel": [
+              0.12698412698412698,
+              0.12698412698412698,
+              0.12698412698412698
+            ],
+            "rgb_mae": 0.12698412698412698,
+            "rgb_max": 2,
+            "alpha_mae": 0.14285714285714285,
+            "alpha_max": 1,
+            "rgb_fraction_within_tolerance": 1.0,
+            "alpha_fraction_within_tolerance": 1.0,
+            "different_pixels": 9
+          },
+          "passed": true,
+          "reasons": []
+        },
+        "boundary": {
+          "box": [
+            0,
+            0,
+            4,
+            7
+          ],
+          "metrics": {
+            "pixel_count": 28,
+            "rgb_mae_per_channel": [
+              0.14285714285714285,
+              0.14285714285714285,
+              0.14285714285714285
+            ],
+            "rgb_mae": 0.14285714285714285,
+            "rgb_max": 2,
+            "alpha_mae": 0.10714285714285714,
+            "alpha_max": 1,
+            "rgb_fraction_within_tolerance": 1.0,
+            "alpha_fraction_within_tolerance": 1.0,
+            "different_pixels": 3
+          },
+          "passed": true,
+          "reasons": []
+        }
+      },
+      "reasons": []
+    }
+  ],
+  "validation": {
+    "build_valid": true,
+    "independent": true,
+    "ui_valid": true,
+    "baseline_pass": true
+  },
+  "final_build": {
+    "status": "passed"
+  },
+  "final_baseline_pass": true
+}

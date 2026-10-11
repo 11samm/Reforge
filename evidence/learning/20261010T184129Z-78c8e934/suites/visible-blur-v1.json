@@ -1,0 +1,167 @@
+{
+  "id": "visible-blur-v1",
+  "run_dir": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\learning\\20261010T184129Z-78c8e934",
+  "cases": [
+    {
+      "id": "gb017",
+      "input": "D:\\Samuel\\Downloads\\Code\\Reforge\\fixtures\\development\\inputs\\gb017.png",
+      "expected": "D:\\Samuel\\Downloads\\Code\\Reforge\\fixtures\\development\\reference_outputs\\gb017.png",
+      "input_sha256": "d074df31f01443693f713ee55bf7008acc23e328cd2a88fcf25ac1267fb97844",
+      "expected_sha256": "62d00414cebd348e9a9f628901176e7caf95d7ebff211b51b4ed06c03c821146",
+      "percentage": 3,
+      "regions": {
+        "center": [
+          59,
+          43,
+          70,
+          54
+        ],
+        "boundary": [
+          0,
+          0,
+          4,
+          97
+        ]
+      }
+    },
+    {
+      "id": "gb010",
+      "input": "D:\\Samuel\\Downloads\\Code\\Reforge\\fixtures\\development\\inputs\\gb010.png",
+      "expected": "D:\\Samuel\\Downloads\\Code\\Reforge\\fixtures\\development\\reference_outputs\\gb010.png",
+      "input_sha256": "e3fad9a9ff04e3a6018549f642db8a4f4f74f0d820869651d296c1a432e13e08",
+      "expected_sha256": "dc50e48fe1a77026fda742bd26bcb87b2cc5061b351f32fdf0e455a1141d5500",
+      "percentage": 3,
+      "regions": {
+        "center": [
+          27,
+          19,
+          38,
+          30
+        ],
+        "boundary": [
+          0,
+          0,
+          4,
+          49
+        ]
+      }
+    },
+    {
+      "id": "fresh-01",
+      "input": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\learning\\20261010T184129Z-78c8e934\\inputs\\fresh-01.png",
+      "expected": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\learning\\20261010T184129Z-78c8e934\\experiments\\fresh-01\\output.png",
+      "input_sha256": "6f6c4d9a677743235fc7e9914be74b82c376ca06bea50b10ecd44d8321d1aa47",
+      "expected_sha256": "446ac6aaa5089e99345d08a9495293b9ac6e063fddffac6723d5b5268f20f278",
+      "percentage": 1,
+      "regions": {
+        "center": [
+          27,
+          19,
+          38,
+          30
+        ],
+        "boundary": [
+          0,
+          0,
+          4,
+          49
+        ]
+      }
+    },
+    {
+      "id": "fresh-02",
+      "input": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\learning\\20261010T184129Z-78c8e934\\inputs\\fresh-02.png",
+      "expected": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\learning\\20261010T184129Z-78c8e934\\experiments\\fresh-02\\output.png",
+      "input_sha256": "2891ba65f36af01d2c6c21d189da1481037f93a14eaba8843759ccfe848de793",
+      "expected_sha256": "a5c09990105d09899e8f0b84241090c62fbc91e287af9f70f6ad44c30b5fc758",
+      "percentage": 3,
+      "regions": {
+        "center": [
+          27,
+          19,
+          38,
+          30
+        ],
+        "boundary": [
+          0,
+          0,
+          4,
+          49
+        ]
+      }
+    },
+    {
+      "id": "fresh-03",
+      "input": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\learning\\20261010T184129Z-78c8e934\\inputs\\fresh-03.png",
+      "expected": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\learning\\20261010T184129Z-78c8e934\\experiments\\fresh-03\\output.png",
+      "input_sha256": "57301272bb259202eb79a05672b79e3ba5453da496118d974943097f5018b338",
+      "expected_sha256": "9f73da6d9411394eac499db245aa2df1454d25a7809aa2c1fbda6a695dcc2ed3",
+      "percentage": 7,
+      "regions": {
+        "center": [
+          27,
+          19,
+          38,
+          30
+        ],
+        "boundary": [
+          0,
+          0,
+          4,
+          49
+        ]
+      }
+    },
+    {
+      "id": "fresh-04",
+      "input": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\learning\\20261010T184129Z-78c8e934\\inputs\\fresh-04.png",
+      "expected": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\learning\\20261010T184129Z-78c8e934\\experiments\\fresh-04\\output.png",
+      "input_sha256": "d18248f32d2bc0fd1c36363f4c77488f7f41a5efdfd157d0e40915e9bb330a08",
+      "expected_sha256": "fed8443e214d1da34c0a45f62865d6e0aebe7e99b401a1cc0cd8dd2e16d2b5d2",
+      "percentage": 3,
+      "regions": {
+        "center": [
+          27,
+          19,
+          38,
+          30
+        ],
+        "boundary": [
+          0,
+          0,
+          4,
+          49
+        ]
+      }
+    }
+  ],
+  "policy": {
+    "id": "blur-provisional-v1",
+    "version": 1,
+    "mode": "tolerance",
+    "rgb_mean_max": 1,
+    "rgb_pixel_tolerance": 3,
+    "rgb_fraction_min": 0.99,
+    "alpha_mean_max": 1,
+    "alpha_max": 3,
+    "alpha_pixel_tolerance": 3,
+    "alpha_fraction_min": 1,
+    "description": "Provisional engineering targets, not established compatibility standards. RGB mean across all three channels <=1 and >=99% pixels with max RGB error <=3. Alpha mean <=1, maximum <=3, and 100% within 3. No blur success established."
+  },
+  "exact_baseline_policy": {
+    "id": "exact-rgba-v1",
+    "version": 1,
+    "mode": "exact",
+    "rgb_mean_max": 0,
+    "rgb_pixel_tolerance": 0,
+    "rgb_fraction_min": 1,
+    "alpha_mean_max": 0,
+    "alpha_max": 0,
+    "alpha_pixel_tolerance": 0,
+    "alpha_fraction_min": 1,
+    "description": "Exact decoded 8-bit RGBA equality for baseline regressions."
+  },
+  "objective": "Lexicographically minimize failed blur gates then mean of case worst-region raw RGBA MAE. Only all-gate-passing feasible candidates can promote. Equal scores retain incumbent.",
+  "tie_policy": "retain incumbent",
+  "region_rule": "For every case, center 11x11 clipped to image plus full-height left 4px border; fixed before candidate comparison."
+}

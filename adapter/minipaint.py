@@ -24,13 +24,19 @@ def write_json(path, value):
 
 class MiniPaintAdapter:
     """One synchronous Playwright owner per browser session; no parallel controllers."""
-    def __init__(self, artifact_dir, *, headed=True, timeout_ms=8000, window_position=None):
+    def __init__(self, artifact_dir, *, headed=True, timeout_ms=8000, window_position=None, diagnostic_input_root=None):
         self.artifact_dir = within(artifact_dir, EVIDENCE)
         self.artifact_dir.mkdir(parents=True, exist_ok=True)
         if window_position is not None and (not headed or len(window_position) != 2 or any(type(v) is not int or not -32768 <= v <= 32767 for v in window_position)):
             raise ValueError("Window position requires headed mode and two integer desktop coordinates")
         self.window_position = tuple(window_position) if window_position is not None else None
         self.headed, self.timeout_ms = headed, timeout_ms
+        self.input_root = FIXTURES / "inputs"
+        if diagnostic_input_root is not None:
+            diagnostic = within(diagnostic_input_root, EVIDENCE / "learning")
+            if diagnostic.name != "inputs":
+                raise ValueError("Diagnostic root must be a learning-run inputs directory")
+            self.input_root = diagnostic
         self.actions = []
         self.identity = None
         self.page = self.context = self.browser = self.pw = None
@@ -210,7 +216,7 @@ class MiniPaintAdapter:
     def import_image(self, input_path, *, route="auto"):
         if self.phase != "reset":
             raise ValueError("Import requires a fresh reset document")
-        path = within(input_path, FIXTURES / "inputs")
+        path = within(input_path, self.input_root)
         info = png_info(path)
         if (info["width"],info["height"]) != (self.setup["canvas_width"],self.setup["canvas_height"]):
             raise ValueError("Input dimensions do not match fresh document")

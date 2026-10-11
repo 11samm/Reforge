@@ -1,0 +1,49 @@
+{
+  "configuration": {
+    "fresh_experiments": 4,
+    "candidates": 1,
+    "run_seconds": 600,
+    "reserve_seconds": 100,
+    "model_seconds": 120,
+    "builder_seconds": 240,
+    "reference_seconds": 60,
+    "command_seconds": 60,
+    "retries": 0,
+    "percentage_min": 0,
+    "percentage_max": 10,
+    "window_position": [
+      1600,
+      0
+    ],
+    "builder_tool_calls": 4,
+    "evidence_reads": 0,
+    "packet_limits": {
+      "planner": {
+        "bytes": 8000,
+        "tokens": 11000
+      },
+      "contract": {
+        "bytes": 40000,
+        "tokens": 26000
+      },
+      "route": {
+        "bytes": 32000,
+        "tokens": 22000
+      },
+      "builder": {
+        "bytes": 60000,
+        "tokens": 30000
+      },
+      "repair": {
+        "bytes": 60000,
+        "tokens": 30000
+      }
+    }
+  },
+  "diagnostic_invocations_max": 1,
+  "builder_invocations_max": 1,
+  "reference_experiments_planned": 0,
+  "retry": false,
+  "fallback": false,
+  "note": "One diagnostic from existing evidence; stop with evidence gap if distinguishing new evidence is needed. Budget begins before workspace preparation."
+}

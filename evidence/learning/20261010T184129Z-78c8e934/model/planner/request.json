@@ -1,0 +1,80 @@
+{
+  "prompt": "Select 4 NEW discriminating Gaussian Blur reference experiments. Prepared visible development cases gb010 transparent shapes 65x49 and gb017 opaque poster129x97 use Percentage3. We need competing hypotheses, input specification, exact integer Percentage, predicted distinguishing observations and usefulness. Exact generator definitions {\"impulse_center\": \"Opaque black background; one opaque white pixel at (floor(width/2),floor(height/2)).\", \"impulse_boundary\": \"Opaque black background; one opaque white pixel at (0,floor(height/2)); LEFT MIDPOINT, not corner.\", \"edge\": \"Opaque black for x<floor(width/2); opaque white otherwise.\", \"gradient\": \"Opaque RGB(round(x*255/(width-1)),round(y*255/(height-1)),64).\", \"checkerboard\": \"Opaque black/white 3x3 blocks; white when (floor(x/3)+floor(y/3)) modulo2 is1.\", \"rgb\": \"Opaque vertical red/green/blue thirds using min(2,floor(x*3/width)).\", \"alpha\": \"Vertical bands: x<floor(width/3) RGBA(0,0,0,0); x<floor(2*width/3) RGBA(255,64,16,128); otherwise RGBA(0,32,255,255). NOT hidden-blue/red step.\"}. Dimensions 3..257, prefer33x33/65x49. Input specification is the selected fixed generator plus dimensions. Do not describe a different pattern in question or predictions. Declared Percentage domain 0..10. Choose impulse/boundary/edge/alpha evidence and at least two percentages to distinguish scaling; no familiar formula assumed. Only rendered UI actions and actual PNG exports will be observed. Opaque prepared gb017 export alpha extrema [82,255] suggests boundary alpha behavior needs testing. No tools, concise schema decisions only.",
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "plans": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "question": {
+              "type": "string"
+            },
+            "hypotheses": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "input": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "impulse_center",
+                    "impulse_boundary",
+                    "edge",
+                    "gradient",
+                    "checkerboard",
+                    "rgb",
+                    "alpha"
+                  ]
+                },
+                "width": {
+                  "type": "integer"
+                },
+                "height": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "kind",
+                "width",
+                "height"
+              ],
+              "additionalProperties": false
+            },
+            "percentage": {
+              "type": "integer"
+            },
+            "predictions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "usefulness": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "question",
+            "hypotheses",
+            "input",
+            "percentage",
+            "predictions",
+            "usefulness"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "plans"
+    ],
+    "additionalProperties": false
+  },
+  "role": "decision"
+}

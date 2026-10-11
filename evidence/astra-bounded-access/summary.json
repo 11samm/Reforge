@@ -1,0 +1,38 @@
+{
+  "run": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\learning\\20261010T225609Z-e994550d-dev-resume",
+  "status": "unresolved",
+  "stop": "diagnostic_evidence_gap",
+  "elapsed_seconds": 49.998,
+  "usage": {
+    "totalTokens": 24626,
+    "inputTokens": 23820,
+    "cachedInputTokens": 0,
+    "cacheWriteInputTokens": 0,
+    "outputTokens": 806,
+    "reasoningOutputTokens": 0
+  },
+  "counts": {
+    "diagnostic": 1,
+    "builder": 0
+  },
+  "diagnosis": {
+    "decision": "stop",
+    "hypotheses": [
+      "Parameter/kernel/support: sigma=Percentage and support=ceil(3*sigma) are assumptions, not identified rules. A width change should generally produce opposite-signed step residuals on opposite sides; the predominantly positive P7 residual instead motivates testing phase/asymmetry or precision loss alongside kernel alternatives.",
+      "Intermediate quantization/pass order: the floating-point horizontal-then-vertical core cannot itself explain fresh-01's axis asymmetry. Quantized passes could produce orientation-dependent profiles and suppress the P7 impulse, but neither pass order nor rounding rule is established.",
+      "Premultiplication/low-alpha conversion: alpha-weighted filtering is supported, but final rounding of premultiplied bytes and rounded-alpha division may differ from the reference conversion sequence. Small intermediate errors predict large straight-RGB errors at low alpha, including errors where exported alpha agrees.",
+      "Boundaries: transparent exterior without renormalization is plausible; opacity-preserving padding is inconsistent with observed alpha loss. Finite support, accumulated precision loss, and rendering/export coverage remain competing explanations for boundary differences."
+    ],
+    "evidence": [
+      "Supplied source uses normalized sampled Gaussian weights, floating-point premultiplied passes, then rounded premultiplied channels divided by rounded alpha. P7 alone adds a coverage/density-based alpha lift; RGB retains the uncorrected denominator. This correction cannot repair any RGB residual.",
+      "fresh-03 and dev-02 have identical reference central-row profiles despite different heights. Both candidate centers are 135 versus reference 130, with alpha exactly 255 and center RGB MAE 3.81818. Boundary-alpha correction cannot explain this interior discrepancy.",
+      "fresh-01 has distance-two RGB 6 horizontally versus 5 vertically. dev-01 has red_sum=0 despite a white impulse. These constrain precision/kernel hypotheses but do not identify one shared implementation.",
+      "fresh-04 retains red 255 into transparent black; dev-04's seam is (211,0,44,133). Both support alpha weighting rather than independent straight-RGB convolution.",
+      "gb010 column_x32 has identical candidate/reference alpha throughout, yet blue differs by +128 at y=5 and y=43. fresh-04 at (16,5) has blue 32 versus 0 with alpha 8 in both; dev-04 at (21,0) has red 47 versus 38 with alpha 27 in both. Alpha-only repair is insufficient.",
+      "Corners fall to alpha 125 at P1, 82 at P3, and 72\u201373 at P7; dev-06 reaches only 169 centrally. fresh-02 shows inward boundary spreading without opposite-midpoint RGB, supporting coverage loss but not exact support.",
+      "All reported alpha gates already pass. gb017, fresh-01, fresh-02, dev-01 and dev-06 pass blur gates; build, independent execution, UI agreement and exact baselines also pass. Passing tolerance gates do not establish exact mechanisms."
+    ],
+    "repair_specification": "None. Do not tune constants, implement a patch, or promote the rejected empirical P7 correction. Multiple observations support alpha weighting and coverage loss, but neither identifies a replacement for the mechanisms already present.",
+    "evidence_gap": "Missing: trusted reference intermediate buffers or implementation, a correction-off comparison, and evidence separating kernel phase/support from per-pass precision and export conversion. Future distinguishing experiments: transpose matched impulses and steps to test axis/pass-order effects; vary impulse amplitude to distinguish quantization thresholds from kernel spreading; compare complementary steps to test phase and complement loss; use constant-color alpha ramps to isolate premultiplication/conversion; vary dimensions around candidate support to test boundary coverage. These experiments are unavailable here and were not run. All supplied comparisons are development evidence, not holdout validation."
+  }
+}

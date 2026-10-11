@@ -21,6 +21,7 @@ class FileBroker:
                     raise ValueError('Capability roots cannot contain links or junctions')
         self.root, self.packet = Path(root).resolve(), Path(packet).resolve()
         self.audit = []
+        self.files = set(FILES)
 
     def path(self, name, write=False):
         if not isinstance(name, str) or '\\' in name or ':' in name:
@@ -33,7 +34,7 @@ class FileBroker:
                 raise ValueError('Packet is read-only')
             root, target = self.packet, self.packet / name.split('/', 1)[1]
         else:
-            if name not in FILES:
+            if name not in self.files:
                 raise ValueError('File outside the application allowlist')
             root, target = self.root, self.root / name
         for node in [target, *target.parents]:
@@ -80,7 +81,7 @@ class ShellRuntime(CodexRuntime):
         tool = params.get('tool')
         success = False
         try:
-            if message['method'] != 'item/tool/call' or len(self.requests) >= 24:
+            if message['method'] != 'item/tool/call' or len(self.requests) >= getattr(self, 'max_requests', 24):
                 raise ValueError('Unexpected request or call limit')
             args = params.get('arguments')
             if isinstance(args, str):
@@ -88,7 +89,7 @@ class ShellRuntime(CodexRuntime):
             content = self.broker.call(tool, args)
             success = True
         except Exception:
-            content = [{'type': 'inputText', 'text': 'Denied: only allowlisted app files and the read-only layout packet are accessible; no execution or other tools.'}]
+            content = [{'type': 'inputText', 'text': 'Denied: only allowlisted app files, read-only supplied packets/evidence and bounded call counts are accessible; no execution or other tools.'}]
         self.requests.append({'method': message['method'], 'tool': tool, 'success': success})
         if message['method'] == 'item/tool/call':
             self.send({'id': message['id'], 'result': {'success': success, 'contentItems': content}})

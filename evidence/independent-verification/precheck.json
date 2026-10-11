@@ -1,0 +1,41 @@
+{
+  "phase_b_report": "D:\\Samuel\\Downloads\\Code\\Reforge\\evidence\\learning\\20261010T223144Z-35dc162f-dev-resume\\report.json",
+  "unchanged_files": 20,
+  "changed_files": [],
+  "model_request_records": 0,
+  "packet_sizes": [
+    {
+      "label": "contract-resume-dry",
+      "role": "contract",
+      "bytes": 29359,
+      "estimated_tokens": 18125,
+      "within_limits": true,
+      "dry_run": true,
+      "actual_input_tokens": null,
+      "compared_estimate": 18125
+    },
+    {
+      "label": "route-0",
+      "role": "route",
+      "bytes": 16040,
+      "estimated_tokens": 14219,
+      "within_limits": true,
+      "dry_run": true,
+      "actual_input_tokens": null,
+      "compared_estimate": 14219
+    },
+    {
+      "label": "builder-1",
+      "role": "repair",
+      "bytes": 40802,
+      "estimated_tokens": 23820,
+      "within_limits": true,
+      "dry_run": true,
+      "actual_input_tokens": null,
+      "compared_estimate": 47640
+    }
+  ],
+  "credential_findings": [],
+  "reviewed_proposed_files": 72,
+  "no_staged_files": true
+}

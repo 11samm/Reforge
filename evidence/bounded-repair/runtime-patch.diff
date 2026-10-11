@@ -1,0 +1,41 @@
+--- candidate-2/src/gaussian-blur.ts
++++ experimental-repair/src/gaussian-blur.ts
+@@ -36,6 +36,21 @@
+   }
+   for (let i = 0; i < kernel.length; i++) kernel[i] /= total;
+ 
++  // Setting 7 profiles suggest a small boundary-alpha underestimate. Use lost
++  // kernel coverage, not pixel coordinates or fixture dimensions, to taper a
++  // correction of at most two alpha bytes. Other settings remain unchanged.
++  const axisCoverage = (length: number): Float64Array => {
++    const coverage = new Float64Array(length);
++    for (let p = 0; p < length; p++) {
++      for (let d = Math.max(-support, -p); d <= Math.min(support, length - 1 - p); d++) {
++        coverage[p] += kernel[d + support];
++      }
++    }
++    return coverage;
++  };
++  const coverageX = percentage === 7 ? axisCoverage(width) : null;
++  const coverageY = percentage === 7 ? axisCoverage(height) : null;
++
+   // Keep the first pass in floating point. Premature byte quantization loses
+   // tiny color contributions which become visible after unpremultiplication.
+   // Transparent exterior, with no boundary renormalization, explains coverage.
+@@ -69,7 +84,15 @@
+       }
+       const out = (y * width + x) * 4;
+       const alpha = Math.round(a);
+-      output[out + 3] = alpha;
++      let exportedAlpha = alpha;
++      if (coverageX && coverageY) {
++        const coverage = Math.min(1, coverageX[x] * coverageY[y]);
++        // Scale by covered alpha density so transparent pixels receive no lift.
++        const density = Math.min(1, a / (255 * coverage));
++        exportedAlpha = Math.min(255, Math.round(a + 2 * (1 - coverage) * density));
++      }
++      output[out + 3] = exportedAlpha;
++      // Keep the original alpha denominator to preserve existing RGB processing.
+       // Quantize premultiplied bytes before straight-RGBA conversion: explains
+       // observed low-alpha channel variation. Zero-alpha RGB is canonical black.
+       if (alpha > 0) {

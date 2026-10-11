@@ -1,0 +1,27 @@
+{
+  "schema": "reforge-investigation-guidance/1",
+  "id": "global-investigation-strategies",
+  "version": "1.0.0",
+  "scope": "global",
+  "note": "Target-independent investigation strategies distilled in docs/investigation-lessons.md. Not behavior evidence for any target; cites no evidence IDs. Target-scoped findings live in docs/target-findings/ and are never placed in packets.",
+  "strategies": [
+    {"id": "G1-verify-roundtrip", "lesson": "L1", "roles": ["planner", "route"], "triggers": ["planning", "infrastructure", "behavior_mismatch"],
+     "text": "Before attributing a difference to the feature, confirm reset/import/export reproduces the supplied input exactly. A failed or missing confirmation is a collection failure and supports no behavior claim."},
+    {"id": "G2-separate-failure-classes", "lesson": "L2", "roles": ["route"], "triggers": ["any_failure"],
+     "text": "Classify each failure separately (procedure/automation, missing evidence or wrong hypothesis, implementation, evaluator, baseline regression) with evidence IDs. Never change behavior to fix a procedure, evaluator or regression failure."},
+    {"id": "G3-matched-experiments", "lesson": "L3", "roles": ["planner", "route"], "triggers": ["planning", "behavior_mismatch"],
+     "text": "Prefer matched experiments that change one relevant factor (size, position, parameter, contrast direction or distant content) while holding the rest fixed, and state before export what each competing hypothesis predicts."},
+    {"id": "G4-numerical-profiles", "lesson": "L4", "roles": ["planner", "route"], "triggers": ["planning", "behavior_mismatch"],
+     "text": "Compare exact numerical profiles against deterministic calculations for each hypothesis. Measure every instance of a feature, including mirrored or opposite-direction instances, before generalizing from one."},
+    {"id": "G5-feature-states", "lesson": "L5", "roles": ["route"], "triggers": ["any_failure", "partial_progress"],
+     "text": "Describe state as usable (all gates pass on the frozen suite), experimental (partial, isolated, not promoted) or verified within a stated scope. A good fit to observations is not a verified mechanism."},
+    {"id": "G6-no-fitted-special-cases", "lesson": "L6", "roles": ["route"], "triggers": ["behavior_mismatch", "partial_progress"],
+     "text": "Do not propose corrections keyed to particular dimensions, case IDs or fitted constants. Require a general rule stated before coding and checked on development cases that were not used to fit it."},
+    {"id": "G7-narrow-repair", "lesson": "L7", "roles": ["route"], "triggers": ["behavior_mismatch", "partial_progress"],
+     "text": "Keep the next action narrow: one failure class, bounded evidence and explicit passing-case constraints to preserve."},
+    {"id": "G8-checkpoint-comparison", "lesson": "L8", "roles": ["route"], "triggers": ["partial_progress"],
+     "text": "Continue from the best hash-verified candidate checkpoint, and compare old and new candidates on the same frozen suite and policy."},
+    {"id": "G9-supported-stop", "lesson": "L9", "roles": ["route"], "triggers": ["any_failure"],
+     "text": "If remaining budget or unresolved confounding leaves no supported next action, recommend stopping and report what is unknown instead of widening scope."}
+  ]
+}

@@ -4,6 +4,7 @@ from functools import partial
 import hashlib
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 import json
+import re
 from pathlib import Path
 import threading
 import subprocess
@@ -22,11 +23,13 @@ class QuietHandler(SimpleHTTPRequestHandler):
     def log_message(self,*args): pass
 
 
-def main(evidence=None):
+def main(evidence=None, allow_blur=False, app=None):
+    main_app=app is None
+    app=ROOT/'generated-app' if main_app else Path(app)
     evidence=Path(evidence) if evidence is not None else ROOT/'evidence/shell-verification'/(time.strftime('%Y%m%d-%H%M%S')+'-'+uuid.uuid4().hex[:8])
     evidence.mkdir(parents=True)
-    report={'status':'failed','viewport':{'width':1440,'height':1000},'cases':[],'checks':{},'evidence':str(evidence)}
-    server=ThreadingHTTPServer(('127.0.0.1',0),partial(QuietHandler,directory=str(ROOT/'generated-app/dist')))
+    report={'status':'failed','viewport':{'width':1440,'height':1000},'cases':[],'checks':{},'evidence':str(evidence),'app':str(app)}
+    server=ThreadingHTTPServer(('127.0.0.1',0),partial(QuietHandler,directory=str(app/'dist')))
     threading.Thread(target=server.serve_forever,daemon=True).start()
     try:
         with sync_playwright() as pw:
@@ -55,15 +58,16 @@ def main(evidence=None):
             page.get_by_role('menuitem',name='Gaussian Blur…',exact=True).click()
             dialog=page.get_by_role('dialog')
             expect(dialog).to_be_visible()
-            expect(dialog.get_by_text('Unavailable until the learning loop implements it.',exact=False)).to_be_visible()
-            slider=dialog.get_by_role('slider',name='Percentage:',exact=False)
+            if not allow_blur:
+                expect(dialog.get_by_text('Unavailable until the learning loop implements it.',exact=False)).to_be_visible()
+            slider=dialog.get_by_role('slider',name=re.compile(r'^Percentage(?::.*)?$'))
             expect(slider).to_be_disabled()
             for attr,value in [('min','0'),('max','50'),('step','1')]: expect(slider).to_have_attribute(attr,value)
             expect(dialog.get_by_role('button',name='Apply')).to_be_disabled()
             page.screenshot(path=str(evidence/'generated-blur-unavailable.png'))
             dialog.get_by_role('button',name='Close',exact=True).click()
             expect(dialog).not_to_be_visible()
-            report['checks']['blur_unavailable']=True
+            report['checks']['blur_empty_document_disabled' if allow_blur else 'blur_unavailable']=True
 
             def export_to(path):
                 page.get_by_role('menuitem',name='File',exact=True).click()
@@ -122,11 +126,11 @@ def main(evidence=None):
             # The mutation capability exists only in this separately bundled evidence fixture.
             fixture=evidence/'current-state-fixture'; fixture.mkdir()
             entry=fixture/'entry.tsx'
-            main_path=(ROOT/'generated-app/src/main.tsx').as_posix()
-            state_path=(ROOT/'generated-app/src/current-image.ts').as_posix()
+            main_path=(app/'src/main.tsx').as_posix()
+            state_path=(app/'src/current-image.ts').as_posix()
             entry.write_text('import '+json.dumps(main_path)+';\nimport { currentImage } from '+json.dumps(state_path)+';\n'
                 + "(window as any).milestoneTestChangePixel = (x: number,y: number,rgb: number[]) => {const r=currentImage.raster;if(!r || x<0 || y<0 || x>=r.width || y>=r.height)throw new Error('Invalid fixture pixel');const i=4*(y*r.width+x);r.data.set(rgb,i);return Array.from(r.data.slice(i,i+4));};\n",encoding='utf-8')
-            bundle=subprocess.run(['node',str(ROOT/'generated-app/node_modules/esbuild/bin/esbuild'),str(entry),'--bundle','--format=esm','--jsx=automatic','--target=es2022','--outfile='+str(fixture/'fixture.js')],cwd=ROOT,timeout=30,capture_output=True,text=True)
+            bundle=subprocess.run(['node',str(app/'node_modules/esbuild/bin/esbuild'),str(entry),'--bundle','--format=esm','--jsx=automatic','--target=es2022','--outfile='+str(fixture/'fixture.js')],cwd=ROOT,timeout=30,capture_output=True,text=True)
             (fixture/'build.log').write_text(bundle.stdout+bundle.stderr,encoding='utf-8')
             if bundle.returncode: raise AssertionError('Isolated fixture build failed')
             (fixture/'index.html').write_text('<html><head><link rel="stylesheet" href="fixture.css"></head><body><div id="root"></div><script type="module" src="fixture.js"></script></body></html>')
@@ -189,7 +193,7 @@ def main(evidence=None):
     finally:
         server.shutdown(); server.server_close()
         (evidence/'results.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
-        (ROOT/'evidence/latest-shell-verification.json').write_text(json.dumps({'status':report['status'],'results':str(evidence/'results.json')},indent=2)+'\n')
+        if main_app: (ROOT/'evidence/latest-shell-verification.json').write_text(json.dumps({'status':report['status'],'results':str(evidence/'results.json')},indent=2)+'\n')
         print(json.dumps({'status':report['status'],'evidence':str(evidence),'error':report.get('error')}))
     return 0 if report['status']=='passed' else 1
 
