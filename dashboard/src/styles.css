@@ -474,3 +474,9 @@ figcaption { font: var(--type-caption); font-weight: 600; color: var(--ink-2); m
 .live-activity span { color:var(--muted); }
 .live-experiment { flex-basis:100%; }
 @media (max-width:760px) { .live-browser-pair { grid-template-columns:1fr; } }
+.candidate-review { display: block; width: 100%; height: min(680px, 65vh); border: 1px solid var(--border, #384049); border-radius: 10px; margin: 16px 0; background: #ddd; }
+.feature-evidence pre, .feature-compose pre { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 320px; overflow: auto; font-size: 12px; }
+.evidence-images { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr)); gap: 12px; }
+.evidence-images figure { margin: 0; min-width: 0; padding: 12px; background: #171d2480; border-radius: 8px; }
+.evidence-images img { max-width: 100%; max-height: 240px; image-rendering: pixelated; }
+.evidence-images figcaption { margin-bottom: 8px; }

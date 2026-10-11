@@ -17,7 +17,7 @@ export function normalizeJob(raw: unknown): Job {
   const evidence: Job['evidence'] = [];
   for (const e of merged) {
     const url = text(e.artifact);
-    if (new RegExp(`^/api/jobs/${r.id}/evidence/(spec|discovery-summary|validation|visible-report|final-summary)\\.json$`).test(url)) {
+    if (new RegExp(`^/api/jobs/${r.id}/evidence/(spec|discovery-summary|validation|visible-report|final-summary|preparation|repair-summary)\\.json$`).test(url)) {
       evidence.push({ name: url.split('/').at(-1)!, url, available_at: e.elapsed_seconds! });
     }
   }

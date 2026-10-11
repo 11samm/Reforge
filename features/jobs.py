@@ -35,18 +35,26 @@ class JobStore:
     def get(self,ident):
         if not re.fullmatch(r'[a-f0-9]{32}',ident): raise ValueError('Invalid job ID')
         with self.lock:
-            job=json.loads((self.directory/ident/'job.json').read_text())
+            from .presentation import safe_file
+            job=json.loads(safe_file(self.directory,ident+'/job.json').read_text())
+            if job.get('id')!=ident: raise ValueError('Cross-job record')
             if ident in self.starts and job['status'] not in TERMINAL: job['elapsed_seconds']=round(self.clock()-self.starts[ident],3)
             return job
     def list(self):
         return sorted([self.get(p.parent.name) for p in self.directory.glob('*/job.json')],key=lambda j:j['created'],reverse=True)[:30]
-    def create(self,request):
+    def create(self,request,prepared=None):
         request_id(request)
         from .pipeline import BUDGET
         with self.lock:
             if self.active or any(j['status'] not in TERMINAL for j in self.list()): raise RuntimeError('A feature job already owns the reference browser')
-            ident=uuid.uuid4().hex; self.active=ident; self.cancel_flags[ident]=threading.Event(); self.starts[ident]=self.clock()
+            ident=prepared['id'] if prepared else uuid.uuid4().hex
+            if not re.fullmatch(r'[a-f0-9]{32}',ident) or (self.directory/ident).exists(): raise ValueError('Demo already used or invalid')
+            if prepared:
+                from .demos import validate
+                validate(request,ident,prepared['preparation'])
+            self.active=ident; self.cancel_flags[ident]=threading.Event(); self.starts[ident]=self.clock()
             job={'id':ident,'request':request.strip(),'status':'queued','stage':'Discover','created':time.time(),'elapsed_seconds':0,'activity':'Queued for bounded execution','budget':BUDGET,'usage':None,'events':[],'evidence':[]}
+            if prepared: job['prepared_demo']={'id':ident,'preparation':prepared['preparation']}
             self.persist(job); self.event(ident,'queued',activity=job['activity']); return self.get(ident)
     def event(self,ident,kind,**data):
         with self.lock:
@@ -83,8 +91,14 @@ class JobStore:
             state=result.get('status')
             if state not in TERMINAL: state='failed'
             if self.cancel_flags[ident].is_set(): state='cancelled'
+            if state=='accepted':
+                from .demos import Demos
+                try: Demos.snapshot(self.directory/ident,ROOT/'dev-workspaces'/('feature-'+ident),ident)
+                except (ValueError,OSError) as error: job['preview_error']=scrub(error)
             self.event(ident,'stop',activity=result.get('classification',state))
-            job=self.get(ident); job.update(status=state,activity=scrub(result.get('classification',state)),usage=result.get('usage'),promoted=False)
+            preview_error=job.get('preview_error')
+            job=self.get(ident); job.update(status=state,activity=scrub(result.get('classification',state)),usage=result.get('usage',job.get('usage')),promoted=False)
+            if preview_error: job['preview_error']=preview_error
             job['events'][-1]['status']=state; self.persist(job)
             if self.active==ident: self.active=None
     def cancel(self,ident):
@@ -97,7 +111,16 @@ class JobStore:
 class BrowserLock:
     def __init__(self,name='feature-browser'): self.name=name
     def __enter__(self):
-        p=ROOT/'.scratch'/(self.name+'.lock'); p.parent.mkdir(exist_ok=True)
+        # Worktrees share the canonical browser locks, including legacy controllers.
+        root=ROOT
+        git=ROOT/'.git'
+        if git.is_file():
+            line=git.read_text(encoding='utf-8').strip()
+            if line.startswith('gitdir: '):
+                directory=Path(line[8:])
+                if not directory.is_absolute(): directory=ROOT/directory
+                if directory.parent.name=='worktrees': root=directory.parent.parent.parent
+        p=root/'.scratch'/(self.name+'.lock'); p.parent.mkdir(exist_ok=True)
         self.file=p.open('a+b'); self.file.seek(0); self.file.write(b'0'); self.file.flush(); self.file.seek(0)
         try:
             if os.name=='nt':

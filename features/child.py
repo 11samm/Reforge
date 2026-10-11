@@ -17,7 +17,7 @@ def main():
     os.environ['REFORGE_LIVE_JOB']=ident
     os.environ['REFORGE_LIVE_ENABLED']='1'
     def emit(kind,**data): print(json.dumps({'feature_event':True,'event':kind,'data':data}),flush=True)
-    try: result=continue_job(job['resume_job'],ident,emit,request=job['request']) if job.get('resume_job') else run(job['request'],ident,emit)
+    try: result=continue_job(job['resume_job'],ident,emit,request=job['request']) if job.get('resume_job') else run(job['request'],ident,emit,prepared=job.get('prepared_demo'))
     except Exception as e: result={'status':'failed','classification':type(e).__name__+': '+str(e)[:1000]}
     finally:
         from .sessions import stop_pool
