@@ -104,6 +104,9 @@ class Harness:
         return proc.returncode
 
     def worker(self, kind, request, directory, timeout, cleanup=False):
+        from features import live, sessions
+        if sessions.pool is not None and live.enabled() and not cleanup and 'final' not in directory.parts and kind!='selfcheck':
+            return sessions.pool.worker(kind,request,directory,self.budget.timeout(timeout,cleanup))
         directory.mkdir(parents=True,exist_ok=True); save(directory/'request.json',request)
         self.process([sys.executable,'-m','learning.worker',kind,str(directory/'request.json'),str(directory)],directory,timeout,cleanup)
         return json.loads((directory/'result.json').read_text())

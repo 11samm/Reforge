@@ -44,6 +44,11 @@ class MiniPaintAdapter:
         self.phase = "uninitialized"
 
     def __enter__(self):
+        from features import sessions
+        if sessions.active():
+            if sessions.runtime['role']!='reference': raise ValueError('Reference browser belongs to another owner')
+            self.pw=sessions.runtime['pw']; self.browser=sessions.runtime['browser']
+            return self
         from features.jobs import BrowserLock
         self.ownership = BrowserLock('reference-browser')
         self.ownership.__enter__()
@@ -60,6 +65,8 @@ class MiniPaintAdapter:
         return self
 
     def __exit__(self, *args):
+        from features import sessions
+        if sessions.active(): return
         from features import live
         live.close()
         try:
@@ -96,6 +103,8 @@ class MiniPaintAdapter:
             device_scale_factor=1, locale="en-US", timezone_id="America/Los_Angeles",
             accept_downloads=True, service_workers="block")
         self.page = self.context.new_page()
+        from features import sessions
+        sessions.replace_page(self.page)
         from features import live
         live.attach(self.page,'reference')
         self.page.set_default_timeout(self.timeout_ms)
