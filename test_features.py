@@ -158,7 +158,7 @@ class LearningIntegrationTests(unittest.TestCase):
             for name in ('src/brightness.ts','src/current-image.ts','package.json','../evaluator/compare.py','layout-packet/reference.png'):
                 with self.assertRaises(ValueError): b.path(name,True)
             with self.assertRaises(ValueError): b.path('src/brightness.ts')
-            self.assertEqual(b.path('src/contrast.ts',True),Path(d)/'src/contrast.ts')
+            self.assertEqual(b.path('src/contrast.ts',True),(Path(d)/'src/contrast.ts').resolve())
     def test_validated_procedure_required_before_learning(self):
         from features.learning import AdjustmentHarness
         with self.assertRaisesRegex(ValueError,'validation required'):

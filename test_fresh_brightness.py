@@ -71,7 +71,7 @@ class FreshBrightnessTests(unittest.TestCase):
             broker=BrightnessBroker(root=Path(temp))
             for name in ('src/contrast.ts','../generated-app/src/brightness.ts','../evidence/brightness/canonical-contract.json','layout-packet/reference.png'):
                 with self.assertRaises(ValueError): broker.path(name)
-            self.assertEqual(broker.path('src/brightness.ts',True),Path(temp)/'src/brightness.ts')
+            self.assertEqual(broker.path('src/brightness.ts',True),(Path(temp)/'src/brightness.ts').resolve())
 
     def test_resume_cannot_relabel_a_different_feature(self):
         from features.pipeline import continue_job

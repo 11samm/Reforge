@@ -135,7 +135,7 @@ def host_hashes():
 def remember(path,case):
     path=within(path,ROOT/'evidence/learning')
     save(ROOT/'evidence/feature-memory/validated-host-patch.json',
-         {'schema':1,'host_hashes':host_hashes(),'patch':path.relative_to(ROOT).as_posix(),
+         {'schema':1,'host_hashes':host_hashes(),'patch':path.relative_to(ROOT.resolve()).as_posix(),
           'patch_sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'case':case,
           'scope':'offline gates and subsequent live discovery; not behavior acceptance'})
 
