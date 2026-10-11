@@ -48,3 +48,12 @@ violations fatal. These tests use mocks, not live model recovery. The third live
 preceded these changes and is documented separately. Existing confirmed locator and
 specification mistakes seeded the local procedural memory; no algorithm evidence was
 copied into it. No new live pilot validated recovery in this turn.
+
+## Isolated harness repair follow-up
+
+113 Python tests passed before the final hash-recall and parent-budget additions;
+those additions passed focused regression suites (39 tests, then 9 repair tests).
+11 dashboard tests and TypeScript/production build passed. The live pilot stopped
+on observation size, outside the repair allowlist, as documented in the pilot report.
+No live harness patch was exercised. Protected policies and capability limits remain
+unchanged. These results establish offline repair infrastructure, not Contrast success.

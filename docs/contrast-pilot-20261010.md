@@ -66,3 +66,26 @@ Deepcopy preserves aliases to shared model.S dictionaries, so mutating the param
 schema also mutated request and other string fields. The constrained fields now use
 independent dictionaries, verified by an offline regression test. No additional live
 pilot was launched after this fix; no candidate was constructed or promoted.
+
+## Bounded host-repair implementation and subsequent pilot - October 11, 2026
+
+Implementation d118441; budget wiring fix 7b1a85a. A pre-inference launch
+2bcd9aa36be441c2a019906b6c6d5b3b stopped at 0.460 seconds because the legacy
+Budget correctly refused run_seconds=1200. The job owner enforces 1200 seconds;
+internal harness limits remain 600. Offline budget regression passed before retry.
+
+Live job 945c402019f5497a8bc4347a5cd5263f failed at Discover after 19.441 seconds.
+The model opened Effects. The resulting visible observation exceeded the 16 KB
+output ceiling, then a visible_inspect also exceeded it. No specification, procedure
+validation, reconstruction or acceptance followed. Provider usage: 39,286 total;
+38,930 input including 24,448 cached; 356 output. No autonomous harness patch was
+proposed because bounded observation/capability handling is outside the writable
+resolve/output_schema function scope. The system retained every action and stopped
+without relaxing limits. A future bounded pagination change is required for this
+failure class; this implementation does not claim arbitrary autonomous host repair.
+
+Repair infrastructure has offline tests for failed-before/passed-after schema replay,
+forbidden patches, repeated-failure and repair-count stops, rejection without a failing
+reproducer, rejected regressions, isolated patch retention and matching-host recall.
+No live autonomous host repair or recalled-patch success has yet been demonstrated.
+No editor promotion, merge or push occurred.
