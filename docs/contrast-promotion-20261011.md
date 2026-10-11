@@ -14,6 +14,9 @@ run; these checks are developer integration revalidation, not a new learning run
   SHA-256 verified before copying.
 - Only `src/main.tsx` and `src/contrast.ts` were promoted. Brightness, codecs,
   CSS, dependencies, configuration, and frozen expected outputs are unchanged.
+- A preserved pre-Contrast starting shell is used for subsequent isolated
+  discovery runs. The pipeline removes Contrast only from its newly copied
+  candidate workspace; the canonical accepted editor and raw evidence remain.
 - Accepted Contrast source SHA-256:
   `ec4bd70d05387e68fff449bc968b9ddc665a25cdc9e55d8b50f8d80ce72a31e4`.
 - The source explicitly retains hypotheses/unknowns about unobserved behavior.

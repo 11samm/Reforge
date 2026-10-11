@@ -92,6 +92,9 @@ def run(request, job_id, emit):
     app=ROOT/'dev-workspaces'/('feature-'+job_id)
     shutil.copytree(ROOT/'generated-app',app,ignore=shutil.ignore_patterns('node_modules','dist'))
     shutil.copytree(ROOT/'generated-app/node_modules',app/'node_modules')
+    # Promotion must not make a subsequent discovery run start with Contrast.
+    shutil.copyfile(ROOT/'features/templates/contrast/main.tsx',app/'src/main.tsx')
+    (app/'src/contrast.ts').unlink(missing_ok=True)
     config=copy.deepcopy(DEFAULTS); config.update(fresh_experiments=4,candidates=2,retries=0,run_seconds=max(120,min(600,int(1200-(time.monotonic()-start)))),reserve_seconds=100,command_seconds=90)
     h=AdjustmentHarness(config,app,spec,validation,notify=emit)
     h.harness_patch=patch
