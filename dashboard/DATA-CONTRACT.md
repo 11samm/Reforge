@@ -141,3 +141,11 @@ integrate:
    the source status is `open`.
 4. Add tests that replay a captured event stream through this path before
    claiming that live mode works.
+
+## Portable accepted recordings (v2)
+
+`Replay saved run` imports a single `reforge.portable-recording` v1 JSON envelope. It contains the exact UTF-8 v2 manifest string and SHA-256 plus base64 images with relative path, size, MIME and SHA-256 inventory. The importer verifies schema, timing/order, path safety, references, image signatures, sizes and hashes before creating local object URLs. No backend or original archive access is needed. The same envelope can be selected from the static run index.
+
+V2 retains the existing visible suite/candidate model. `recording.final` is a distinct recording-only section with once-only final cases, reference/input assets, evaluation metrics and original summary `available_at`; `recording.evidence` contains archival images with conservative section-completion reveal times. Final inputs/outputs never enter repair/model packets or learning input directories. Run provenance declares the original execution mode, tested acceptance scope, developer changes and repair history. `telemetry.available_at` and `candidates.decided_seconds` support explicit recorded reveal timing; absent values retain v1 behavior.
+
+A successful import starts at time zero. The dashboard labels recorded mode and source job, hides future evaluation images/metrics, and keeps final summaries and outcome-bearing provenance hidden until available. The final inspector shares existing case rendering but its case IDs/assets are separate from visible candidate cases. Images are recorded evidence and never appear in live-session panes. Import replacements/run switches clear selections, reject stale loads and dispose owned URLs. See `../docs/portable-replay.md` for actual source provenance, exports and validation.

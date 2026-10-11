@@ -63,7 +63,7 @@ test('model telemetry is the recorded usage, with nothing invented', () => {
 });
 
 test('synthetic fixture: unknown statuses, unsafe paths, newer schema, incomplete run', () => {
-  const run = normalizeRun(synthetic, BASE);
+  const run = normalizeRun({ ...(synthetic as Record<string, unknown>), schema_version: 99 }, BASE);
   assert.equal(run.provenance, 'synthetic');
   assert.equal(run.outcome.status, 'incomplete');
   assert.deepEqual(run.claims.map((c) => c.status), ['UNRECOGNIZED', 'UNRECOGNIZED', 'HYPOTHESIS']);

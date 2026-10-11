@@ -25,7 +25,7 @@ export function Candidates({ run, t, sel, setSel, onOpenEvidence }: {
     <div className="candidates">
       <Card>
         <table className="table">
-          <thead><tr><th>Candidate</th><th>Started</th><th>Build</th><th>Independent</th><th>UI export</th><th>Baselines</th><th>Blur cases</th><th>Decision</th></tr></thead>
+          <thead><tr><th>Candidate</th><th>Started</th><th>Build</th><th>Independent</th><th>UI export</th><th>Baselines</th><th>Adjustment cases</th><th>Decision</th></tr></thead>
           <tbody>
             {visible.map((c) => {
               const x = candidateAt(c, t);
@@ -56,7 +56,7 @@ export function Candidates({ run, t, sel, setSel, onOpenEvidence }: {
         {a.decided && cand.reason && <Pill tone="neutral">Route label: {humanize(cand.reason)}</Pill>}
         <div className="grow" />
         <Segmented<Tab> label="Candidate evidence" value={tab} onChange={setTab} options={[
-          { id: 'cases', label: `Blur cases · ${cand.suiteCaseCount}` },
+          { id: 'cases', label: `Adjustment cases · ${cand.suiteCaseCount}` },
           { id: 'baselines', label: `Baseline regressions${cand.baseline ? ` · ${cand.baseline.cases.length}` : ''}` },
           { id: 'builder', label: 'Builder turn' },
         ]} />
@@ -112,6 +112,7 @@ export function Candidates({ run, t, sel, setSel, onOpenEvidence }: {
       {tab === 'builder' && (
         <Card title={`Builder turn · ${cand.builder?.invocation ?? 'not recorded'}`}>
           {!cand.builder ? <Empty tone="warn">Model telemetry for this builder turn is not included in the bundle.</Empty>
+            : !(cand.builder.revealedAt === null ? t >= run.duration : cand.builder.revealedAt <= t) ? <Empty>Builder telemetry is not available at this recorded time.</Empty>
             : !cand.builder.recorded ? <Empty tone="warn">Invocation record missing: no usage telemetry was recorded for this turn.</Empty> : (
               <>
                 <dl className="facts facts-inline">
@@ -132,7 +133,7 @@ export function Candidates({ run, t, sel, setSel, onOpenEvidence }: {
   );
 }
 
-function CasePanel({ run, cases, evaluated, decided, candidateFailed, errorText, selectedCase, onSelectCase, onOpenEvidence, policy }: {
+export function CasePanel({ run, cases, evaluated, decided, candidateFailed, errorText, selectedCase, onSelectCase, onOpenEvidence, policy }: {
   run: Run; cases: CaseResult[]; evaluated: boolean; decided: boolean; candidateFailed: boolean; errorText: string | null;
   selectedCase: string | null; onSelectCase: (id: string) => void; onOpenEvidence: (id: string) => void; policy: Record<string, unknown> | null;
 }) {
@@ -146,7 +147,7 @@ function CasePanel({ run, cases, evaluated, decided, candidateFailed, errorText,
 
   const missingCandidate = !showResults ? (decided && candidateFailed ? `No candidate output: candidate stopped before evaluation${errorText ? ` (${errorText})` : ''}` : 'Not evaluated yet at this point')
     : k.outcome === 'missing_output' ? 'Evaluator recorded missing candidate output' : 'Candidate image not in bundle';
-  const imgs = { reference: k.images.reference, candidate: showResults ? k.images.candidate : null, rgb: showResults ? k.images.rgbDifference : null, alpha: showResults ? k.images.alphaDifference : null, input: k.images.input };
+  const imgs = { reference: showResults ? k.images.reference : null, candidate: showResults ? k.images.candidate : null, rgb: showResults ? k.images.rgbDifference : null, alpha: showResults ? k.images.alphaDifference : null, input: showResults ? k.images.input : null };
   const missings = { reference: 'Reference output not in bundle', input: 'Input not in bundle', candidate: missingCandidate,
     rgb: showResults ? 'RGB difference image not in bundle' : missingCandidate, alpha: showResults ? 'Alpha difference image not in bundle' : missingCandidate };
   const parsed = k.reasons.map((r) => parseReason(r) ?? { raw: r, region: '', metric: '', label: r, value: NaN, limit: NaN, comparator: '' });
@@ -160,7 +161,7 @@ function CasePanel({ run, cases, evaluated, decided, candidateFailed, errorText,
           <tbody>
             {cases.map((c) => {
               const m = showResults ? c.metrics : null;
-              const bad = (metric: string) => (violated(c.reasons, 'full_image', metric) ? 'bad-cell' : '');
+              const bad = (metric: string) => (showResults && violated(c.reasons, 'full_image', metric) ? 'bad-cell' : '');
               return (
                 <tr key={c.id} className={`clickable ${c.id === k.id ? 'selected' : ''}`} onClick={() => onSelectCase(c.id)}>
                   <td><strong className="mono">{c.id}</strong><small className="muted block">{c.source === 'development_fixture' ? 'fixture' : c.source === 'fresh_experiment' ? 'fresh' : ''}</small></td>
@@ -212,7 +213,7 @@ function CasePanel({ run, cases, evaluated, decided, candidateFailed, errorText,
         )}
         <p className="muted small">Scored on raw unpremultiplied RGBA; checkerboard is display only. Difference images come from the trusted evaluator.</p>
 
-        <h4>{showResults && k.outcome === 'passed' ? 'Why it passed' : 'Why it failed'}</h4>
+        <h4>{!showResults ? 'Comparison pending' : k.outcome === 'passed' ? 'Why it passed' : 'Why it failed'}</h4>
         {!showResults ? <Empty tone={decided ? 'warn' : 'neutral'}>{missingCandidate}. No pixel comparison exists, so this is not a pixel failure.</Empty>
           : k.outcome === 'passed' ? <p className="good-text">All full-image and region gates passed on this case.</p>
             : k.outcome === 'missing_output' ? <Empty tone="warn">The evaluator found no candidate output to compare. This is a missing output, not a failed pixel comparison.</Empty>
