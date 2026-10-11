@@ -60,8 +60,9 @@ steps are in [DATA-CONTRACT.md](DATA-CONTRACT.md).
 ## Design notes
 
 - **Layout** follows the reference admin dashboard: a left sidebar with a run
-  picker and identity card, a page title with a mode badge, a provenance
-  banner, filter chips and segmented tabs, and tables with a detail panel.
+  picker and identity card, a page title with a mode badge, a warning
+  banner for synthetic or unlabeled bundles, filter chips and segmented
+  tabs, and tables with a detail panel.
 - **Style** is restrained glassmorphism: translucent frosted panels over a
   pastel gradient with blurred light orbs, dark navy text for contrast,
   thin translucent white borders, and soft tinted shadows. Colors carry

@@ -21,13 +21,13 @@ const NAV: { id: View; label: string; icon: string }[] = [
   { id: 'events', label: 'Event log', icon: 'events' },
 ];
 
-const TITLES: Record<View, [string, string]> = {
-  overview: ['Run overview', 'Observe → experiment → contract → implement → evaluate → accept / reject'],
-  experiments: ['Experiments', 'Diagnostic inputs run through the real reference editor, with exact Percentage values'],
-  contract: ['Behavior contract', 'Bounded claims, their status, supporting evidence and open questions'],
-  candidates: ['Candidates', 'Builder attempts, trusted gates, per-case comparisons and decisions'],
-  telemetry: ['Model usage', 'Recorded token telemetry per model invocation; missing records are marked'],
-  events: ['Event log', 'Every recorded event in sequence; click a row to jump the replay'],
+const TITLES: Record<View, string> = {
+  overview: 'Run overview',
+  experiments: 'Experiments',
+  contract: 'Behavior contract',
+  candidates: 'Candidates',
+  telemetry: 'Model usage',
+  events: 'Event log',
 };
 
 const SPEEDS = [1, 5, 20, 60];
@@ -145,10 +145,7 @@ export function App() {
 
         <main className="main">
           <header className="page-head">
-            <div>
-              <h1>{TITLES[view][0]}</h1>
-              <p className="subtitle">{TITLES[view][1]}</p>
-            </div>
+            <h1>{TITLES[view]}</h1>
             <span className={`mode-badge mode-${kind}`}>
               <span className="dot" />{kind === 'recorded' ? 'RECORDED PLAYBACK' : kind === 'synthetic' ? 'SYNTHETIC — NOT RESULTS' : kind === 'live' ? 'LIVE' : 'UNLABELED SOURCE'}
             </span>
@@ -210,16 +207,7 @@ function ProvenanceBanner({ run }: { run: Run }) {
       </div>
     );
   }
-  if (run.provenance === 'recorded') {
-    return (
-      <div className="banner banner-recorded">
-        <Icon name="info" />
-        <div><strong>Recorded playback of a completed run. Not live.</strong>
-          <p>Replaying {run.timeline.length} events recorded by the trusted host from <code>{run.provenanceSource ?? 'unknown source'}</code>.
-            Values come from the recorded run, not from the dashboard.</p></div>
-      </div>
-    );
-  }
+  if (run.provenance === 'recorded') return null;
   return (
     <div className="banner banner-synthetic">
       <Icon name="alert" />
