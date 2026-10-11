@@ -5,7 +5,7 @@ import time
 from pathlib import Path
 from playwright.sync_api import expect
 from adapter.minipaint import MiniPaintAdapter
-from adapter.png import compare_pngs, png_info
+from adapter.png import compare_pngs, png_info, ROOT
 from learning.core import digest, save
 from .spec import locator, parameter, validate, value_in_domain
 
@@ -87,7 +87,7 @@ def reference(request, directory):
 # Fixed code reads only rendered DOM and native numeric attributes. Never model-supplied JS.
 VISIBLE_DOM = '''body => [...body.querySelectorAll('button,input,label,[role="menuitem"],h1,h2,h3')]
  .filter(e=>e.getClientRects().length && getComputedStyle(e).visibility!=='hidden')
- .slice(0,150).map(e=>({tag:e.tagName,type:e.getAttribute('type'),role:e.getAttribute('role'),
+ .map(e=>({tag:e.tagName,type:e.getAttribute('type'),role:e.getAttribute('role'),
  label:e.getAttribute('aria-label'),dialog:(e.closest('[role="dialog"]')?.querySelector('h1,h2,h3')?.innerText||'').slice(0,160),row:(e.closest('tr')?.innerText||'').slice(0,160),text:(e.innerText||'').slice(0,160),
  min:e.getAttribute('min'),max:e.getAttribute('max'),step:e.getAttribute('step'),
  value:('value' in e?String(e.value).slice(0,160):null)}))'''
@@ -98,6 +98,7 @@ class DiscoveryBroker:
         self.actions=0; self.observations={}; self.audit=[]; self.bytes=0
         self.notify=notify
         self.recoverable_errors=0; self.recovery_enabled=False; self.memory=None
+        self.site_map=None; self.navigation=[]; self.snapshot=None; self.snapshot_counter=0; self.calls=0; self.storage_bytes=0
     def check(self):
         if self.clock()-self.start >= self.limits['seconds']: raise TimeoutError('Discovery time budget exhausted')
     def call(self, tool, args):
@@ -125,58 +126,104 @@ class DiscoveryBroker:
                         'instruction': 'This is not a successful observation. Inspect current visible state before correction.'})}]
             raise
 
+    def _response(self, payload):
+        content=[{'type':'inputText','text':json.dumps(payload)}]
+        size=len(json.dumps(content).encode())
+        if size>self.limits['output_bytes']: raise ValueError('Visible output too large; unresolved')
+        self.bytes+=size
+        if self.bytes>self.limits['total_bytes']: raise ValueError('Cumulative observation output budget exhausted')
+        return content
+
     def _call(self, tool, args):
-        self.check()
+        self.check(); self.calls+=1
+        if self.calls>self.limits['tool_calls']: raise ValueError('Discovery tool budget exhausted')
+        from learning.core import exact
+        if tool in ('map_query','map_route'):
+            if self.site_map is None: raise ValueError('No interaction map configured')
+            if tool=='map_query':
+                exact(args,['query','parent','page']); payload=self.site_map.query(**args)
+            else:
+                exact(args,['feature']); payload={'route':self.site_map.route(args['feature'])}
+            self.audit.append({'tool':tool,'arguments':args})
+            return self._response(payload)
         if tool not in ('visible_inspect','visible_screenshot','visible_click','visible_set'): raise ValueError('Discovery tool denied')
-        if len(self.observations) >= self.limits['observations']: raise ValueError('Observation budget exhausted')
-        if tool in ('visible_inspect','visible_screenshot'):
-            if args != {}: raise ValueError('Inspection takes no code/paths')
-        else:
-            from learning.core import exact
+        if tool in ('visible_click','visible_set'):
             exact(args,['locator','dialog']+(['value'] if tool=='visible_set' else []))
             if not isinstance(args['dialog'],str) or len(args['dialog'])>160: raise ValueError('Invalid visible dialog name')
-            if self.actions >= self.limits['actions']: raise ValueError('Action budget exhausted')
-            self.actions += 1
-            root=self.page
+            if self.actions>=self.limits['actions']: raise ValueError('Action budget exhausted')
+            self.actions+=1; root=self.page
             if args['dialog']:
                 root=self.page.get_by_role('dialog'); expect(root).to_have_count(1)
                 expect(root.get_by_role('heading',name=args['dialog'],exact=True)).to_be_visible()
-            field=resolve(root,args['locator'])
+            field=resolve(root,args['locator']); accepted=None
             if tool=='visible_click':
                 if args['locator']['role'] not in ('menuitem','button'): raise ValueError('Click only visible menu items/buttons')
                 field.click()
+                if not args['dialog']:
+                    self.navigation=(self.navigation+[args['locator']])[-6:]
             else:
                 if args['locator']['role'] not in ('slider','spinbutton'): raise ValueError('Numeric controls only')
-                control={'min':float(field.get_attribute('min')),'max':float(field.get_attribute('max')),'step':float(field.get_attribute('step')),'locator':args['locator'],'type':args['locator']['role'],'label':args['locator']['name']}
+                control={'min':float(field.get_attribute('min')),'max':float(field.get_attribute('max')),'step':float(field.get_attribute('step')),
+                         'locator':args['locator'],'type':args['locator']['role'],'label':args['locator']['name']}
                 if (control['max']-control['min'])/control['step']>2000: raise ValueError('Numeric action size limit')
-                set_numeric(root,control,args['value'])
+                accepted=set_numeric(root,control,args['value'])
+            self.snapshot=None
+            self.audit.append({'tool':tool,'arguments':args,'action_status':'succeeded','accepted':accepted})
+            self.notify(activity=f'{tool} succeeded; inspect current visible state separately')
+            return self._response({'action_status':'succeeded','accepted':accepted,'inspection_required':True})
+        if len(self.observations)>=self.limits['observations']: raise ValueError('Observation budget exhausted')
         ident='observation-'+str(len(self.observations)+1)
         if tool=='visible_screenshot':
+            if args!={}: raise ValueError('Screenshot takes no paths/code')
             path=self.directory/(ident+'.png'); self.page.screenshot(path=str(path),full_page=False,timeout=5000)
             data=path.read_bytes()
             if len(data)>self.limits['screenshot_bytes']: raise ValueError('Screenshot output too large')
             import base64
             content=[{'type':'inputText','text':'Untrusted screenshot evidence '+ident},{'type':'inputImage','imageUrl':'data:image/png;base64,'+base64.b64encode(data).decode()}]
-            observation={'screenshot':path.name,'sha256':digest(path)}; size=len(data)
+            size=len(json.dumps(content).encode()); self.bytes+=size
+            if self.bytes>self.limits['total_bytes']: raise ValueError('Cumulative observation output budget exhausted')
+            observation={'screenshot':path.name,'sha256':digest(path)}
         else:
-            observation={'accessibility':self.page.locator('body').aria_snapshot(timeout=5000),'controls':self.page.locator('body').evaluate(VISIBLE_DOM,timeout=5000)}
-            encoded=json.dumps(observation,allow_nan=False); size=len(encoded.encode())
-            if size>self.limits['output_bytes']: raise ValueError('Visible output too large; unresolved')
-            content=[{'type':'inputText','text':json.dumps({'id':ident,'untrusted_visible_data':observation})}]
-        response_size=len(json.dumps(content).encode())
-        if tool!='visible_screenshot' and response_size>self.limits['output_bytes']: raise ValueError('Visible output too large; unresolved')
-        self.bytes+=response_size
-        if self.bytes>self.limits['total_bytes']: raise ValueError('Cumulative observation output budget exhausted')
-        self.observations[ident]=observation
-        save(self.directory/(ident+'.json'),observation)
+            if args=={}: args={'scope':'auto','dialog':'','page':0}
+            exact(args,['scope','dialog','page'])
+            if args['scope'] not in ('auto','page','dialog') or not isinstance(args['dialog'],str) or len(args['dialog'])>160 or type(args['page']) is not int or not 0<=args['page']<100: raise ValueError('Invalid visible inspection request')
+            selection=(args['scope'],args['dialog'])
+            if args['page']==0:
+                root=self.page.locator('body'); scope='page'
+                dialogs=self.page.get_by_role('dialog'); visible=[dialogs.nth(i) for i in range(dialogs.count()) if dialogs.nth(i).is_visible()]
+                if args['scope']=='dialog' or (args['scope']=='auto' and visible):
+                    if len(visible)!=1: raise ValueError('Ambiguous or missing visible dialog')
+                    root=visible[0]; scope='dialog'
+                    if args['dialog']: expect(root.get_by_role('heading',name=args['dialog'],exact=True)).to_be_visible()
+                raw={'accessibility':root.aria_snapshot(timeout=5000),'controls':root.evaluate(VISIBLE_DOM,timeout=5000)}
+                if len(raw['controls'])>2000 or len(json.dumps(raw).encode())>self.limits['total_bytes']: raise ValueError('Visible snapshot storage limit')
+                self.storage_bytes+=len(json.dumps(raw).encode())
+                if self.storage_bytes>self.limits['total_bytes']: raise ValueError('Cumulative visible snapshot storage limit')
+                from .inspection import pages
+                chunks=pages(raw,self.limits['output_bytes']); self.snapshot_counter+=1
+                self.snapshot={'id':'snapshot-'+str(self.snapshot_counter),'selection':selection,'pages':chunks,'scope':scope}
+                save(self.directory/(self.snapshot['id']+'.json'),raw)
+            if not self.snapshot or self.snapshot['selection']!=selection: raise ValueError('Snapshot changed; request page zero again')
+            if args['page']>=len(self.snapshot['pages']): raise ValueError('Unknown observation page')
+            observation={**self.snapshot['pages'][args['page']], 'snapshot_id':self.snapshot['id'],'page':args['page'],
+                         'pages':len(self.snapshot['pages']),'scope':self.snapshot['scope']}
+            content=self._response({'id':ident,'untrusted_visible_data':observation})
+            if self.site_map:
+                source=self.directory.relative_to(ROOT).as_posix() if self.directory.is_relative_to(ROOT) else self.directory.name
+                self.site_map.observe(self.navigation,ident,observation['controls'],source+'/'+ident)
+        self.observations[ident]=observation; save(self.directory/(ident+'.json'),observation)
         self.audit.append({'tool':tool,'arguments':args,'observation_id':ident})
         self.notify(activity=f'{tool}: {self.actions}/{self.limits["actions"]} actions; {len(self.observations)}/{self.limits["observations"]} observations')
-        self.check()
-        return content
+        self.check(); return content
+
 
 def ground(spec, observations):
     """Reject invented domains/defaults even when the model cites a valid ID."""
     validate(spec,observations,ready=True)
+    snapshots={o.get('snapshot_id') for o in observations.values() if any(r.get('dialog')==spec['dialog'] for r in o.get('controls',[]))}
+    for snapshot in snapshots-{None}:
+        rows=[o for o in observations.values() if o.get('snapshot_id')==snapshot]
+        if {o['page'] for o in rows} != set(range(rows[0]['pages'])): raise ValueError('Inspect every page of the dialog before declaring discovery complete')
     dialog_controls=[r for o in observations.values() for r in o.get('controls',[]) if r.get('dialog')==spec['dialog'] and r.get('type') in ('range','number')]
     labels={c['label'] for c in spec['controls']}
     for r in dialog_controls:

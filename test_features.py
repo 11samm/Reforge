@@ -215,11 +215,11 @@ class BrowserTests(unittest.TestCase):
     def test_discovery_limits_and_no_evaluation_tool(self):
         with tempfile.TemporaryDirectory() as d:
             limits={**LIMITS,'actions':1,'observations':2}; b=DiscoveryBroker(self.page,Path(d),limits)
-            b.call('visible_inspect',{}); b.call('visible_click',{'locator':strategy('menuitem','Image'),'dialog':''})
+            b.call('visible_inspect',{}); b.call('visible_inspect',{}); b.call('visible_click',{'locator':strategy('menuitem','Image'),'dialog':''})
             with self.assertRaisesRegex(ValueError,'budget'): b.call('visible_inspect',{})
             with self.assertRaises(ValueError): b.call('evaluate',{'code':'secret'})
             b=DiscoveryBroker(self.page,Path(d),{**LIMITS,'output_bytes':10})
-            with self.assertRaisesRegex(ValueError,'large'): b.call('visible_inspect',{})
+            with self.assertRaisesRegex(ValueError,'limit|large'): b.call('visible_inspect',{})
             b=DiscoveryBroker(self.page,Path(d),LIMITS,clock=lambda:999); b.start=0
             with self.assertRaises(TimeoutError): b.call('visible_inspect',{})
     def test_failed_discovery_action_preserves_bounded_diagnostics(self):

@@ -106,3 +106,5 @@ checks. Model patches remain isolated artifacts; no canonical source is promoted
 Unknown faults stop. Evaluators, thresholds, expected outputs and capability brokers
 cannot be patched. Tested patches can be recalled only with matching host hashes and
 fresh offline regression gates; live discovery must still validate the procedure.
+
+Interaction map and bounded inspection: see docs/interaction-map.md. No live pilot was run for this addition.

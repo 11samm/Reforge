@@ -57,3 +57,13 @@ those additions passed focused regression suites (39 tests, then 9 repair tests)
 on observation size, outside the repair allowlist, as documented in the pilot report.
 No live harness patch was exercised. Protected policies and capability limits remain
 unchanged. These results establish offline repair infrastructure, not Contrast success.
+
+## Interaction map and pagination
+
+122 Python tests passed before the final map paging/provenance checks; 11 dashboard
+tests and TypeScript/production build passed. The map addition uses only local mock
+browser pages and reference-free data. Full-page large-menu tests confirm successful
+actions remain successful and all 301 visible controls can be retrieved under the
+unchanged 16 KB output limit. Cross-job nodes become stale, cached route targets are
+checked, and incomplete dialog pages cannot ground discovery. No live learning run
+was launched for this addition. See docs/interaction-map.md for storage/tool bounds.

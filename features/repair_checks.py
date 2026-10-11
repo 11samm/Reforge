@@ -42,7 +42,7 @@ def main():
     if request['regressions']:
         # Tests execute in this interpreter, so they exercise patched functions.
         import unittest
-        suite=unittest.defaultTestLoader.loadTestsFromNames(['test_features','test_smoke','test_adapter','test_shell_boundary','test_evaluator','test_learning','test_brightness'])
+        suite=unittest.defaultTestLoader.loadTestsFromNames(['test_features','test_interaction_map','test_smoke','test_adapter','test_shell_boundary','test_evaluator','test_learning','test_brightness'])
         if not unittest.TextTestRunner().run(suite).wasSuccessful(): return 1
     return 0
 if __name__=='__main__': raise SystemExit(main())
