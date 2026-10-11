@@ -132,8 +132,10 @@ def candidate(request,directory):
         threading.Thread(target=server.serve_forever,daemon=True).start()
         try:
             with sync_playwright() as pw:
-                browser=pw.chromium.launch(headless=True,timeout=30000)
+                from features import live
+                browser=pw.chromium.launch(headless=not live.enabled(),timeout=30000)
                 page=browser.new_page(viewport={'width':1440,'height':1000},device_scale_factor=1,accept_downloads=True)
+                live.attach(page,'candidate')
                 page.set_default_timeout(8000); external=[]; errors=[]
                 def route(r):
                     if r.request.url.startswith(f'http://127.0.0.1:{server.server_port}/'): r.continue_()
@@ -153,18 +155,22 @@ def candidate(request,directory):
                         expect(empty.get_by_role('slider',name=op['ui_parameter'],exact=False)).to_be_disabled()
                         expect(empty.get_by_role('button',name='Apply',exact=True)).to_be_disabled()
                         empty.get_by_role('button',name='Close',exact=True).click()
+                live.action('Import diagnostic image', input=Path(first['input']).name, parameter=first[key])
                 page.locator('input[type=file]').set_input_files(first['input'])
                 expect(page.get_by_role('img',name='Original image preview: '+Path(first['input']).name,exact=True)).to_be_visible()
                 page.get_by_role('menuitem',name=op['ui_menu'] if op else 'Effects',exact=True).click()
                 page.get_by_role('menuitem',name=op['ui_item'] if op else 'Gaussian Blurâ€¦',exact=True).click()
                 import re
                 dialog=page.get_by_role('dialog'); slider=dialog.get_by_role('slider',name=re.compile('^'+(op['ui_parameter'] if op else 'Percentage')+r'(?::.*)?$'))
+                live.action('Set adjustment parameter', parameter=first[key])
                 slider.press('Home')
                 for _ in range(first[key]-(op['parameter']['min'] if op else 0)): slider.press('ArrowRight')
                 expect(slider).to_have_value(str(first[key]))
+                live.action('Apply adjustment', parameter=first[key])
                 dialog.get_by_role('button',name='Apply',exact=True).click()
                 expect(dialog).not_to_be_visible()
                 page.get_by_role('menuitem',name='File',exact=True).click()
+                live.action('Export PNG and compare with independent batch')
                 with page.expect_download(timeout=15000) as download:
                     page.get_by_role('menuitem',name='Export PNG',exact=True).click()
                 ui=directory/'ui-blur-export.png'; download.value.save_as(str(ui))
@@ -173,6 +179,7 @@ def candidate(request,directory):
                 result['ui_check']={'case_id':first['id'],'comparison':comparison,'external_requests':external,'browser_errors':errors}
                 result['ui_valid']=True
                 page.screenshot(path=str(directory/'ui-blur.png'))
+                live.close()
                 browser.close()
         finally: server.shutdown(); server.server_close()
     except Exception as error:
@@ -199,6 +206,8 @@ def main():
             if args.kind not in ('feature-discovery','feature-reference'): raise ValueError('Harness patches restricted to feature reference workers')
             from features.repair import install_file
             install_file(request['harness_patch'])
+        from features import live
+        live.start(args.kind,request)
         result={'status':'passed'}
         if args.kind=='reference': result=reference(request,d)
         elif args.kind=='brightness-reference':
@@ -215,6 +224,8 @@ def main():
         elif args.kind=='selfcheck': result=selfcheck(d)
         else: build(d,request.get('app'))
     except Exception as error: result={'status':'infrastructure_failure','error':{'type':type(error).__name__,'message':str(error)[:2000]}}
+    from features import live
+    live.close()
     save(d/'result.json',result)
     return 0 if result.get('status') in ['passed','observed','discovered'] or result.get('build_valid') else 1
 

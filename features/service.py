@@ -35,6 +35,9 @@ def server(store,port=5190,enabled=False):
                     raise ValueError('Unknown action')
                 if len(route)==3: return self.reply(200,{'jobs':store.list(),'pilot_enabled':enabled})
                 if len(route)==4: return self.reply(200,store.get(route[3]))
+                if len(route)==5 and route[4]=='live':
+                    from .live import snapshot
+                    return self.reply(200,snapshot(store.get(route[3])))
                 if len(route)==6 and route[4]=='evidence' and route[5] in ARTIFACTS:
                     job=store.get(route[3]); url='/api/jobs/'+route[3]+'/evidence/'+route[5]
                     if not any(e['url']==url for e in job['evidence']): return self.reply(404,{'error':'Evidence not yet available'})

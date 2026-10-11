@@ -3,7 +3,7 @@ import type { BundleEvent } from './bundle.ts';
 
 export const STAGES = ['Discover', 'Validate procedure', 'Investigate', 'Reconstruct', 'Verify'] as const;
 export interface Job {
-  id: string; request: string; status: string; stage: string; activity: string; elapsed_seconds: number;
+  id: string; presentation_label?: string; request: string; status: string; stage: string; activity: string; elapsed_seconds: number;
   budget: Record<string, number>; usage: { total?: { inputTokens?: number; outputTokens?: number; totalTokens?: number } }[] | null;
   events: BundleEvent[]; evidence: { name: string; url: string; available_at: number }[];
 }
@@ -23,7 +23,7 @@ export function normalizeJob(raw: unknown): Job {
   }
   const budget: Record<string, number> = {};
   if (r.budget && typeof r.budget === 'object') for (const [k,v] of Object.entries(r.budget)) if (typeof v === 'number' && Number.isFinite(v) && v >= 0) budget[k] = v;
-  return { id: r.id, request: text(r.request), status: text(r.status), stage: text(r.stage), activity: text(r.activity),
+  return { id: r.id, presentation_label: text(r.presentation_label), request: text(r.request), status: text(r.status), stage: text(r.stage), activity: text(r.activity),
     elapsed_seconds: typeof r.elapsed_seconds === 'number' && Number.isFinite(r.elapsed_seconds) ? r.elapsed_seconds : 0,
     budget, usage: Array.isArray(r.usage) ? r.usage : null, events: merged, evidence };
 }

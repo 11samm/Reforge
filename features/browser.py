@@ -144,6 +144,8 @@ class DiscoveryBroker:
         return content
 
     def _call(self, tool, args):
+        from . import live
+        live.action(tool, **{k:v for k,v in args.items() if k in ('locator','dialog','value','scope','page')})
         self.check(); self.calls+=1
         if self.calls>self.limits['tool_calls']: raise ValueError('Discovery tool budget exhausted')
         from learning.core import exact
