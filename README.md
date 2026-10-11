@@ -1,148 +1,130 @@
-# Reforge â€” connectivity milestone
+# Reforge
 
-For the current presentation, use the [demo launch guide](docs/demo-launch.md) and
-[three-attempt rehearsal report](docs/demo-rehearsal-20261011.md). The October 11
-rehearsal recommends recorded replay; the historical milestone notes below remain preserved.
+Reforge reconstructs image-editing features by observing miniPaint, running experiments, building an isolated implementation, and independently evaluating the result. A React dashboard shows the investigation, candidate decisions, pixel comparisons, regression checks, and recorded evidence.
 
-Milestone 1 only, implemented during OCC Hacks on October 10, 2026. Design context:
-`reforge_prd_v1.3.md` in ReforgerData. No dataset files or collector code were read,
-copied, or changed. The editor and learning loop are deferred. Deterministic reference browser replay
-was added in the next milestone; see [adapter setup and recovery](README-adapter.md).
+## Current results
 
-## Setup and rerun
+- Brightness and Contrast have accepted actual-run recordings bundled with the dashboard.
+- A later fresh Brightness attempt accepted in 208.604 seconds at commit `396b0870962a2be9e15ed347ddf56dfb6033984c`. Its separately exported submission recording is not bundled in this source download.
+- Gaussian Blur is an unresolved historical attempt, not an accepted feature or Blur Brush.
+- Fresh-run repeatability remains under development. An accepted run establishes success within its tested scope, not exhaustive compatibility or guaranteed success on another attempt.
 
-Requires Python 3.12+ and a native Codex executable on PATH; no Python packages.
-If PATH resolves a Windows `.cmd` wrapper, set `codex_bin` in `smoke.config.json`
-to an absolute `codex.exe` path. Check authentication:
+## Try recorded playback first
+
+Requires Node.js 24 and npm. From the extracted repository directory:
+
+```sh
+npm --prefix dashboard ci
+npm --prefix dashboard run build
+npm --prefix dashboard run preview
+```
+
+Open http://127.0.0.1:5181/ and select **Overview**. Choose the accepted Brightness or Contrast recording in **Run bundle**, then **Restart replay**, **20x**, and **Play**. **Jump to end → Candidates** reveals comparisons and final evidence. At time zero, later results are intentionally hidden.
+
+Recorded playback needs no Python service, Codex login, API key, or reference website. **Replay saved run** imports a portable `.reforge.json` recording from your computer.
+
+Replay uses Overview, Experiments, Contract, Candidates, Model usage, and Event log. It does not recreate the Implement tab's live browser layout. Archived screenshots are not continuous video. Synthetic fixtures are labeled and must not be presented as actual results.
+
+## Live learning setup
+
+Requires Python 3.12+, Node.js 24, Playwright Chromium, access to hosted miniPaint, and an installed Codex CLI on PATH. Run commands from the repository root, not the Python executable's directory.
+
+```sh
+python -m venv .venv
+```
+
+Activate the environment. In Windows Command Prompt:
+
+```bat
+.venv\Scripts\activate.bat
+```
+
+In PowerShell:
 
 ```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+On macOS/Linux:
+
+```sh
+source .venv/bin/activate
+```
+
+Then install dependencies:
+
+```sh
+python -m pip install -r requirements-adapter.txt
+python -m playwright install chromium
+npm --prefix generated-app ci
+npm --prefix generated-app run build
+npm --prefix dashboard ci
+npm --prefix dashboard run build
+```
+
+### Sign in with your own account
+
+Reforge does **not** automatically open a ChatGPT sign-in popup. Install the [Codex CLI](https://developers.openai.com/codex/cli/) separately, then check authentication and sign in if needed:
+
+```sh
 codex --version
 codex login status
+codex login
 ```
 
-If needed, run `codex login` and complete the supported ChatGPT browser sign-in.
-Codex manages credentials and refresh. Reforge never reads credential files or
-prints secrets. It retains only account type and plan, not email.
+Complete the CLI's browser sign-in with your own supported ChatGPT account. This project uses managed ChatGPT authentication, not API-key authentication; inherited API-key variables are removed from the model runtime. Account access and usage limits still apply. The exact configured model must be available to your account; provider fallback is disabled.
 
-```powershell
-Set-Location 'D:\Samuel\Downloads\Code\Reforge'
-python smoke.py
+Your download does not include the author's `.env`, Codex login credentials, or local authentication directory. Reforge does not supply access to the author's account. Keep your own credentials outside version control. Historical documentation can contain local example paths; replace them with your checkout path.
+
+### Start the services
+
+In one terminal:
+
+```sh
+python -m features.service --enable-pilot
 ```
 
-Exit 0 means both checks passed; exit 1 means failure. JSON results are printed
-and saved in `.scratch/latest-report.json` and `.scratch/<run-id>/report.json`.
-Each invocation uses a new isolated scratch directory. Scratch files are Git-ignored.
+In another terminal, from the same repository root:
 
-`smoke.config.json` controls executable, model, effort, check timeout (120 seconds),
-and RPC timeout (20 seconds). Timeouts must be 1â€“300 seconds. Startup, pagination,
-local execution, and teardown also have bounds. On turn timeout the process tree
-is terminated on Windows. Raw runtime stderr/error messages are suppressed; safe
-errors, error codes, completion status, elapsed time, and available usage are saved.
-
-## Access and isolation
-
-Uses local Codex app-server over stdio JSON-RPC. Route selected after inspecting
-current [app-server docs](https://learn.chatgpt.com/docs/app-server),
-[authentication docs](https://learn.chatgpt.com/docs/auth), and the
-[official model catalog](https://developers.openai.com/api/docs/models).
-
-Only managed ChatGPT authentication is accepted; API-key accounts fail before
-inference. Inherited API-key environment variables are removed. Usage is through
-the existing ChatGPT plan, not API-key billing. Cursor subscription access is not
-assumed. Reforge does not purchase credits, enable overages, or reset quotas.
-Existing user-managed account settings and subscription limits still apply.
-
-The runtime catalog is checked for the exact model and reasoning effort. Catalog
-presence alone does not prove entitlement; completed inference confirms access.
-Provider fallback is disabled and the returned model/provider must match. To choose
-another advertised model explicitly: `python smoke.py --model gpt-6-sol`.
-
-Agent threads are ephemeral with `environments: []` and empty capability roots.
-Shell, plugins, connectors, hooks, memories, and web search are disabled. The file
-check exposes only `create_add_file`: source text in, fixed scratch `add.py` out.
-It has no path/read argument and cannot overwrite. Other server requests are denied.
-No dataset, collector, reference, evaluator, or final evaluation files are exposed.
-This proves constrained agent file creation; broader repository/shell editing needs
-separate isolation work in a later milestone.
-
-## Checks and observed results
-
-Successful run: `codex-cli 0.162.0-alpha.17.2`, exact model `gpt-6.1-sol`, requested
-and supported effort `medium`; managed ChatGPT account, reported plan `plus`.
-Both checks ran through `smoke.py` in 14.803 seconds total.
-
-- **Structured answer â€” passed, 8.266 seconds:** output schema plus application
-  validation of exactly `question`, `input_description`, `parameter_value`, and
-  `competing_hypotheses`; finite numeric parameter and two distinct nonempty
-  hypotheses required. Proposed a white image/radius 5 boundary experiment.
-  `behavior_verified: false`: this is not verified miniPaint behavior.
-- **File edit â€” passed, 5.902 seconds:** agent invoked the file tool once, creating
-  `add.py`. An AST allowlist rejects imports, calls, annotations, decorators,
-  defaults, external names, and extra statements before execution. Python verified
-  `(2,3)`, `(-7,10)`, `(0,0)`, `(123456,-654321)` â†’ `[5,3,0,-530865]`.
-- **Usage:** structured check 8,048 total tokens (7,921 input, 127 output); file
-  check 15,968 (15,901 input, 67 output, 7,680 cached input). Cached tokens are
-  included in input. Use `usage.total` across tool turns, not `usage.last`.
-
-Artifacts: `.scratch/20261010-095153-5fed201b/add.py` and `report.json`.
-Public runtime protocol schemas inspected during setup are in `.scratch/protocol/`.
-The initial run completed inference but failed a strict conversation-event check;
-that validator was corrected before the successful rerun. No runtime errors in
-this successful run.
-
-Usage is `null` if telemetry is unavailable, and is not an invoice or dollar
-estimate. Account quotas/rate limits may prevent reruns. Dynamic tools and some
-protocol fields are experimental; future CLI versions may require updates.
-
-## Offline checks
-
-```powershell
-python -m unittest -v test_smoke
+```sh
+npm --prefix dashboard run preview
 ```
 
-Five tests passed: structured validation, unsafe code rejection, deadlines/exits,
-RPC failure and usage handling, and path/overwrite rejection. No inference needed.
+Open http://127.0.0.1:5181/ and choose **Implement a feature**. The API runs at http://127.0.0.1:5190/. Starting the service without `--enable-pilot` disables new learning while retaining access to available local jobs.
 
-## GitHub Actions
+1. Select Brightness or Contrast.
+2. Click **Prepare fresh demo**. Preparation builds an isolated starting editor without invoking the model.
+3. Click **Learn** once for that preparation. This starts a model-backed attempt and consumes your account's usage.
+4. Watch progress and evidence. Reference browser activity generally begins before candidate testing. The candidate can remain idle during investigation, code generation, and build checks.
+5. Final held-out evaluation deliberately hides/closes the visible browser sessions. A **Held-out evaluation** screen is expected.
+6. After acceptance, open the isolated candidate exploration, upload a new image, and exercise the feature. Exploration is unscored and does not automatically promote the candidate into the main editor.
 
-`.github/workflows/ci.yml` runs syntax checks, the offline tests, and CLI help on
-pushes, pull requests, and manual dispatch. It checks Python 3.12 on Linux and
-Python 3.14 on Windows with a five-minute job timeout and read-only repository
-permissions. Official actions are pinned to verified commit hashes.
+**Cancel run** appears in Feature jobs while an attempt is active. Wait for terminal cancellation before stopping the service. Browser windows are controlled by the harness; closing them can interrupt execution. Presentation failures may leave stale frames, which are explicitly labeled; consult job status and event evidence.
 
-CI needs no Codex login, secrets, or model requests. The two live model checks
-remain local: run `python smoke.py` with your ChatGPT sign-in. Deployment is
-deferred until there is an application to deploy.
+The service uses shared ownership locks. If it reports another pipeline owns the browser/service, locate that existing process and coordinate shutdown. Do not delete lock files or blanket-kill Python, Node, or Chrome. Only one learning attempt should own the shared resources at a time.
 
-## Reference adapter milestone
+## Download and evidence boundaries
 
-See [README-adapter.md](README-adapter.md) for separated workspaces, the supported headed
-miniPaint validation command, headless mismatch results, and recovery. The model smoke
-command and authentication route above remain unchanged.
+The source ZIP contains tracked project files. Dependencies, generated builds, local candidate workspaces, private scratch data, and untracked raw run archives are not included. Bundled replay evidence is distinct from a runnable candidate archive. Links to a particular local job's candidate preview work only while its service and preserved local artifacts are available.
 
-## Editor shell milestone
+## Validation
 
-See [README-shell.md](README-shell.md) for the local editor, layout evidence,
-restricted generation invocation, exact upload/export checks, and limitations.
+```sh
+python -m unittest test_presentation_isolation
+npm --prefix dashboard test
+npm --prefix dashboard run build
+```
 
-## Deterministic evaluator milestone
+These deterministic checks do not launch a new learning attempt and do not establish end-to-end repeatability. Additional numerical and editor regression procedures are documented below.
 
-See [README-evaluator.md](README-evaluator.md) for independent raw-RGBA metrics,
-versioned exact/provisional policies, controlled examples, and the four-case baseline
-command. Blur implementation and the learning loop remain deferred.
+## More documentation
 
-## Bounded learning harness milestone
+- [Demo launch and playback](docs/demo-launch.md)
+- [Portable recording format and verification](docs/portable-replay.md)
+- [Feature pipeline architecture](docs/feature-pipeline.md)
+- [Brightness evaluation](README-brightness.md)
+- [Independent evaluator](README-evaluator.md)
+- [Editor shell](README-shell.md)
+- [Original connectivity milestone and authentication details](README-connectivity.md)
 
-See [README-learning.md](README-learning.md) for the sequential Gaussian Blur harness,
-actual model responsibilities, supplied procedures, hard budgets, frozen visible
-evaluation, restricted builder and checkpoint/restore behavior. Run
-`.venv\Scripts\python.exe -m learning.run` from a genuinely unavailable blur start.
-All real attempts, including rejected contracts/candidates, remain in evidence/learning.
-The latest pointer is evidence/latest-learning.json. No final holdout or push.
-
-Actual results: [milestone 5 report](evidence/milestone5-results.md). The bounded
-integrated attempt completed, but blur compatibility did not pass; baseline preserved.
-
-## Brightness second-feature milestone
-
-See [README-brightness.md](README-brightness.md) for the explicitly scoped Color Corrections brightness procedure, bounded harness specialization, exact policy and actual-run artifacts. Blur remains experimental and isolated; brightness status is reported separately.
+Historical milestone documents describe the state at the time they were written; some contain older feature support lists or machine-specific commands.
