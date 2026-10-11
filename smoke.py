@@ -6,6 +6,7 @@ import math
 import os
 from pathlib import Path
 import queue
+import re
 import shutil
 import subprocess
 import sys
@@ -80,6 +81,19 @@ def safe_error(error):
     if isinstance(error, (ValueError, TimeoutError, FileNotFoundError)):
         return {"type": type(error).__name__, "message": str(error)}
     return {"type": type(error).__name__, "message": "Runtime/protocol failure; check Codex installation and ChatGPT login"}
+
+
+def runtime_diagnostic(error):
+    """Allowlisted, bounded error details; never full protocol payloads."""
+    error = error if isinstance(error, dict) else {}
+    message = str(error.get('message') or '')[:8000]
+    message = re.sub(r'https?://[^\s<>"\']+', '[endpoint]', message)
+    message = re.sub(r'(?i)Bearer\s+[^\s,;]+', 'Bearer [redacted]', message)
+    message = re.sub(r'(?i)((?:api[_-]?key|token|password|secret|authorization)\s*[=:]\s*)[^\s,;]+', r'\1[redacted]', message)
+    message = re.sub(r'\bsk-[A-Za-z0-9_-]+', '[redacted]', message)
+    message = re.sub(r'(?:[A-Za-z]:[\\/]|/(?:Users|home|tmp)/)[^\s<>"\']+', '[local path]', message)
+    return {'code': error.get('codexErrorInfo') if isinstance(error.get('codexErrorInfo'), (str, int)) else None,
+            'message': message[:1500] or None}
 
 
 class RuntimeErrorCode(Exception):
@@ -160,7 +174,7 @@ class CodexRuntime:
         elif method == "error":
             self.turn_errors.setdefault(params.get("threadId"), []).append({
                 "willRetry": params.get("willRetry"),
-                "code": params.get("error", {}).get("codexErrorInfo"),
+                **runtime_diagnostic(params.get("error")),
             })
         elif method == "turn/completed":
             self.turn_status[params["threadId"]] = params["turn"]

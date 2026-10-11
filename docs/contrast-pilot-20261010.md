@@ -45,3 +45,13 @@ Usage: 93,338 total; 91,891 input including 57,984 cached; 1,447 output.
 The subsequent offline implementation constrains these fields, adds bounded action
 and specification correction, and persistent procedural lessons. No further live
 pilot was launched in this turn; no Contrast candidate was constructed or promoted.
+
+## Fourth authorized pilot - October 11, 2026
+
+Job 2c0fba2006d64aaabc89833a983c3030, implementation 5392463.
+Failed after 6.395 seconds. The model turn failed before any dynamic tool request;
+completed items contained only userMessage. Runtime code: other; willRetry: false.
+No provider usage was reported (not a claim of zero billed usage).
+The original adapter discarded the server error message, so the exact cause cannot
+be recovered from this archived record. Runtime notifications and failed-turn errors
+now retain bounded redacted messages alongside codes. No further pilot was run.

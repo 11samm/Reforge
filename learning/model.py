@@ -2,7 +2,7 @@
 import json
 import time
 from build_shell import FileBroker, ShellRuntime, APP
-from smoke import ROOT, safe_error
+from smoke import ROOT, safe_error, runtime_diagnostic
 from .core import KINDS, ROUTES, STATUSES, save
 
 def obj(properties):
@@ -116,6 +116,7 @@ def invoke(prompt, directory, timeout, schema=None, builder=False, app=APP, read
         runtime.rpc('turn/start',turn,deadline)
         while tid not in runtime.turn_status: runtime.receive(deadline)
         status=runtime.turn_status[tid]['status']; report['completion_status']=status
+        if status!='completed': report['turn_failure']=runtime_diagnostic(runtime.turn_status[tid].get('error'))
         items=runtime.completed_items.get(tid,[])
         report['completed_item_types']=[i.get('type') for i in items]
         if status!='completed' or any(i.get('type') not in ['userMessage','agentMessage','reasoning','dynamicToolCall'] for i in items):
