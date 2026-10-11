@@ -12,7 +12,7 @@ from .spec import locator, parameter, validate, value_in_domain
 def resolve(root, strategy):
     locator(strategy)
     if strategy['by'] == 'row':
-        found = root.get_by_role('row', name=re.compile('^'+re.escape(strategy['name'])+r':')).get_by_role(strategy['role'])
+        found = root.get_by_role('row', name=re.compile('^'+re.escape(strategy['name'].rstrip().removesuffix(':').rstrip())+r':')).get_by_role(strategy['role'])
     elif strategy['by'] == 'label':
         found = root.get_by_label(strategy['name'], exact=True)
     else:
@@ -169,9 +169,9 @@ def ground(spec, observations):
     dialog_controls=[r for o in observations.values() for r in o.get('controls',[]) if r.get('dialog')==spec['dialog'] and r.get('type') in ('range','number')]
     labels={c['label'] for c in spec['controls']}
     for r in dialog_controls:
-        if not any(r.get('label')==label or (r.get('row') or '').startswith(label+':') for label in labels): raise ValueError('Unspecified numeric dialog control; unresolved')
+        if not any(r.get('label')==label or (r.get('row') or '').startswith(label.rstrip().removesuffix(':').rstrip()+':') for label in labels): raise ValueError('Unspecified numeric dialog control; unresolved')
     for c in spec['controls']:
         wanted={'min':c['min'],'max':c['max'],'step':c['step'],'value':c['default']}
-        rows=[r for ident in c['observation_ids'] for r in observations[ident].get('controls',[]) if r.get('type') == ('range' if c['type']=='slider' else 'number') and (r.get('label')==c['label'] or (r.get('row') or '').startswith(c['label']+':'))]
+        rows=[r for ident in c['observation_ids'] for r in observations[ident].get('controls',[]) if r.get('type') == ('range' if c['type']=='slider' else 'number') and (r.get('label')==c['label'] or (r.get('row') or '').startswith(c['label'].rstrip().removesuffix(':').rstrip()+':'))]
         if not any(all(r.get(k) is not None and float(r[k])==v for k,v in wanted.items()) for r in rows): raise ValueError('Control facts absent from cited visible observations')
     return spec

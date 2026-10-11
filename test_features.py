@@ -148,6 +148,17 @@ class BrowserTests(unittest.TestCase):
         self.page.locator('body').evaluate("e=>e.insertAdjacentHTML('beforeend','<button role=menuitem>Image</button>')")
         with self.assertRaisesRegex(ValueError,'Ambiguous'): resolve(self.page,strategy('menuitem','Image'))
         with self.assertRaises(ValueError): resolve(self.page,strategy('button','Missing'))
+    def test_row_label_with_colon_sets_numeric_control(self):
+        with tempfile.TemporaryDirectory() as d:
+            broker = DiscoveryBroker(self.page, Path(d), LIMITS)
+            for label, value in [('Contrast:', 3), ('Contrast', -7)]:
+                broker.call('visible_set', {'locator': strategy('slider', label, 'row'),
+                                           'dialog': 'Adjust', 'value': value})
+                self.assertEqual(self.page.locator('input').input_value(), str(value))
+            self.page.locator('table').evaluate("e=>e.insertAdjacentHTML('beforeend','<tr><td>Contrast:</td><td><input type=range min=-10 max=10 step=1></td></tr>')")
+            with self.assertRaisesRegex(ValueError, 'Ambiguous'):
+                resolve(self.page, strategy('slider', 'Contrast:', 'row'))
+
     def test_value_readback_and_changed_domain(self):
         c=specification()['controls'][0]
         self.assertEqual(set_numeric(self.page,c,-7),-7)

@@ -21,3 +21,16 @@ and total, not additional usage.
 
 Original private artifacts remain under evidence/learning/feature-<job-id> and
 evidence/feature-jobs/<job-id>. No candidate was promoted, merged or pushed.
+
+## Second authorized pilot
+
+Job: 48965c1eeb68400fbcb235c10e612b78, implementation da3f7b2.
+Failed at Discover after 38.305 seconds. The new diagnostic captured:
+visible_set, row/slider name "Contrast:", dialog "Color Corrections", value 10;
+ValueError: "Ambiguous or missing visible control: Contrast:".
+The row resolver appended a colon to an already colon-terminated label, searching
+for "Contrast::". The resolver now accepts the label with or without its trailing
+colon. Offline regression checks both forms and preserves duplicate rejection.
+This establishes the second run's cause; the first run's missing arguments cannot
+be retrospectively recovered. No further live run or candidate promotion occurred.
+Provider usage: 88,847 total; 87,436 input including 57,984 cached; 1,411 output.
