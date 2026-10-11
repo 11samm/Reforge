@@ -22,6 +22,17 @@
   -webkit-font-smoothing: antialiased;
 }
 
+/* Provisional local-job section, using the existing dashboard palette. */
+.feature-job { padding: 24px; border-radius: var(--radius); display: flex; flex-direction: column; gap: 16px; }
+.feature-job > .play-btn { align-self: flex-start; }
+.feature-job .play-btn:disabled { opacity: 0.45; cursor: default; box-shadow: none; }
+.feature-request { display: flex; flex-direction: column; gap: 8px; font-weight: 600; }
+.feature-request input { width: min(100%, 560px); padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: rgba(255,255,255,0.8); }
+.feature-stages { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 0; }
+.feature-stages li { padding: 8px 12px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); }
+.feature-stages li[aria-current=step] { color: var(--primary); background: var(--info-bg); }
+.feature-job details summary { cursor: pointer; }
+
 * { box-sizing: border-box; }
 html, body, #root { height: 100%; margin: 0; }
 button, input, select { font: inherit; color: inherit; }

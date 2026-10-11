@@ -9,10 +9,12 @@ import { Contract } from './views/Contract.tsx';
 import { Candidates } from './views/Candidates.tsx';
 import { Telemetry } from './views/Telemetry.tsx';
 import { EventLog } from './views/EventLog.tsx';
+import { ImplementFeature } from './views/ImplementFeature.tsx';
 
-export type View = 'overview' | 'experiments' | 'contract' | 'candidates' | 'telemetry' | 'events';
+export type View = 'overview' | 'experiments' | 'contract' | 'candidates' | 'telemetry' | 'events' | 'implement';
 
 const NAV: { id: View; label: string; icon: string }[] = [
+  { id: 'implement', label: 'Implement a feature', icon: 'experiments' },
   { id: 'overview', label: 'Overview', icon: 'overview' },
   { id: 'experiments', label: 'Experiments', icon: 'experiments' },
   { id: 'contract', label: 'Contract', icon: 'contract' },
@@ -22,6 +24,7 @@ const NAV: { id: View; label: string; icon: string }[] = [
 ];
 
 const TITLES: Record<View, [string, string]> = {
+  implement: ['Implement a feature', 'Discover → Validate procedure → Investigate → Reconstruct → Verify'],
   overview: ['Run overview', 'Observe → experiment → contract → implement → evaluate → accept / reject'],
   experiments: ['Experiments', 'Diagnostic inputs run through the real reference editor, with exact Percentage values'],
   contract: ['Behavior contract', 'Bounded claims, their status, supporting evidence and open questions'],
@@ -108,7 +111,7 @@ export function App() {
     setPlaying((p) => !p);
   };
 
-  const kind = run?.provenance ?? 'unknown';
+  const kind = view === 'implement' ? 'job' : run?.provenance ?? 'unknown';
   const atEnd = run ? t >= run.duration : true;
 
   return (
@@ -127,18 +130,18 @@ export function App() {
               </button>
             ))}
           </nav>
-          <label className="run-picker">
+          {view !== 'implement' && <label className="run-picker">
             <span>Run bundle</span>
             <select value={runId ?? ''} onChange={(e) => setRunId(e.target.value)}>
               {index?.map((e) => <option key={e.id} value={e.id}>{e.kind === 'synthetic' ? '⚠ ' : ''}{e.title}</option>)}
             </select>
-          </label>
+          </label>}
           <div className="sidebar-spacer" />
           <div className={`identity identity-${kind}`}>
-            <span className="identity-badge">{kind === 'synthetic' ? 'SYN' : kind === 'live' ? 'LIVE' : 'REC'}</span>
+            <span className="identity-badge">{kind === 'job' ? 'JOB' : kind === 'synthetic' ? 'SYN' : kind === 'live' ? 'LIVE' : 'REC'}</span>
             <div>
-              <strong title={run?.id}>{run?.id ?? 'No run loaded'}</strong>
-              <small>{kind === 'recorded' ? 'Recorded playback' : kind === 'synthetic' ? 'Synthetic fixture' : kind === 'live' ? 'Live' : 'Unlabeled source'}</small>
+              <strong title={run?.id}>{kind === 'job' ? 'Local feature jobs' : run?.id ?? 'No run loaded'}</strong>
+              <small>{kind === 'job' ? 'Persisted service state' : kind === 'recorded' ? 'Recorded playback' : kind === 'synthetic' ? 'Synthetic fixture' : kind === 'live' ? 'Live' : 'Unlabeled source'}</small>
             </div>
           </div>
         </aside>
@@ -150,13 +153,13 @@ export function App() {
               <p className="subtitle">{TITLES[view][1]}</p>
             </div>
             <span className={`mode-badge mode-${kind}`}>
-              <span className="dot" />{kind === 'recorded' ? 'RECORDED PLAYBACK' : kind === 'synthetic' ? 'SYNTHETIC — NOT RESULTS' : kind === 'live' ? 'LIVE' : 'UNLABELED SOURCE'}
+              <span className="dot" />{kind === 'job' ? 'LOCAL JOBS' : kind === 'recorded' ? 'RECORDED PLAYBACK' : kind === 'synthetic' ? 'SYNTHETIC — NOT RESULTS' : kind === 'live' ? 'LIVE' : 'UNLABELED SOURCE'}
             </span>
           </header>
 
-          {run && <ProvenanceBanner run={run} />}
+          {view !== 'implement' && run && <ProvenanceBanner run={run} />}
 
-          {run && snap && (
+          {view !== 'implement' && run && snap && (
             <div className="replay glass">
               <div className="replay-buttons">
                 <button type="button" className="icon-btn" onClick={() => { setT(0); setPlaying(false); }} title="Restart replay"><Icon name="restart" /></button>
@@ -185,8 +188,9 @@ export function App() {
           )}
 
           <div className="content" ref={contentRef}>
-            {error && <div className="load-error glass"><Icon name="alert" /> Could not load run data: {error}</div>}
-            {!run && !error && <div className="loading">Loading run bundle…</div>}
+            {view === 'implement' && <ImplementFeature />}
+            {view !== 'implement' && error && <div className="load-error glass"><Icon name="alert" /> Could not load run data: {error}</div>}
+            {view !== 'implement' && !run && !error && <div className="loading">Loading run bundle…</div>}
             {run && snap && view === 'overview' && <Overview run={run} snap={snap} t={t} onOpenCandidate={(id) => { setSel((s) => ({ ...s, candidate: id, caseId: null })); setView('candidates'); }} onOpenEvidence={openEvidence} />}
             {run && view === 'experiments' && <Experiments run={run} t={t} selected={sel.experiment} onSelect={(id) => setSel((s) => ({ ...s, experiment: id }))} onOpenEvidence={openEvidence} />}
             {run && view === 'contract' && <Contract run={run} t={t} onOpenEvidence={openEvidence} />}

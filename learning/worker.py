@@ -74,7 +74,7 @@ def candidate(request,directory):
     op=None
     if request.get('operation'):
         from .operations import operation_spec
-        op=operation_spec(request['operation'])
+        op=operation_spec(request['operation'],request.get('spec'))
     source=op['source'] if op else 'src/gaussian-blur.ts'
     function=op['export'] if op else 'applyGaussianBlur'
     key=op['parameter']['key'] if op else 'percentage'
@@ -127,7 +127,7 @@ def candidate(request,directory):
         result['evaluator_suspect']=any(r['classification'] in ['infrastructure_error','invalid_region'] or
                                       r.get('reference_path') is None for r in result['cases'])
         # Check the shell applies to current image state and matches the same batch operation.
-        first=next((c for c in suite['cases'] if c[key]!=0),suite['cases'][0]) if op else suite['cases'][0]
+        first=next((c for c in suite['cases'] if c[key]!=op['parameter']['default']),suite['cases'][0]) if op else suite['cases'][0]
         server=ThreadingHTTPServer(('127.0.0.1',0),partial(QuietHandler,directory=str(app/'dist')))
         threading.Thread(target=server.serve_forever,daemon=True).start()
         try:
@@ -144,7 +144,7 @@ def candidate(request,directory):
                     page.get_by_role('menuitem',name=op['ui_menu'],exact=True).click()
                     page.get_by_role('menuitem',name=op['ui_item'],exact=True).click()
                     empty=page.get_by_role('dialog')
-                    expect(empty.get_by_role('slider',name='Brightness',exact=False)).to_be_disabled()
+                    expect(empty.get_by_role('slider',name=op['ui_parameter'],exact=False)).to_be_disabled()
                     expect(empty.get_by_role('button',name='Apply',exact=True)).to_be_disabled()
                     empty.get_by_role('button',name='Close',exact=True).click()
                 page.locator('input[type=file]').set_input_files(first['input'])
@@ -184,7 +184,7 @@ def selfcheck(directory):
     return {'status':'passed','equal':equal,'unequal':unequal}
 
 def main():
-    parser=argparse.ArgumentParser(); parser.add_argument('kind',choices=['reference','brightness-reference','devreference','candidate','build','selfcheck'])
+    parser=argparse.ArgumentParser(); parser.add_argument('kind',choices=['reference','brightness-reference','feature-reference','feature-discovery','devreference','candidate','build','selfcheck'])
     parser.add_argument('request',type=Path); parser.add_argument('directory',type=Path); args=parser.parse_args()
     d=within(args.directory,EVIDENCE/'learning'); d.mkdir(parents=True,exist_ok=True)
     try:
@@ -194,12 +194,18 @@ def main():
         elif args.kind=='brightness-reference':
             from adapter.brightness import reference_brightness
             result=reference_brightness(request,d)
+        elif args.kind=='feature-reference':
+            from features.browser import reference as feature_reference
+            result=feature_reference(request,d)
+        elif args.kind=='feature-discovery':
+            from features.discovery import discover
+            result=discover(request,d)
         elif args.kind=='devreference': result=developer_reference(request,d)
         elif args.kind=='candidate': result=candidate(request,d)
         elif args.kind=='selfcheck': result=selfcheck(d)
         else: build(d,request.get('app'))
     except Exception as error: result={'status':'infrastructure_failure','error':{'type':type(error).__name__,'message':str(error)[:2000]}}
     save(d/'result.json',result)
-    return 0 if result.get('status') in ['passed','observed'] or result.get('build_valid') else 1
+    return 0 if result.get('status') in ['passed','observed','discovered'] or result.get('build_valid') else 1
 
 if __name__=='__main__': raise SystemExit(main())

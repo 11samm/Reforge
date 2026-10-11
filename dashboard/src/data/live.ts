@@ -20,7 +20,9 @@ export function parseEventLine(line: string): BundleEvent | null {
     const value: unknown = JSON.parse(line);
     if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
     const e = value as BundleEvent;
-    return typeof e.event === 'string' ? e : null;
+    return typeof e.event === 'string' && e.event.length > 0 && e.event.length <= 80
+      && (e.sequence === undefined || (Number.isInteger(e.sequence) && Number(e.sequence) >= 1))
+      && (e.elapsed_seconds === undefined || (typeof e.elapsed_seconds === 'number' && Number.isFinite(e.elapsed_seconds) && e.elapsed_seconds >= 0)) ? e : null;
   } catch {
     return null;
   }
@@ -29,8 +31,14 @@ export function parseEventLine(line: string): BundleEvent | null {
 /** Append live events to a static bundle skeleton so normalizeRun() can be reused unchanged. */
 export function appendEvents(bundle: RunBundleV1, events: BundleEvent[]): RunBundleV1 {
   const seen = new Set((bundle.events ?? []).map((e) => e.sequence));
-  const fresh = events.filter((e) => e.sequence === undefined || !seen.has(e.sequence));
-  return { ...bundle, events: [...(bundle.events ?? []), ...fresh] };
+  const fresh = events.filter((e) => {
+    if (e.sequence === undefined) return true; // Preserve the original legacy ingestion interface.
+    if (seen.has(e.sequence)) return false;
+    seen.add(e.sequence); return true;
+  });
+  const combined = [...(bundle.events ?? []), ...fresh];
+  if (combined.every(e => e.sequence !== undefined)) combined.sort((a,b) => a.sequence! - b.sequence!);
+  return { ...bundle, events: combined };
 }
 
 /**

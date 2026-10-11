@@ -44,22 +44,27 @@ class MiniPaintAdapter:
         self.phase = "uninitialized"
 
     def __enter__(self):
-        self.pw = sync_playwright().start()
+        from features.jobs import BrowserLock
+        self.ownership = BrowserLock('reference-browser')
+        self.ownership.__enter__()
         try:
+            self.pw = sync_playwright().start()
             launch_options = {"headless": not self.headed, "timeout": 30000}
             if self.window_position is not None:
                 launch_options["args"] = ["--window-position=" + ",".join(map(str, self.window_position))]
             self.browser = self.pw.chromium.launch(**launch_options)
         except Exception:
-            self.pw.stop()
+            if self.pw: self.pw.stop()
+            self.ownership.__exit__()
             raise
         return self
 
     def __exit__(self, *args):
-        if self.browser:
-            self.browser.close()
-        if self.pw:
-            self.pw.stop()
+        try:
+            if self.browser: self.browser.close()
+            if self.pw: self.pw.stop()
+        finally:
+            if getattr(self,'ownership',None): self.ownership.__exit__()
 
     @contextmanager
     def action(self, name, **details):

@@ -10,6 +10,12 @@ BRIGHTNESS = {
  'policy':'exact-rgba-v1','provenance':'evidence/learning/brightness-preparation/imported-scope-2/parameters.json',
 }
 
-def operation_spec(ident):
- if ident!='brightness': raise ValueError('Unknown operation specification')
- return BRIGHTNESS
+def operation_spec(ident, discovered=None):
+ if ident=='brightness': return BRIGHTNESS
+ if ident=='contrast' and discovered is not None:
+  from features.spec import validate,parameter
+  validate(discovered,ready=True); p=parameter(discovered)
+  return {'id':'contrast','version':1,'source':'src/contrast.ts','export':'applyContrast',
+          'parameter':{'name':p['label'],'key':'value','min':p['min'],'max':p['max'],'default':p['default'],'step':p['step']},
+          'ui_menu':'Image','ui_item':'Contrast…','ui_parameter':p['label'],'policy':'exact-rgba-v1'}
+ raise ValueError('Unknown or unvalidated operation specification')
