@@ -1,0 +1,973 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Aurora Glass — Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<!-- ============================================================
+     1. GLOBAL DESIGN TOKENS (source of truth: tokens.css, next to this page)
+     ============================================================ -->
+<link rel="stylesheet" href="tokens.css" />
+
+<!-- ============================================================
+     2. TAILWIND MAPPING (utilities reference the CSS variables)
+     ============================================================ -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { sans: ['var(--font-sans)'], mono: ['var(--font-mono)'] },
+        colors: {
+          ink:     { 100: 'var(--ink-100)', 300: 'var(--ink-300)', 500: 'var(--ink-500)', 700: 'var(--ink-700)', 900: 'var(--ink-900)' },
+          primary: { 50: 'var(--primary-50)', 100: 'var(--primary-100)', 300: 'var(--primary-300)', 500: 'var(--primary-500)', 600: 'var(--primary-600)' },
+          violet:  { 100: 'var(--violet-100)', 300: 'var(--violet-300)', 500: 'var(--violet-500)', 600: 'var(--violet-600)' },
+          success: { 100: 'var(--success-100)', 500: 'var(--success-500)' },
+          warning: { 100: 'var(--warning-100)', 500: 'var(--warning-500)' },
+          danger:  { 100: 'var(--danger-100)', 500: 'var(--danger-500)' },
+          glass: {
+            subtle: 'var(--glass-subtle)', panel: 'var(--glass-panel)', card: 'var(--glass-card)',
+            elevated: 'var(--glass-elevated)', tint: 'var(--glass-tint)',
+            border: 'var(--glass-border)', 'border-strong': 'var(--glass-border-strong)', divider: 'var(--glass-divider)',
+          },
+        },
+        backdropBlur: {
+          'glass-xs': 'var(--blur-xs)', 'glass-sm': 'var(--blur-sm)', 'glass-md': 'var(--blur-md)',
+          'glass-lg': 'var(--blur-lg)', 'glass-xl': 'var(--blur-xl)',
+        },
+        backdropSaturate: { glass: '1.6' },
+        boxShadow: {
+          'soft-xs': 'var(--shadow-xs)', 'soft-sm': 'var(--shadow-sm)', 'soft-md': 'var(--shadow-md)',
+          'soft-lg': 'var(--shadow-lg)', glow: 'var(--shadow-glow)', highlight: 'var(--highlight-inset)',
+        },
+        backgroundImage: {
+          canvas: 'var(--grad-canvas)', hero: 'var(--grad-hero)', 'grad-primary': 'var(--grad-primary)',
+          'grad-violet': 'var(--grad-violet)', sheen: 'var(--grad-sheen)', orb: 'var(--grad-orb)',
+        },
+        borderRadius: {
+          xs: 'var(--radius-xs)', sm: 'var(--radius-sm)', md: 'var(--radius-md)', lg: 'var(--radius-lg)',
+          xl: 'var(--radius-xl)', '2xl': 'var(--radius-2xl)', pill: 'var(--radius-pill)',
+        },
+        transitionTimingFunction: { glass: 'var(--ease-out)' },
+      },
+    },
+  };
+</script>
+
+<!-- ============================================================
+     3. COMPONENT RECIPES (composed only from tokens)
+     ============================================================ -->
+<style type="text/tailwindcss">
+  @layer base {
+    html { scroll-behavior: smooth; }
+    body { @apply font-sans text-ink-700 antialiased bg-canvas bg-fixed min-h-screen; font-size: 14px; line-height: 22px; }
+    ::selection { background: var(--primary-100); color: var(--ink-900); }
+  }
+  @layer components {
+    /* Surfaces */
+    .glass-panel    { @apply bg-glass-panel    backdrop-blur-glass-lg backdrop-saturate-glass border border-glass-border rounded-2xl shadow-soft-lg; }
+    .glass-card     { @apply bg-glass-card     backdrop-blur-glass-md backdrop-saturate-glass border border-glass-border rounded-xl  shadow-soft-md; }
+    .glass-subtle   { @apply bg-glass-subtle   backdrop-blur-glass-sm border border-glass-border rounded-lg; }
+    .glass-elevated { @apply bg-glass-elevated backdrop-blur-glass-md border border-glass-border-strong shadow-soft-sm; }
+
+    /* Type */
+    .t-display  { @apply text-ink-900; font: var(--type-display); letter-spacing: var(--tracking-tight); }
+    .t-h1       { @apply text-ink-900; font: var(--type-h1); letter-spacing: var(--tracking-tight); }
+    .t-h2       { @apply text-ink-900; font: var(--type-h2); }
+    .t-h3       { @apply text-ink-900; font: var(--type-h3); }
+    .t-body     { @apply text-ink-700; font: var(--type-body); }
+    .t-small    { @apply text-ink-500; font: var(--type-small); }
+    .t-caption  { @apply text-ink-500; font: var(--type-caption); }
+    .t-overline { @apply text-ink-500 uppercase; font: var(--type-overline); letter-spacing: var(--tracking-overline); }
+
+    /* Buttons */
+    .btn { @apply inline-flex items-center justify-center gap-2 h-9 px-4 rounded-pill text-[13px] font-medium transition-all duration-200 ease-glass select-none
+                  focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary-100 disabled:opacity-50 disabled:pointer-events-none; }
+    .btn-sm { @apply h-8 px-3.5 text-[12.5px]; }
+    .btn-lg { @apply h-11 px-6 text-[14px]; }
+    .btn-primary   { @apply btn bg-grad-primary text-white shadow-glow hover:brightness-110 active:brightness-95; }
+    .btn-secondary { @apply btn glass-elevated text-ink-900 hover:bg-white active:shadow-soft-xs; }
+    .btn-tint      { @apply btn bg-primary-100 text-primary-600 hover:bg-primary-50; }
+    .btn-ghost     { @apply btn text-ink-700 hover:bg-glass-card; }
+    .btn-icon      { @apply inline-grid place-items-center w-9 h-9 rounded-pill text-ink-700 hover:bg-glass-card transition-colors duration-200
+                            focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary-100; }
+
+    /* Inputs */
+    .field { @apply w-full h-10 rounded-pill glass-elevated px-4 text-[14px] text-ink-900 placeholder:text-ink-500 transition-shadow duration-200
+                    focus:outline-none focus:ring-4 focus:ring-primary-100 focus:border-primary-300; }
+
+    /* Tabs */
+    .tab-underline { @apply relative h-11 px-1 text-[14px] font-medium text-ink-700 hover:text-ink-900 transition-colors; }
+    .tab-underline[aria-selected="true"] { @apply text-primary-500; }
+    .tab-underline[aria-selected="true"]::after { content: ""; @apply absolute left-0 right-0 -bottom-px h-0.5 rounded-pill bg-primary-500; }
+    .segment { @apply h-8 px-4 rounded-pill text-[13px] font-medium text-ink-500 hover:text-ink-900 transition-all duration-200; }
+    .segment[aria-selected="true"] { @apply bg-white text-primary-500 shadow-soft-sm; }
+
+    /* Navigation */
+    .nav-item { @apply flex items-center gap-2.5 h-9 px-3 rounded-md text-[14px] text-ink-700 hover:bg-glass-card transition-colors duration-150; }
+    .nav-item[aria-current="page"] { @apply bg-glass-elevated text-ink-900 font-medium shadow-soft-xs; }
+
+    /* Indicators */
+    .badge   { @apply inline-flex items-center gap-1.5 h-6 px-2.5 rounded-pill text-[12px] font-medium; }
+    .count   { @apply inline-grid place-items-center min-w-[18px] h-[18px] px-1 rounded-pill bg-primary-500 text-white text-[10.5px] font-semibold ring-2 ring-white; }
+    .dot     { @apply inline-block w-2 h-2 rounded-full; }
+    .app-icon { @apply grid place-items-center w-9 h-9 rounded-sm text-[13px] font-bold border-2 shadow-soft-xs; }
+
+    /* Code */
+    .code { @apply font-mono text-[12px] leading-5 text-ink-700 whitespace-pre overflow-auto; }
+    .kbd  { @apply font-mono text-[11.5px] px-1.5 py-0.5 rounded-xs bg-glass-elevated border border-glass-border-strong text-ink-700; }
+  }
+</style>
+
+<style>
+  /* Ambient light blobs that give the glass something to refract */
+  .ambient { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+  .ambient span { position: absolute; border-radius: 50%; filter: blur(60px); opacity: .55; }
+  .ambient .a { width: 520px; height: 520px; left: -120px; top: 120px; background: #b9dcfb; }
+  .ambient .b { width: 460px; height: 460px; right: -100px; top: -80px; background: #d8ccff; }
+  .ambient .c { width: 520px; height: 520px; right: 10%; bottom: -200px; background: #f0d9fb; }
+
+  /* 3D-ish decorative shapes from the hero banner */
+  .torus { width: 150px; height: 150px; border-radius: 50%;
+           background: radial-gradient(circle at 50% 50%, transparent 0 28%, #6c4fd8 29%, #8b6cf0 40%, #c9b8ff 52%, #a68cf7 62%, #7b5ce6 71%, transparent 72%);
+           filter: drop-shadow(0 18px 24px rgba(108, 79, 216, .25)); transform: rotate(-18deg) scaleY(.92); }
+  .orb   { border-radius: 50%; background: var(--grad-orb); box-shadow: 0 10px 20px -6px rgba(108, 79, 216, .35); }
+  .cone  { width: 34px; height: 38px; background: linear-gradient(140deg, #ffb3a6, #ff6d5a 60%, #e04f3d);
+           clip-path: polygon(10% 0, 100% 35%, 30% 100%); filter: drop-shadow(0 8px 10px rgba(255, 109, 90, .3)); }
+  .cube  { width: 26px; height: 26px; border-radius: 6px; background: linear-gradient(135deg, #ff9a8a, #f2543f);
+           transform: rotate(18deg); box-shadow: 0 8px 14px -4px rgba(242, 84, 63, .35); }
+
+  /* Busy backdrop used to demonstrate blur levels */
+  .blur-backdrop { background:
+      radial-gradient(circle at 20% 30%, #8b6cf0 0 18%, transparent 19%),
+      radial-gradient(circle at 70% 60%, #3563e9 0 16%, transparent 17%),
+      radial-gradient(circle at 45% 85%, #ff7e6b 0 10%, transparent 11%),
+      repeating-linear-gradient(45deg, #a9d4f7 0 8px, #e3ebff 8px 16px); }
+
+  .toggle { appearance: none; width: 40px; height: 24px; border-radius: 999px; background: var(--ink-100);
+            position: relative; cursor: pointer; transition: background var(--dur-base) var(--ease-out);
+            box-shadow: inset 0 1px 2px rgba(40,56,120,.12); }
+  .toggle::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%;
+                   background: #fff; box-shadow: var(--shadow-sm); transition: transform var(--dur-base) var(--ease-out); }
+  .toggle:checked { background: var(--primary-500); }
+  .toggle:checked::after { transform: translateX(16px); }
+  .toggle:focus-visible { outline: none; box-shadow: 0 0 0 4px var(--primary-100); }
+
+  .check { appearance: none; width: 18px; height: 18px; border-radius: 6px; background: var(--glass-elevated);
+           border: 1.5px solid var(--ink-300); display: inline-grid; place-items: center; cursor: pointer; transition: all var(--dur-fast); }
+  .check:checked { background: var(--grad-primary); border-color: var(--primary-500); }
+  .check:checked::after { content: ""; width: 9px; height: 5px; border: 2px solid #fff; border-top: 0; border-right: 0; transform: rotate(-45deg) translate(1px, -1px); }
+
+  .range { appearance: none; width: 100%; height: 6px; border-radius: 999px; background: linear-gradient(90deg, var(--primary-500) var(--p, 50%), var(--ink-100) var(--p, 50%)); }
+  .range::-webkit-slider-thumb { appearance: none; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: var(--shadow-md); border: 1px solid var(--glass-border-strong); cursor: pointer; }
+  .range::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: var(--shadow-md); border: 1px solid var(--glass-border-strong); cursor: pointer; }
+
+  section { scroll-margin-top: 96px; }
+</style>
+</head>
+
+<body>
+<div class="ambient" aria-hidden="true"><span class="a"></span><span class="b"></span><span class="c"></span></div>
+
+<!-- ============ TOP BAR ============ -->
+<header class="sticky top-4 z-50 mx-auto max-w-[1240px] px-6">
+  <div class="glass-panel !rounded-pill flex items-center gap-6 h-14 pl-5 pr-2">
+    <div class="flex items-center gap-2.5">
+      <div class="orb w-6 h-6"></div>
+      <span class="t-h3">Aurora Glass</span>
+      <span class="badge bg-primary-100 text-primary-600 !h-5 !text-[11px]">v1.0</span>
+    </div>
+    <nav class="hidden md:flex items-center gap-1 ml-auto text-[13px] font-medium">
+      <a href="#analysis"   class="btn-ghost btn-sm">Analysis</a>
+      <a href="#tokens"     class="btn-ghost btn-sm">Tokens</a>
+      <a href="#code"       class="btn-ghost btn-sm">CSS / Tailwind</a>
+      <a href="#components" class="btn-ghost btn-sm">Components</a>
+      <a href="#composition" class="btn-primary btn-sm">Live example</a>
+    </nav>
+  </div>
+</header>
+
+<main class="mx-auto max-w-[1240px] px-6 pb-24">
+
+  <!-- ============ HERO ============ -->
+  <section class="pt-16 pb-12 grid lg:grid-cols-[1.2fr_1fr] gap-10 items-center">
+    <div>
+      <p class="t-overline mb-3">Design system · Light glassmorphism</p>
+      <h1 class="t-display">Frosted glass, soft light, pastel depth.</h1>
+      <p class="t-body mt-4 max-w-[560px] text-[15px] leading-6">
+        A strict token set extracted from the reference app library screen. Every surface, blur, opacity, gradient stop and shadow below is a named variable,
+        and every component on this page is built from them alone.
+      </p>
+      <div class="flex flex-wrap gap-3 mt-7">
+        <a href="#tokens" class="btn-primary btn-lg">Explore tokens</a>
+        <a href="#code" class="btn-secondary btn-lg">Copy CSS variables</a>
+      </div>
+    </div>
+    <div class="relative h-[260px]">
+      <div class="glass-card absolute left-0 top-6 w-[62%] p-5">
+        <p class="t-overline">Layer 3 · Card</p>
+        <p class="t-h3 mt-1">--glass-card</p>
+        <p class="t-caption mt-1">white 64% · blur 16px</p>
+      </div>
+      <div class="glass-panel absolute right-0 top-0 w-[58%] h-[180px] p-5 !rounded-xl">
+        <p class="t-overline">Layer 2 · Panel</p>
+        <p class="t-h3 mt-1">--glass-panel</p>
+        <p class="t-caption mt-1">white 46% · blur 24px</p>
+      </div>
+      <div class="glass-elevated absolute left-[22%] bottom-0 w-[60%] p-4 rounded-lg shadow-soft-lg flex items-center gap-3">
+        <div class="app-icon bg-[#2c1a4a] border-violet-300 text-violet-300">Mo</div>
+        <div class="flex-1"><p class="t-h3 !text-[14px]">Layer 4 · Elevated</p><p class="t-caption">white 82% · popovers, inputs</p></div>
+        <span class="btn-primary btn-sm">Open</span>
+      </div>
+      <div class="orb w-12 h-12 absolute -top-6 right-[54%]"></div>
+      <div class="cube absolute bottom-10 right-4"></div>
+    </div>
+  </section>
+
+  <!-- ============ 01 ANALYSIS ============ -->
+  <section id="analysis" class="mb-20">
+    <div class="flex items-end justify-between mb-6">
+      <div><p class="t-overline">01</p><h2 class="t-h1">Style analysis</h2></div>
+      <p class="t-small max-w-[420px] text-right hidden md:block">What defines the reference, and the rule each observation becomes.</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <article class="glass-card p-6">
+        <div class="w-10 h-10 rounded-md bg-primary-100 grid place-items-center text-primary-500 mb-4" data-icon="layers"></div>
+        <h3 class="t-h3">Frosted glass panels</h3>
+        <p class="t-small mt-2">The window, sidebar and cards are translucent white over a pastel field. Each nested layer is <em>more</em> opaque than its parent, so content gets more legible the closer it is to the user.</p>
+        <p class="t-caption mt-3 font-mono text-primary-600">rule → 4 opacity steps: 28 / 46 / 64 / 82%</p>
+      </article>
+      <article class="glass-card p-6">
+        <div class="w-10 h-10 rounded-md bg-violet-100 grid place-items-center text-violet-500 mb-4" data-icon="sun"></div>
+        <h3 class="t-h3">Soft, top-down lighting</h3>
+        <p class="t-small mt-2">There are no hard edges. Every surface has a 1px white top highlight, and its shadows are wide, low-alpha and tinted blue-violet. That light comes from the backdrop color, not from black.</p>
+        <p class="t-caption mt-3 font-mono text-primary-600">rule → shadow alpha ≤ 0.22, tint rgb(72,88,180)</p>
+      </article>
+      <article class="glass-card p-6">
+        <div class="w-10 h-10 rounded-md bg-[var(--sky-200)] grid place-items-center text-primary-600 mb-4" data-icon="palette"></div>
+        <h3 class="t-h3">Pastel blue → purple palette</h3>
+        <p class="t-small mt-2">The canvas runs from sky blue at the top left to lilac at the bottom right. A saturated cobalt is kept for actions only, with violet and coral for small decorative accents.</p>
+        <p class="t-caption mt-3 font-mono text-primary-600">rule → one action color (#3563E9)</p>
+      </article>
+      <article class="glass-card p-6">
+        <div class="w-10 h-10 rounded-md bg-primary-100 grid place-items-center text-primary-500 mb-4" data-icon="stack"></div>
+        <h3 class="t-h3">Layered depth</h3>
+        <p class="t-small mt-2">Depth reads in four layers: canvas → window → sidebar/content → card → control. Elevation is shown by opacity, blur and shadow together, never by darkening.</p>
+        <p class="t-caption mt-3 font-mono text-primary-600">rule → blur ↓ as opacity ↑</p>
+      </article>
+      <article class="glass-card p-6">
+        <div class="w-10 h-10 rounded-md bg-violet-100 grid place-items-center text-violet-500 mb-4" data-icon="grid"></div>
+        <h3 class="t-h3">Calm composition</h3>
+        <p class="t-small mt-2">The layout is a sidebar plus a single content column. It has generous 24–32px gutters, pill-shaped controls, and one hero banner at the top. Each card holds a single row of actions.</p>
+        <p class="t-caption mt-3 font-mono text-primary-600">rule → 4px grid, radius 12–28px, pill controls</p>
+      </article>
+      <article class="glass-card p-6">
+        <div class="w-10 h-10 rounded-md bg-[var(--mint-200)] grid place-items-center text-success-500 mb-4" data-icon="sparkle"></div>
+        <h3 class="t-h3">Modern, creative mood</h3>
+        <p class="t-small mt-2">Glossy 3D primitives (torus, orb, cone, cube) and a mint-to-lavender hero gradient add play. They are confined to the hero and decorative zones.</p>
+        <p class="t-caption mt-3 font-mono text-primary-600">rule → 3D shapes only in hero / empty states</p>
+      </article>
+    </div>
+
+    <div class="glass-subtle mt-5 p-6 !rounded-xl grid md:grid-cols-4 gap-5">
+      <div class="md:col-span-1">
+        <p class="t-overline text-danger-500">Guardrails</p>
+        <h3 class="t-h3 mt-1">What this system rejects</h3>
+      </div>
+      <div class="md:col-span-3 grid sm:grid-cols-2 gap-4">
+        <div class="flex gap-3"><span class="badge bg-danger-100 text-danger-500 shrink-0">✕ Low contrast</span><p class="t-small">Text never sits directly on the canvas or on surfaces below 64% opacity. Ink tokens are tested at ≥ 4.5:1 against white glass.</p></div>
+        <div class="flex gap-3"><span class="badge bg-danger-100 text-danger-500 shrink-0">✕ Harsh shadows</span><p class="t-small">No black and no tight offsets. Every shadow is a two-layer, blue-tinted, negative-spread blur.</p></div>
+        <div class="flex gap-3"><span class="badge bg-danger-100 text-danger-500 shrink-0">✕ Clutter</span><p class="t-small">A max of one primary button per card, at least 16px padding, and dividers at 7% ink rather than boxes inside boxes.</p></div>
+        <div class="flex gap-3"><span class="badge bg-danger-100 text-danger-500 shrink-0">✕ Dark themes</span><p class="t-small">There are no dark surfaces. The darkest fill allowed is the action color; ink is used for text only.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 02 TOKENS ============ -->
+  <section id="tokens" class="mb-20">
+    <div class="mb-6"><p class="t-overline">02</p><h2 class="t-h1">Design tokens</h2></div>
+
+    <!-- Color -->
+    <div class="glass-panel p-6 md:p-8 mb-6">
+      <div class="flex items-baseline justify-between mb-5"><h3 class="t-h2">Color</h3><span class="t-caption">Contrast ratios measured on #FFFFFF</span></div>
+      <div id="colorGroups" class="grid gap-6"></div>
+    </div>
+
+    <!-- Glass surfaces + blur -->
+    <div class="grid lg:grid-cols-2 gap-6 mb-6">
+      <div class="glass-panel p-6 md:p-8">
+        <h3 class="t-h2">Background opacity</h3>
+        <p class="t-small mt-1 mb-5">The same white at four alphas, over a busy backdrop with matching blur.</p>
+        <div class="blur-backdrop rounded-xl p-4 grid grid-cols-2 gap-3">
+          <div class="rounded-lg border border-glass-border p-4 backdrop-blur-glass-sm" style="background:var(--glass-subtle)">
+            <p class="font-semibold text-ink-900">subtle</p><p class="font-mono text-[11.5px] text-ink-900">0.28 · blur-sm</p></div>
+          <div class="rounded-lg border border-glass-border p-4 backdrop-blur-glass-lg" style="background:var(--glass-panel)">
+            <p class="font-semibold text-ink-900">panel</p><p class="font-mono text-[11.5px] text-ink-900">0.46 · blur-lg</p></div>
+          <div class="rounded-lg border border-glass-border p-4 backdrop-blur-glass-md" style="background:var(--glass-card)">
+            <p class="font-semibold text-ink-900">card</p><p class="font-mono text-[11.5px] text-ink-700">0.64 · blur-md</p></div>
+          <div class="rounded-lg border border-glass-border-strong p-4 backdrop-blur-glass-md" style="background:var(--glass-elevated)">
+            <p class="font-semibold text-ink-900">elevated</p><p class="font-mono text-[11.5px] text-ink-700">0.82 · blur-md</p></div>
+        </div>
+        <table class="w-full mt-5 text-[13px]">
+          <thead><tr class="text-left t-overline"><th class="py-2">Token</th><th>Value</th><th>Tailwind</th><th>Use</th></tr></thead>
+          <tbody class="divide-y divide-glass-divider font-mono text-[12px]">
+            <tr><td class="py-2 text-ink-900">--glass-subtle</td><td>rgba(255,255,255,.28)</td><td class="text-primary-600">bg-glass-subtle</td><td class="font-sans text-ink-500">Sidebar, inset</td></tr>
+            <tr><td class="py-2 text-ink-900">--glass-panel</td><td>rgba(255,255,255,.46)</td><td class="text-primary-600">bg-glass-panel</td><td class="font-sans text-ink-500">Window shell</td></tr>
+            <tr><td class="py-2 text-ink-900">--glass-card</td><td>rgba(255,255,255,.64)</td><td class="text-primary-600">bg-glass-card</td><td class="font-sans text-ink-500">Cards, lists</td></tr>
+            <tr><td class="py-2 text-ink-900">--glass-elevated</td><td>rgba(255,255,255,.82)</td><td class="text-primary-600">bg-glass-elevated</td><td class="font-sans text-ink-500">Controls, popovers</td></tr>
+            <tr><td class="py-2 text-ink-900">--glass-tint</td><td>rgba(227,235,255,.55)</td><td class="text-primary-600">bg-glass-tint</td><td class="font-sans text-ink-500">Selected state</td></tr>
+            <tr><td class="py-2 text-ink-900">--glass-border</td><td>rgba(255,255,255,.60)</td><td class="text-primary-600">border-glass-border</td><td class="font-sans text-ink-500">1px panel edge</td></tr>
+            <tr><td class="py-2 text-ink-900">--glass-divider</td><td>rgba(24,33,59,.07)</td><td class="text-primary-600">divide-glass-divider</td><td class="font-sans text-ink-500">Row separators</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="glass-panel p-6 md:p-8">
+        <h3 class="t-h2">Backdrop blur</h3>
+        <p class="t-small mt-1 mb-5">Each step is paired with <span class="kbd">saturate(160%)</span> so the colors behind the glass stay vivid instead of turning grey.</p>
+        <div class="blur-backdrop rounded-xl p-4 grid grid-cols-5 gap-2">
+          <div class="h-28 rounded-md border border-glass-border bg-white/30 backdrop-blur-glass-xs grid place-items-end p-2"><span class="kbd">xs</span></div>
+          <div class="h-28 rounded-md border border-glass-border bg-white/30 backdrop-blur-glass-sm grid place-items-end p-2"><span class="kbd">sm</span></div>
+          <div class="h-28 rounded-md border border-glass-border bg-white/30 backdrop-blur-glass-md grid place-items-end p-2"><span class="kbd">md</span></div>
+          <div class="h-28 rounded-md border border-glass-border bg-white/30 backdrop-blur-glass-lg grid place-items-end p-2"><span class="kbd">lg</span></div>
+          <div class="h-28 rounded-md border border-glass-border bg-white/30 backdrop-blur-glass-xl grid place-items-end p-2"><span class="kbd">xl</span></div>
+        </div>
+        <table class="w-full mt-5 text-[13px]">
+          <thead><tr class="text-left t-overline"><th class="py-2">Token</th><th>Value</th><th>Tailwind</th><th>Use</th></tr></thead>
+          <tbody class="divide-y divide-glass-divider font-mono text-[12px]">
+            <tr><td class="py-2 text-ink-900">--blur-xs</td><td>4px</td><td class="text-primary-600">backdrop-blur-glass-xs</td><td class="font-sans text-ink-500">Chips over images</td></tr>
+            <tr><td class="py-2 text-ink-900">--blur-sm</td><td>8px</td><td class="text-primary-600">backdrop-blur-glass-sm</td><td class="font-sans text-ink-500">Sidebar, subtle</td></tr>
+            <tr><td class="py-2 text-ink-900">--blur-md</td><td>16px</td><td class="text-primary-600">backdrop-blur-glass-md</td><td class="font-sans text-ink-500">Cards, controls</td></tr>
+            <tr><td class="py-2 text-ink-900">--blur-lg</td><td>24px</td><td class="text-primary-600">backdrop-blur-glass-lg</td><td class="font-sans text-ink-500">Window, header</td></tr>
+            <tr><td class="py-2 text-ink-900">--blur-xl</td><td>40px</td><td class="text-primary-600">backdrop-blur-glass-xl</td><td class="font-sans text-ink-500">Modal scrim</td></tr>
+          </tbody>
+        </table>
+        <div class="mt-5">
+          <div class="flex justify-between t-caption mb-2"><span>Try it: live blur</span><span id="blurVal" class="font-mono">16px</span></div>
+          <input id="blurRange" type="range" min="0" max="40" value="16" class="range" style="--p:40%" aria-label="Blur amount" />
+          <div class="blur-backdrop rounded-lg mt-3 p-3 h-20">
+            <div id="blurDemo" class="h-full rounded-md border border-glass-border grid place-items-center text-ink-900 font-medium" style="background:var(--glass-card);backdrop-filter:blur(16px) saturate(160%);-webkit-backdrop-filter:blur(16px) saturate(160%)">Glass card</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gradients -->
+    <div class="glass-panel p-6 md:p-8 mb-6">
+      <h3 class="t-h2">Gradients &amp; stops</h3>
+      <p class="t-small mt-1 mb-5">Stop positions are part of the token. Don't re-space them per component.</p>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5" id="gradients"></div>
+    </div>
+
+    <!-- Shadows + radius -->
+    <div class="grid lg:grid-cols-[1.4fr_1fr] gap-6 mb-6">
+      <div class="glass-panel p-6 md:p-8">
+        <h3 class="t-h2">Soft shadows</h3>
+        <p class="t-small mt-1 mb-6">Two layers: a tight 1–4px contact shadow plus a wide, negative-spread ambient shadow. Tint is rgb(72,88,180), never black.</p>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-5">
+          <div><div class="h-20 rounded-lg bg-white shadow-soft-xs"></div><p class="font-mono text-[12px] text-ink-900 mt-3">shadow-soft-xs</p><p class="t-caption">Nav item, chips</p></div>
+          <div><div class="h-20 rounded-lg bg-white shadow-soft-sm"></div><p class="font-mono text-[12px] text-ink-900 mt-3">shadow-soft-sm</p><p class="t-caption">Buttons, inputs</p></div>
+          <div><div class="h-20 rounded-lg bg-white shadow-soft-md"></div><p class="font-mono text-[12px] text-ink-900 mt-3">shadow-soft-md</p><p class="t-caption">Cards</p></div>
+          <div><div class="h-20 rounded-lg bg-white shadow-soft-lg"></div><p class="font-mono text-[12px] text-ink-900 mt-3">shadow-soft-lg</p><p class="t-caption">Window, modal</p></div>
+          <div><div class="h-20 rounded-lg bg-grad-primary shadow-glow"></div><p class="font-mono text-[12px] text-ink-900 mt-3">shadow-glow</p><p class="t-caption">Primary action</p></div>
+          <div><div class="h-20 rounded-lg bg-[var(--sky-200)] shadow-highlight"></div><p class="font-mono text-[12px] text-ink-900 mt-3">shadow-highlight</p><p class="t-caption">Glass top edge (inset)</p></div>
+        </div>
+      </div>
+      <div class="glass-panel p-6 md:p-8">
+        <h3 class="t-h2">Radius</h3>
+        <p class="t-small mt-1 mb-6">Outer containers are rounder than what's inside them.</p>
+        <div class="grid grid-cols-4 gap-4" id="radii"></div>
+        <h3 class="t-h2 mt-8">Spacing</h3>
+        <p class="t-small mt-1 mb-4">4px base grid.</p>
+        <div class="space-y-2" id="spacing"></div>
+      </div>
+    </div>
+
+    <!-- Typography -->
+    <div class="glass-panel p-6 md:p-8">
+      <div class="flex items-baseline justify-between mb-5"><h3 class="t-h2">Typography</h3><span class="t-caption">Inter · 400 / 500 / 600</span></div>
+      <div class="divide-y divide-glass-divider">
+        <div class="grid md:grid-cols-[200px_1fr] gap-2 py-4 items-baseline"><span class="font-mono text-[12px] text-ink-500">.t-display · 40/48 · 600</span><span class="t-display">Discover your tools</span></div>
+        <div class="grid md:grid-cols-[200px_1fr] gap-2 py-4 items-baseline"><span class="font-mono text-[12px] text-ink-500">.t-h1 · 28/36 · 600</span><span class="t-h1">All Apps</span></div>
+        <div class="grid md:grid-cols-[200px_1fr] gap-2 py-4 items-baseline"><span class="font-mono text-[12px] text-ink-500">.t-h2 · 20/28 · 600</span><span class="t-h2">Stock Library</span></div>
+        <div class="grid md:grid-cols-[200px_1fr] gap-2 py-4 items-baseline"><span class="font-mono text-[12px] text-ink-500">.t-h3 · 16/24 · 600</span><span class="t-h3">Photo Studio</span></div>
+        <div class="grid md:grid-cols-[200px_1fr] gap-2 py-4 items-baseline"><span class="font-mono text-[12px] text-ink-500">.t-body · 14/22 · 400</span><span class="t-body">Grab 10 free images with a 30-day trial and find the perfect shot for your next project.</span></div>
+        <div class="grid md:grid-cols-[200px_1fr] gap-2 py-4 items-baseline"><span class="font-mono text-[12px] text-ink-500">.t-small · 13/20 · 400</span><span class="t-small">Designing and developing modern web platforms with elastic layout</span></div>
+        <div class="grid md:grid-cols-[200px_1fr] gap-2 py-4 items-baseline"><span class="font-mono text-[12px] text-ink-500">.t-caption · 12/16 · 400</span><span class="t-caption">Updated 2 hours ago</span></div>
+        <div class="grid md:grid-cols-[200px_1fr] gap-2 py-4 items-baseline"><span class="font-mono text-[12px] text-ink-500">.t-overline · 11/16 · 600</span><span class="t-overline">Apps in your plan</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 03 CODE ============ -->
+  <section id="code" class="mb-20">
+    <div class="flex items-end justify-between mb-6">
+      <div><p class="t-overline">03</p><h2 class="t-h1">CSS variables &amp; Tailwind utilities</h2></div>
+      <div role="tablist" class="glass-subtle !rounded-pill p-1 flex gap-1" id="codeTabs">
+        <button role="tab" class="segment" aria-selected="true" data-target="code-css">CSS variables</button>
+        <button role="tab" class="segment" aria-selected="false" data-target="code-tw">tailwind.config.js</button>
+        <button role="tab" class="segment" aria-selected="false" data-target="code-recipe">Recipes</button>
+      </div>
+    </div>
+    <div class="glass-panel overflow-hidden">
+      <div class="flex items-center justify-between px-5 h-12 border-b border-glass-divider">
+        <div class="flex gap-1.5"><span class="w-3 h-3 rounded-full bg-[#ff6b5f]"></span><span class="w-3 h-3 rounded-full bg-[#ffbe2e]"></span><span class="w-3 h-3 rounded-full bg-[#29c840]"></span></div>
+        <button id="copyBtn" class="btn-secondary btn-sm"><span data-icon="copy"></span><span>Copy</span></button>
+      </div>
+<pre id="code-css" class="code p-6 max-h-[520px]">:root {
+  /* Backdrop blur */
+  --blur-xs: 4px;   --blur-sm: 8px;   --blur-md: 16px;
+  --blur-lg: 24px;  --blur-xl: 40px;  --glass-saturate: 160%;
+
+  /* Background opacities (white glass) */
+  --glass-subtle:   rgba(255, 255, 255, 0.28);
+  --glass-panel:    rgba(255, 255, 255, 0.46);
+  --glass-card:     rgba(255, 255, 255, 0.64);
+  --glass-elevated: rgba(255, 255, 255, 0.82);
+  --glass-tint:     rgba(227, 235, 255, 0.55);
+  --glass-border:        rgba(255, 255, 255, 0.60);
+  --glass-border-strong: rgba(255, 255, 255, 0.90);
+  --glass-divider:       rgba(24, 33, 59, 0.07);
+
+  /* Gradient stops */
+  --grad-canvas:
+    radial-gradient(60% 50% at 0% 0%,     #cfe7fb 0%, rgba(207,231,251,0) 70%),
+    radial-gradient(50% 50% at 100% 100%, #e7dcfb 0%, rgba(231,220,251,0) 70%),
+    radial-gradient(40% 40% at 85% 10%,   #dfe3ff 0%, rgba(223,227,255,0) 70%),
+    linear-gradient(160deg, #e3f0fc 0%, #ebeafc 55%, #f3ebfa 100%);
+  --grad-hero:    linear-gradient(105deg, #c9c6fb 0%, #d7e8ea 32%, #e6f5d9 52%, #eef4ff 78%, #e3e6ff 100%);
+  --grad-primary: linear-gradient(180deg, #4874f3 0%, #3563e9 100%);
+  --grad-violet:  linear-gradient(135deg, #c3b4fb 0%, #8b6cf0 100%);
+  --grad-sheen:   linear-gradient(180deg, rgba(255,255,255,.70) 0%, rgba(255,255,255,0) 100%);
+  --grad-orb:     radial-gradient(circle at 30% 28%, #f4efff 0%, #c3b4fb 35%, #8b6cf0 75%, #6c4fd8 100%);
+
+  /* Soft shadows (tinted, two-layer) */
+  --shadow-xs: 0 1px 2px rgba(40,56,120,.06);
+  --shadow-sm: 0 1px 2px rgba(40,56,120,.05), 0 4px 12px -2px rgba(64,84,170,.10);
+  --shadow-md: 0 2px 4px rgba(40,56,120,.04), 0 12px 32px -8px rgba(72,88,180,.16);
+  --shadow-lg: 0 4px 8px rgba(40,56,120,.04), 0 32px 64px -16px rgba(92,84,196,.22);
+  --shadow-glow: 0 6px 18px -4px rgba(53,99,233,.45);
+  --highlight-inset: inset 0 1px 0 rgba(255,255,255,.85), inset 0 0 0 1px rgba(255,255,255,.30);
+
+  /* Color */
+  --ink-900: #18213b; --ink-700: #3a4562; --ink-500: #5d6784; --ink-300: #a3abc2; --ink-100: #e6e9f2;
+  --primary-50: #f1f5ff; --primary-100: #e3ebff; --primary-300: #9db6fb; --primary-500: #3563e9; --primary-600: #2a52cc;
+  --violet-100: #ece7ff; --violet-300: #c3b4fb; --violet-500: #8b6cf0; --violet-600: #6a4bd6;
+  --sky-200: #cfe7fb; --sky-300: #a9d4f7; --mint-200: #e3f5d8; --coral-400: #ff7e6b;
+  --success-500: #157a4a; --success-100: #dcf6e8;
+  --warning-500: #9a5b06; --warning-100: #fff1dc;
+  --danger-500:  #c0334b; --danger-100:  #ffe4e8;
+
+  /* Radius · Spacing · Motion */
+  --radius-xs: 6px; --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+  --radius-xl: 20px; --radius-2xl: 28px; --radius-pill: 999px;
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 20px;
+  --space-6: 24px; --space-8: 32px; --space-10: 40px; --space-14: 56px;
+
+  /* Typography: use as font: var(--type-*) */
+  --font-sans: "Inter", "SF Pro Text", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --type-display: 600 40px/48px var(--font-sans);  --type-h1: 600 28px/36px var(--font-sans);
+  --type-h2: 600 20px/28px var(--font-sans);       --type-h3: 600 16px/24px var(--font-sans);
+  --type-body: 400 14px/22px var(--font-sans);     --type-small: 400 13px/20px var(--font-sans);
+  --type-caption: 400 12px/16px var(--font-sans);  --type-overline: 600 11px/16px var(--font-sans);
+  --tracking-tight: -0.025em; --tracking-overline: 0.08em;
+  --ease-out: cubic-bezier(.22,1,.36,1); --dur-fast: 150ms; --dur-base: 250ms; --dur-slow: 400ms;
+}</pre>
+<pre id="code-tw" class="code p-6 max-h-[520px] hidden">// tailwind.config.js — utilities resolve to the CSS variables above
+module.exports = {
+  theme: {
+    extend: {
+      backdropBlur: {
+        'glass-xs': 'var(--blur-xs)',   // backdrop-blur-glass-xs
+        'glass-sm': 'var(--blur-sm)',   // backdrop-blur-glass-sm
+        'glass-md': 'var(--blur-md)',   // backdrop-blur-glass-md
+        'glass-lg': 'var(--blur-lg)',   // backdrop-blur-glass-lg
+        'glass-xl': 'var(--blur-xl)',   // backdrop-blur-glass-xl
+      },
+      backdropSaturate: { glass: '1.6' }, // backdrop-saturate-glass
+      colors: {
+        glass: {
+          subtle:   'var(--glass-subtle)',    // bg-glass-subtle
+          panel:    'var(--glass-panel)',     // bg-glass-panel
+          card:     'var(--glass-card)',      // bg-glass-card
+          elevated: 'var(--glass-elevated)',  // bg-glass-elevated
+          tint:     'var(--glass-tint)',      // bg-glass-tint
+          border:   'var(--glass-border)',    // border-glass-border
+          'border-strong': 'var(--glass-border-strong)',
+          divider:  'var(--glass-divider)',   // divide-glass-divider
+        },
+        ink:     { 100: 'var(--ink-100)', 300: 'var(--ink-300)', 500: 'var(--ink-500)', 700: 'var(--ink-700)', 900: 'var(--ink-900)' },
+        primary: { 50: 'var(--primary-50)', 100: 'var(--primary-100)', 300: 'var(--primary-300)', 500: 'var(--primary-500)', 600: 'var(--primary-600)' },
+        violet:  { 100: 'var(--violet-100)', 300: 'var(--violet-300)', 500: 'var(--violet-500)', 600: 'var(--violet-600)' },
+        success: { 100: 'var(--success-100)', 500: 'var(--success-500)' },
+        warning: { 100: 'var(--warning-100)', 500: 'var(--warning-500)' },
+        danger:  { 100: 'var(--danger-100)',  500: 'var(--danger-500)' },
+      },
+      backgroundImage: {
+        canvas: 'var(--grad-canvas)',          // bg-canvas
+        hero: 'var(--grad-hero)',              // bg-hero
+        'grad-primary': 'var(--grad-primary)', // bg-grad-primary
+        'grad-violet': 'var(--grad-violet)',   // bg-grad-violet
+        sheen: 'var(--grad-sheen)',            // bg-sheen
+        orb: 'var(--grad-orb)',                // bg-orb
+      },
+      boxShadow: {
+        'soft-xs': 'var(--shadow-xs)',   // shadow-soft-xs
+        'soft-sm': 'var(--shadow-sm)',   // shadow-soft-sm
+        'soft-md': 'var(--shadow-md)',   // shadow-soft-md
+        'soft-lg': 'var(--shadow-lg)',   // shadow-soft-lg
+        glow: 'var(--shadow-glow)',      // shadow-glow
+        highlight: 'var(--highlight-inset)', // shadow-highlight
+      },
+      borderRadius: {
+        xs: 'var(--radius-xs)', sm: 'var(--radius-sm)', md: 'var(--radius-md)', lg: 'var(--radius-lg)',
+        xl: 'var(--radius-xl)', '2xl': 'var(--radius-2xl)', pill: 'var(--radius-pill)',
+      },
+      fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+      transitionTimingFunction: { glass: 'var(--ease-out)' },
+    },
+  },
+};</pre>
+<pre id="code-recipe" class="code p-6 max-h-[520px] hidden">/* Surfaces — opacity ↑ as blur ↓ as you move closer to the user */
+.glass-panel    { @apply bg-glass-panel    backdrop-blur-glass-lg backdrop-saturate-glass border border-glass-border        rounded-2xl shadow-soft-lg; }
+.glass-card     { @apply bg-glass-card     backdrop-blur-glass-md backdrop-saturate-glass border border-glass-border        rounded-xl  shadow-soft-md; }
+.glass-subtle   { @apply bg-glass-subtle   backdrop-blur-glass-sm                         border border-glass-border        rounded-lg; }
+.glass-elevated { @apply bg-glass-elevated backdrop-blur-glass-md                         border border-glass-border-strong shadow-soft-sm; }
+
+/* Buttons */
+.btn-primary   { @apply btn bg-grad-primary text-white shadow-glow hover:brightness-110; }
+.btn-secondary { @apply btn glass-elevated text-ink-900 hover:bg-white; }
+.btn-tint      { @apply btn bg-primary-100 text-primary-600; }
+
+/* Inputs */
+.field { @apply h-10 rounded-pill glass-elevated px-4 text-ink-900 placeholder:text-ink-500
+                focus:ring-4 focus:ring-primary-100 focus:border-primary-300; }
+
+/* Tabs & nav */
+.tab-underline[aria-selected="true"]  { @apply text-primary-500; } /* + 2px primary bar */
+.segment[aria-selected="true"]        { @apply bg-white text-primary-500 shadow-soft-sm; }
+.nav-item[aria-current="page"]        { @apply bg-glass-elevated text-ink-900 font-medium shadow-soft-xs; }
+
+/* Contrast rule: text only on glass-card (≥ .64) or more opaque surfaces. */</pre>
+    </div>
+  </section>
+
+  <!-- ============ 04 COMPONENTS ============ -->
+  <section id="components" class="mb-20">
+    <div class="mb-6"><p class="t-overline">04</p><h2 class="t-h1">Components</h2></div>
+
+    <div class="grid lg:grid-cols-2 gap-6">
+      <!-- Buttons -->
+      <div class="glass-panel p-6 md:p-8">
+        <h3 class="t-h2 mb-5">Buttons</h3>
+        <div class="space-y-5">
+          <div class="flex flex-wrap items-center gap-3">
+            <button class="btn-primary">Update this app</button>
+            <button class="btn-secondary">Open</button>
+            <button class="btn-tint">Start free trial</button>
+            <button class="btn-ghost">Cancel</button>
+          </div>
+          <div class="flex flex-wrap items-center gap-3">
+            <button class="btn-primary btn-sm">Update</button>
+            <button class="btn-secondary btn-sm">Open</button>
+            <button class="btn-primary btn-lg">Install</button>
+            <button class="btn-primary" disabled>Disabled</button>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <button class="btn-icon" aria-label="More" data-icon="more"></button>
+            <button class="btn-icon" aria-label="Cloud" data-icon="cloud"></button>
+            <button class="btn-icon glass-elevated" aria-label="Settings" data-icon="settings"></button>
+            <button class="btn-secondary"><span data-icon="download"></span>Download</button>
+            <button class="btn-primary"><span data-icon="plus"></span>New project</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Inputs -->
+      <div class="glass-panel p-6 md:p-8">
+        <h3 class="t-h2 mb-5">Inputs &amp; controls</h3>
+        <div class="space-y-4">
+          <label class="relative block">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-ink-500" data-icon="search"></span>
+            <input class="field !pl-11" placeholder="Search" />
+            <span class="absolute right-3 top-1/2 -translate-y-1/2 kbd">Ctrl K</span>
+          </label>
+          <div class="grid sm:grid-cols-2 gap-3">
+            <label class="block"><span class="t-caption font-medium text-ink-700 ml-1">Project name</span><input class="field mt-1.5" value="Spring campaign" /></label>
+            <label class="block"><span class="t-caption font-medium text-ink-700 ml-1">Category</span>
+              <select class="field mt-1.5 appearance-none"><option>Photography</option><option>Graphic Design</option><option>Video</option></select></label>
+          </div>
+          <div class="flex flex-wrap items-center gap-6 pt-1">
+            <label class="flex items-center gap-2.5 t-body cursor-pointer"><input type="checkbox" class="toggle" checked />Auto-update</label>
+            <label class="flex items-center gap-2.5 t-body cursor-pointer"><input type="checkbox" class="toggle" />Beta apps</label>
+            <label class="flex items-center gap-2 t-body cursor-pointer"><input type="checkbox" class="check" checked />Notify me</label>
+          </div>
+          <div>
+            <div class="flex justify-between t-caption mb-2"><span>Storage used</span><span class="font-mono">62 / 100 GB</span></div>
+            <div class="h-2 rounded-pill bg-ink-100 overflow-hidden"><div class="h-full w-[62%] rounded-pill bg-grad-primary"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="glass-panel p-6 md:p-8">
+        <h3 class="t-h2 mb-5">Tabs</h3>
+        <p class="t-overline mb-2">Primary navigation</p>
+        <div role="tablist" class="flex gap-7 border-b border-glass-divider" data-tabs>
+          <button role="tab" class="tab-underline" aria-selected="true">Apps</button>
+          <button role="tab" class="tab-underline" aria-selected="false">Your work <span class="dot bg-primary-500 w-1.5 h-1.5 align-top"></span></button>
+          <button role="tab" class="tab-underline" aria-selected="false">Discover</button>
+          <button role="tab" class="tab-underline" aria-selected="false">Market <span class="dot bg-primary-500 w-1.5 h-1.5 align-top"></span></button>
+        </div>
+        <p class="t-overline mt-6 mb-2">Segmented</p>
+        <div role="tablist" class="inline-flex gap-1 p-1 glass-subtle !rounded-pill" data-tabs>
+          <button role="tab" class="segment" aria-selected="true">Desktop</button>
+          <button role="tab" class="segment" aria-selected="false">Mobile</button>
+          <button role="tab" class="segment" aria-selected="false">Web</button>
+        </div>
+      </div>
+
+      <!-- Badges -->
+      <div class="glass-panel p-6 md:p-8">
+        <h3 class="t-h2 mb-5">Badges, status &amp; avatars</h3>
+        <div class="flex flex-wrap gap-2">
+          <span class="badge bg-success-100 text-success-500"><span class="dot bg-success-500"></span>Updated</span>
+          <span class="badge bg-primary-100 text-primary-600"><span class="dot bg-primary-500"></span>Update available</span>
+          <span class="badge bg-warning-100 text-warning-500"><span class="dot bg-warning-500"></span>Pending</span>
+          <span class="badge bg-danger-100 text-danger-500"><span class="dot bg-danger-500"></span>Failed</span>
+          <span class="badge bg-violet-100 text-violet-600">New</span>
+          <span class="badge glass-elevated text-ink-700">Trial · 30 days</span>
+        </div>
+        <div class="flex items-center gap-6 mt-6">
+          <div class="flex items-center gap-2 t-small text-ink-700"><span class="dot bg-success-500"></span>Updated</div>
+          <div class="flex items-center gap-2 t-small text-ink-700"><span class="dot bg-primary-500"></span>Update available</div>
+        </div>
+        <div class="flex items-center gap-5 mt-6">
+          <button class="btn-icon relative" aria-label="Notifications"><span data-icon="bell"></span><span class="count absolute -top-0.5 -right-0.5">3</span></button>
+          <div class="relative"><div class="w-9 h-9 rounded-full bg-grad-violet ring-2 ring-white shadow-soft-sm grid place-items-center text-white font-semibold text-[13px]">SA</div><span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-success-500 ring-2 ring-white"></span></div>
+          <div class="flex -space-x-2">
+            <div class="w-8 h-8 rounded-full ring-2 ring-white bg-[var(--sky-300)] grid place-items-center text-[11px] font-semibold text-ink-900">JL</div>
+            <div class="w-8 h-8 rounded-full ring-2 ring-white bg-violet-300 grid place-items-center text-[11px] font-semibold text-ink-900">MK</div>
+            <div class="w-8 h-8 rounded-full ring-2 ring-white bg-[var(--mint-200)] grid place-items-center text-[11px] font-semibold text-ink-900">RT</div>
+            <div class="w-8 h-8 rounded-full ring-2 ring-white glass-elevated grid place-items-center text-[11px] font-semibold text-ink-700">+4</div>
+          </div>
+          <span class="count">12</span>
+        </div>
+      </div>
+
+      <!-- Sidebar nav -->
+      <div class="glass-panel p-6 md:p-8">
+        <h3 class="t-h2 mb-5">Sidebar navigation</h3>
+        <div class="glass-subtle p-3 max-w-[260px]" data-nav>
+          <p class="t-overline px-3 pt-1 pb-2">Apps</p>
+          <a href="#" class="nav-item" aria-current="page"><span data-icon="grid" class="text-ink-500"></span>All Apps</a>
+          <a href="#" class="nav-item"><span data-icon="refresh" class="text-ink-500"></span>Updates<span class="count ml-auto !ring-0">3</span></a>
+          <p class="t-overline px-3 pt-4 pb-2">Categories</p>
+          <a href="#" class="nav-item"><span data-icon="camera" class="text-ink-500"></span>Photography</a>
+          <a href="#" class="nav-item"><span data-icon="pen" class="text-ink-500"></span>Graphic Design</a>
+          <a href="#" class="nav-item"><span data-icon="video" class="text-ink-500"></span>Video</a>
+        </div>
+      </div>
+
+      <!-- Notification / toast -->
+      <div class="glass-panel p-6 md:p-8">
+        <h3 class="t-h2 mb-5">Toast &amp; popover</h3>
+        <div class="glass-elevated rounded-lg shadow-soft-lg p-4 flex gap-3 max-w-[380px]">
+          <div class="w-9 h-9 rounded-md bg-success-100 text-success-500 grid place-items-center shrink-0" data-icon="check"></div>
+          <div class="flex-1"><p class="t-h3 !text-[14px]">Photo Studio updated</p><p class="t-small">Version 26.1 is ready. Restart to apply.</p>
+            <div class="flex gap-2 mt-3"><button class="btn-primary btn-sm">Restart</button><button class="btn-ghost btn-sm">Later</button></div></div>
+          <button class="btn-icon !w-7 !h-7 -mt-1 -mr-1" aria-label="Dismiss" data-icon="x"></button>
+        </div>
+        <div class="glass-elevated rounded-lg shadow-soft-lg p-1.5 mt-4 max-w-[220px]">
+          <button class="nav-item w-full !h-8 !text-[13px]"><span data-icon="external" class="text-ink-500"></span>Open</button>
+          <button class="nav-item w-full !h-8 !text-[13px]"><span data-icon="refresh" class="text-ink-500"></span>Check for updates</button>
+          <div class="h-px bg-glass-divider my-1 mx-2"></div>
+          <button class="nav-item w-full !h-8 !text-[13px] !text-danger-500"><span data-icon="trash"></span>Uninstall</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero banner -->
+    <div class="mt-6 rounded-xl bg-hero border border-glass-border shadow-soft-md relative overflow-hidden p-8 md:p-10 min-h-[200px]">
+      <div class="absolute inset-0 bg-sheen opacity-50 pointer-events-none"></div>
+      <div class="relative max-w-[440px]">
+        <div class="flex items-center gap-3"><div class="app-icon bg-[#2a0f1f] border-[#ff7e9b] text-[#ffb3c6]">St</div><span class="t-h2">Stock Library</span></div>
+        <p class="t-body mt-3 text-ink-700">Grab 10 free images with a 30-day free trial and find the perfect image for your next project.</p>
+        <button class="btn-primary mt-5">Start free trial</button>
+      </div>
+      <div class="absolute right-6 md:right-16 top-1/2 -translate-y-1/2 hidden sm:block w-[260px] h-[180px]" aria-hidden="true">
+        <div class="torus absolute right-0 bottom-0"></div>
+        <div class="orb w-9 h-9 absolute left-16 top-0"></div>
+        <div class="cone absolute left-6 top-16"></div>
+        <div class="cube absolute right-24 top-4"></div>
+      </div>
+      <span class="absolute top-4 right-4 t-overline">Hero banner</span>
+    </div>
+
+    <!-- List + cards -->
+    <div class="grid lg:grid-cols-[1.3fr_1fr] gap-6 mt-6">
+      <div>
+        <p class="t-overline mb-3">App list group</p>
+        <div class="glass-card divide-y divide-glass-divider" id="appList"></div>
+      </div>
+      <div>
+        <p class="t-overline mb-3">Feature card</p>
+        <article class="glass-card p-5">
+          <div class="flex items-center gap-3"><div class="app-icon bg-[#1f0a3a] border-[#b38cff] text-[#d9c2ff]">Mo</div><h4 class="t-h3">Motion Lab</h4><span class="badge bg-violet-100 text-violet-600 ml-auto !h-5 !text-[11px]">New</span></div>
+          <p class="t-small mt-3">Designing and developing modern web platforms with elastic layout.</p>
+          <div class="flex items-center justify-end gap-1 mt-5"><button class="btn-secondary btn-sm">Open</button><button class="btn-icon !w-8 !h-8" aria-label="More" data-icon="more"></button></div>
+        </article>
+        <article class="glass-card p-5 mt-4 flex items-center gap-4">
+          <div class="orb w-12 h-12 shrink-0"></div>
+          <div class="flex-1"><p class="t-h3 !text-[14px]">Empty state</p><p class="t-small">No projects yet. Start from a template.</p></div>
+          <button class="btn-tint btn-sm">Browse</button>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 05 COMPOSITION ============ -->
+  <section id="composition">
+    <div class="flex items-end justify-between mb-6">
+      <div><p class="t-overline">05</p><h2 class="t-h1">Composition: the reference screen, rebuilt</h2></div>
+      <p class="t-small max-w-[380px] text-right hidden md:block">Built only from the components and tokens above.</p>
+    </div>
+
+    <div class="glass-panel overflow-hidden">
+      <!-- title bar -->
+      <div class="flex items-center gap-6 h-16 px-5 border-b border-glass-divider">
+        <div class="flex gap-2 w-[200px] shrink-0"><span class="w-3 h-3 rounded-full bg-[#ff6b5f]"></span><span class="w-3 h-3 rounded-full bg-[#ffbe2e]"></span><span class="w-3 h-3 rounded-full bg-[#29c840]"></span></div>
+        <div role="tablist" class="hidden md:flex gap-7 self-stretch items-end" data-tabs>
+          <button role="tab" class="tab-underline !h-16" aria-selected="true">Apps</button>
+          <button role="tab" class="tab-underline !h-16" aria-selected="false">Your work <span class="dot bg-primary-500 w-1.5 h-1.5 align-top"></span></button>
+          <button role="tab" class="tab-underline !h-16" aria-selected="false">Discover</button>
+          <button role="tab" class="tab-underline !h-16" aria-selected="false">Market <span class="dot bg-primary-500 w-1.5 h-1.5 align-top"></span></button>
+        </div>
+        <label class="relative flex-1 max-w-[240px] ml-auto">
+          <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-500" data-icon="search"></span>
+          <input class="field !h-9 !pl-10 !text-[13px]" placeholder="Search" />
+        </label>
+        <button class="btn-icon relative" aria-label="Notifications"><span data-icon="bell"></span><span class="count absolute -top-0.5 -right-0.5">3</span></button>
+        <button class="btn-icon" aria-label="Cloud" data-icon="cloud"></button>
+        <div class="w-8 h-8 rounded-full bg-grad-violet ring-2 ring-white shadow-soft-sm grid place-items-center text-white font-semibold text-[12px]">SA</div>
+      </div>
+
+      <div class="grid md:grid-cols-[220px_1fr]">
+        <!-- sidebar -->
+        <aside class="p-3 border-r border-glass-divider bg-glass-subtle" data-nav>
+          <p class="t-overline px-3 pt-3 pb-2">Apps</p>
+          <a href="#" class="nav-item" aria-current="page"><span data-icon="grid" class="text-ink-500"></span>All Apps</a>
+          <a href="#" class="nav-item"><span data-icon="refresh" class="text-ink-500"></span>Updates<span class="count ml-auto !ring-0">3</span></a>
+          <p class="t-overline px-3 pt-5 pb-2">Categories</p>
+          <a href="#" class="nav-item"><span data-icon="camera" class="text-ink-500"></span>Photography</a>
+          <a href="#" class="nav-item"><span data-icon="pen" class="text-ink-500"></span>Graphic Design</a>
+          <a href="#" class="nav-item"><span data-icon="video" class="text-ink-500"></span>Video</a>
+          <a href="#" class="nav-item"><span data-icon="brush" class="text-ink-500"></span>Illustrations</a>
+          <a href="#" class="nav-item"><span data-icon="layout" class="text-ink-500"></span>UI/UX</a>
+          <a href="#" class="nav-item"><span data-icon="cube" class="text-ink-500"></span>3D / AR</a>
+          <p class="t-overline px-3 pt-5 pb-2">Fonts</p>
+          <a href="#" class="nav-item"><span class="w-4 text-center font-serif italic text-ink-500">f</span>Manage fonts</a>
+          <p class="t-overline px-3 pt-5 pb-2">Resources</p>
+          <a href="#" class="nav-item"><span data-icon="image" class="text-ink-500"></span>Stock</a>
+          <a href="#" class="nav-item"><span data-icon="book" class="text-ink-500"></span>Tutorials</a>
+          <a href="#" class="nav-item"><span data-icon="users" class="text-ink-500"></span>Community</a>
+        </aside>
+
+        <!-- content -->
+        <div class="p-6 md:p-8 bg-glass-subtle/0">
+          <div class="flex items-center justify-between mb-6">
+            <h3 class="t-h2">All Apps</h3>
+            <div role="tablist" class="inline-flex gap-1 p-1 glass-subtle !rounded-pill" data-tabs>
+              <button role="tab" class="segment" aria-selected="true">Desktop</button>
+              <button role="tab" class="segment" aria-selected="false">Mobile</button>
+              <button role="tab" class="segment" aria-selected="false">Web</button>
+            </div>
+          </div>
+
+          <div class="rounded-xl bg-hero border border-glass-border shadow-soft-md relative overflow-hidden p-7 min-h-[170px]">
+            <div class="absolute inset-0 bg-sheen opacity-50 pointer-events-none"></div>
+            <div class="relative max-w-[380px]">
+              <div class="flex items-center gap-3"><div class="app-icon !w-8 !h-8 bg-[#2a0f1f] border-[#ff7e9b] text-[#ffb3c6]">St</div><span class="t-h3 !text-[18px]">Stock Library</span></div>
+              <p class="t-small !text-ink-700 mt-2">Grab 10 free images with a 30-day free trial and find the perfect image for your new project.</p>
+              <button class="btn-primary btn-sm mt-4">Start free trial</button>
+            </div>
+            <div class="absolute right-4 top-1/2 -translate-y-1/2 hidden sm:block w-[230px] h-[160px]" aria-hidden="true">
+              <div class="torus absolute -right-4 -bottom-4"></div>
+              <div class="orb w-8 h-8 absolute left-14 -top-2"></div>
+              <div class="cone absolute left-4 top-14"></div>
+              <div class="cube absolute right-20 top-2"></div>
+            </div>
+          </div>
+
+          <p class="t-overline mt-8 mb-3">Installed</p>
+          <div class="glass-card divide-y divide-glass-divider" id="appList2"></div>
+
+          <p class="t-overline mt-8 mb-3">Apps in your plan</p>
+          <div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-4" id="planCards"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="mx-auto max-w-[1240px] px-6 pb-10 t-caption flex justify-between">
+  <span>Aurora Glass design system</span><span>Light-only · WCAG AA text contrast</span>
+</footer>
+
+<script>
+  // ---------- Icons (1.6px stroke, 18px) ----------
+  const P = {
+    search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+    bell: '<path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10 20a2 2 0 0 0 4 0"/>',
+    cloud: '<path d="M7 18a5 5 0 1 1 1-9.9A6 6 0 0 1 19.5 10 4 4 0 0 1 18 18Z"/>',
+    more: '<circle cx="5" cy="12" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/><circle cx="19" cy="12" r="1.3" fill="currentColor"/>',
+    grid: '<rect x="4" y="4" width="6" height="6" rx="1.5"/><rect x="14" y="4" width="6" height="6" rx="1.5"/><rect x="4" y="14" width="6" height="6" rx="1.5"/><rect x="14" y="14" width="6" height="6" rx="1.5"/>',
+    refresh: '<path d="M20 11a8 8 0 0 0-14.9-3M4 13a8 8 0 0 0 14.9 3"/><path d="M4 4v4h4M20 20v-4h-4"/>',
+    camera: '<path d="M4 8h3l2-3h6l2 3h3v11H4Z"/><circle cx="12" cy="13" r="3.5"/>',
+    pen: '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
+    video: '<rect x="3" y="6" width="13" height="12" rx="2"/><path d="m16 10 5-3v10l-5-3"/>',
+    brush: '<path d="M9.5 14.5 19 5a1.4 1.4 0 0 0-2-2l-9.5 9.5"/><path d="M7 14c-2 0-3 1.5-3 3s-1 2-1 2c3 1 7 0 7-3a2 2 0 0 0-3-2Z"/>',
+    layout: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 9v11"/>',
+    cube: '<path d="m12 3 8 4.5v9L12 21l-8-4.5v-9Z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/>',
+    image: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/>',
+    book: '<path d="M4 5a2 2 0 0 1 2-2h14v16H6a2 2 0 0 0-2 2Z"/><path d="M4 19V5"/>',
+    users: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"/>',
+    settings: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.9 1.2V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-2.9-1.2l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.7 1.7 0 0 0 3 14H3a2 2 0 1 1 0-4h.1A1.7 1.7 0 0 0 4.6 9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.7 1.7 0 0 0 10 4.6V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 2.9 1.2l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.7 1.7 0 0 0 21 10h.1a2 2 0 1 1 0 4Z"/>',
+    download: '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>',
+    plus: '<path d="M12 5v14M5 12h14"/>',
+    check: '<path d="m5 12 5 5 9-10"/>',
+    x: '<path d="M6 6l12 12M18 6 6 18"/>',
+    copy: '<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/>',
+    external: '<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',
+    trash: '<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>',
+    layers: '<path d="m12 3 9 5-9 5-9-5Z"/><path d="m3 13 9 5 9-5"/>',
+    sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+    palette: '<path d="M12 3a9 9 0 1 0 0 18c1.5 0 2-1 2-2s-1-1.5-1-2.5 1-1.5 2-1.5h2a4 4 0 0 0 4-4c0-4.4-4-8-9-8Z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="15" cy="7" r="1"/>',
+    stack: '<rect x="4" y="13" width="16" height="7" rx="2"/><rect x="6" y="8" width="12" height="5" rx="1.5"/><rect x="8" y="4" width="8" height="4" rx="1"/>',
+    sparkle: '<path d="M12 3c.5 4 2 5.5 6 6-4 .5-5.5 2-6 6-.5-4-2-5.5-6-6 4-.5 5.5-2 6-6Z"/><path d="M19 15c.2 1.6.9 2.3 2.5 2.5-1.6.2-2.3.9-2.5 2.5-.2-1.6-.9-2.3-2.5-2.5 1.6-.2 2.3-.9 2.5-2.5Z"/>',
+  };
+  const svg = (n, s = 18) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[n] || ''}</svg>`;
+
+  // ---------- Color swatches with contrast ----------
+  const lum = hex => { const c = hex.match(/\w\w/g).map(h => { const v = parseInt(h, 16) / 255; return v <= .03928 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4; }); return .2126 * c[0] + .7152 * c[1] + .0722 * c[2]; };
+  const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m); return (x + .05) / (y + .05); };
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const groups = [
+    ['Ink · text', ['--ink-900', '--ink-700', '--ink-500', '--ink-300', '--ink-100']],
+    ['Primary · action', ['--primary-600', '--primary-500', '--primary-300', '--primary-100', '--primary-50']],
+    ['Accent · pastel', ['--violet-600', '--violet-500', '--violet-300', '--violet-100', '--sky-300', '--sky-200', '--mint-200', '--coral-400']],
+    ['Semantic', ['--success-500', '--success-100', '--warning-500', '--warning-100', '--danger-500', '--danger-100']],
+  ];
+  document.getElementById('colorGroups').innerHTML = groups.map(([title, vars]) => `
+    <div><p class="t-overline mb-3">${title}</p>
+      <div class="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-8 gap-3">${vars.map(v => {
+        const hex = css(v); const r = ratio(hex, '#ffffff'); const pass = r >= 4.5;
+        return `<div class="rounded-lg bg-glass-elevated border border-glass-border-strong p-1.5 shadow-soft-xs">
+          <div class="h-14 rounded-md" style="background:${hex};box-shadow:inset 0 0 0 1px rgba(24,33,59,.06)"></div>
+          <div class="px-1 pt-2 pb-0.5"><p class="font-mono text-[11px] text-ink-900 truncate">${v}</p>
+          <div class="flex justify-between items-center"><span class="font-mono text-[11px] text-ink-500 uppercase">${hex}</span>
+          <span class="text-[10px] font-semibold ${pass ? 'text-success-500' : 'text-ink-500'}">${r.toFixed(1)}</span></div></div></div>`;
+      }).join('')}</div></div>`).join('');
+
+  // ---------- Gradients ----------
+  const grads = [
+    ['--grad-canvas', 'bg-canvas', 'Page background', 'sky #CFE7FB @0,0 · lilac #E7DCFB @100,100 · periwinkle #DFE3FF @85,10 · base 160° #E3F0FC 0% → #EBEAFC 55% → #F3EBFA 100%'],
+    ['--grad-hero', 'bg-hero', 'Hero banner', '105° #C9C6FB 0% → #D7E8EA 32% → #E6F5D9 52% → #EEF4FF 78% → #E3E6FF 100%'],
+    ['--grad-primary', 'bg-grad-primary', 'Primary button, progress', '180° #4874F3 0% → #3563E9 100%'],
+    ['--grad-violet', 'bg-grad-violet', 'Avatar, accent fills', '135° #C3B4FB 0% → #8B6CF0 100%'],
+    ['--grad-orb', 'bg-orb', '3D primitives', 'radial @30%,28% #F4EFFF 0% → #C3B4FB 35% → #8B6CF0 75% → #6C4FD8 100%'],
+    ['--grad-sheen', 'bg-sheen', 'Glass top highlight overlay', '180° white 70% 0% → white 0% 100%'],
+  ];
+  document.getElementById('gradients').innerHTML = grads.map(([v, tw, use, stops]) => `
+    <div class="glass-card p-2 !shadow-soft-sm">
+      <div class="h-24 rounded-lg ${v === '--grad-sheen' ? 'bg-[var(--sky-300)]' : ''} relative overflow-hidden"><div class="absolute inset-0" style="background:var(${v})"></div>
+      ${v === '--grad-orb' ? '' : ''}</div>
+      <div class="p-3"><div class="flex justify-between items-baseline"><p class="font-mono text-[12px] text-ink-900">${v}</p><p class="font-mono text-[11px] text-primary-600">${tw}</p></div>
+      <p class="t-caption mt-0.5">${use}</p><p class="font-mono text-[10.5px] leading-4 text-ink-500 mt-2">${stops}</p></div></div>`).join('');
+
+  // ---------- Radius & spacing ----------
+  document.getElementById('radii').innerHTML = [['xs', 6], ['sm', 8], ['md', 12], ['lg', 16], ['xl', 20], ['2xl', 28], ['pill', 999]].map(([n, v]) => `
+    <div class="text-center"><div class="h-14 bg-glass-elevated border border-glass-border-strong shadow-soft-sm" style="border-radius:var(--radius-${n})"></div>
+    <p class="font-mono text-[11px] text-ink-900 mt-2">rounded-${n}</p><p class="t-caption">${v === 999 ? '999' : v}px</p></div>`).join('');
+  document.getElementById('spacing').innerHTML = [1, 2, 3, 4, 5, 6, 8, 10, 14].map(n => `
+    <div class="flex items-center gap-3"><span class="font-mono text-[11px] text-ink-500 w-20">--space-${n}</span>
+    <div class="h-3 rounded-pill bg-grad-violet" style="width:var(--space-${n})"></div><span class="font-mono text-[11px] text-ink-700">${n * 4}px</span></div>`).join('');
+
+  // ---------- App list & cards ----------
+  const apps = [
+    { ab: 'Ph', name: 'Photo Studio', bg: '#061e33', bd: '#31a8ff', fg: '#7cc8ff', status: 'Updated', ok: true },
+    { ab: 'Ve', name: 'Vector Pro', bg: '#2b1600', bd: '#ff9a00', fg: '#ffc266', status: 'Update available', ok: false },
+    { ab: 'Xp', name: 'Prototype X', bg: '#2e001f', bd: '#ff61f6', fg: '#ffa3fa', status: 'Updated', ok: true },
+  ];
+  const row = a => `
+    <div class="flex items-center gap-4 px-4 py-3">
+      <div class="app-icon" style="background:${a.bg};border-color:${a.bd};color:${a.fg}">${a.ab}</div>
+      <p class="t-h3 !font-medium flex-1">${a.name}</p>
+      <div class="hidden sm:flex items-center gap-2 t-small !text-ink-700 w-40"><span class="dot ${a.ok ? 'bg-success-500' : 'bg-primary-500'}"></span>${a.status}</div>
+      <div class="w-36 flex justify-end">${a.ok ? '<button class="btn-secondary btn-sm">Open</button>' : '<button class="btn-primary btn-sm">Update this app</button>'}</div>
+      <button class="btn-icon !w-8 !h-8" aria-label="More">${svg('more')}</button>
+    </div>`;
+  document.getElementById('appList').innerHTML = apps.map(row).join('');
+  document.getElementById('appList2').innerHTML = apps.map(row).join('');
+  const plan = [
+    { ab: 'Pr', name: 'Premiere Cut', bg: '#1a0033', bd: '#9999ff', fg: '#c2c2ff', update: true },
+    { ab: 'Fx', name: 'After Motion', bg: '#1a0033', bd: '#b38cff', fg: '#d9c2ff', update: false },
+    { ab: 'Ly', name: 'Layout Desk', bg: '#33001a', bd: '#ff3366', fg: '#ff99b3', update: false },
+  ];
+  document.getElementById('planCards').innerHTML = plan.map(a => `
+    <article class="glass-card p-5 transition-transform duration-300 ease-glass hover:-translate-y-0.5 hover:shadow-soft-lg">
+      <div class="flex items-center gap-3"><div class="app-icon !w-8 !h-8" style="background:${a.bg};border-color:${a.bd};color:${a.fg}">${a.ab}</div><h4 class="t-h3">${a.name}</h4></div>
+      <p class="t-small mt-3">Designing and developing modern web platforms with elastic layout.</p>
+      <div class="flex items-center justify-end gap-1 mt-5">${a.update ? '<button class="btn-primary btn-sm">Update</button>' : '<button class="btn-secondary btn-sm">Open</button>'}
+      <button class="btn-icon !w-8 !h-8" aria-label="More">${svg('more')}</button></div>
+    </article>`).join('');
+
+  // ---------- Inject icons ----------
+  document.querySelectorAll('[data-icon]').forEach(el => {
+    const big = el.classList.contains('w-10');
+    el.insertAdjacentHTML('afterbegin', svg(el.dataset.icon, big ? 20 : 18));
+    if (!el.className.includes('inline') && !el.className.includes('grid') && el.tagName === 'SPAN') el.classList.add('inline-flex');
+  });
+
+  // ---------- Interactions ----------
+  document.querySelectorAll('[data-tabs]').forEach(list => list.addEventListener('click', e => {
+    const t = e.target.closest('[role=tab]'); if (!t) return;
+    list.querySelectorAll('[role=tab]').forEach(b => b.setAttribute('aria-selected', b === t));
+  }));
+  document.querySelectorAll('[data-nav]').forEach(nav => nav.addEventListener('click', e => {
+    const a = e.target.closest('.nav-item'); if (!a) return; e.preventDefault();
+    nav.querySelectorAll('.nav-item').forEach(n => n.removeAttribute('aria-current')); a.setAttribute('aria-current', 'page');
+  }));
+
+  const codeTabs = document.getElementById('codeTabs');
+  let activeCode = 'code-css';
+  // Over http, show the live token file; file:// keeps the embedded copy.
+  if (location.protocol.startsWith('http')) {
+    fetch('tokens.css').then(r => r.ok ? r.text() : Promise.reject())
+      .then(text => { document.getElementById('code-css').textContent = text; }).catch(() => {});
+  }
+  codeTabs.addEventListener('click', e => {
+    const t = e.target.closest('[role=tab]'); if (!t) return;
+    codeTabs.querySelectorAll('[role=tab]').forEach(b => b.setAttribute('aria-selected', b === t));
+    ['code-css', 'code-tw', 'code-recipe'].forEach(id => document.getElementById(id).classList.toggle('hidden', id !== t.dataset.target));
+    activeCode = t.dataset.target;
+  });
+  const copyBtn = document.getElementById('copyBtn');
+  copyBtn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(document.getElementById(activeCode).textContent);
+    const label = copyBtn.lastElementChild; label.textContent = 'Copied'; setTimeout(() => label.textContent = 'Copy', 1400);
+  });
+
+  const range = document.getElementById('blurRange'), demo = document.getElementById('blurDemo'), val = document.getElementById('blurVal');
+  range.addEventListener('input', () => {
+    const f = `blur(${range.value}px) saturate(160%)`;
+    demo.style.backdropFilter = f; demo.style.webkitBackdropFilter = f;
+    val.textContent = range.value + 'px'; range.style.setProperty('--p', (range.value / 40 * 100) + '%');
+  });
+</script>
+</body>
+</html>

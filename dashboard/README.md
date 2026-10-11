@@ -60,12 +60,23 @@ steps are in [DATA-CONTRACT.md](DATA-CONTRACT.md).
 ## Design notes
 
 - **Layout** follows the reference admin dashboard: a left sidebar with a run
-  picker and identity card, a page title with a mode badge, a provenance
-  banner, filter chips and segmented tabs, and tables with a detail panel.
-- **Style** is restrained glassmorphism: frosted white panels over a soft
-  blue/violet gradient with blurred light orbs, dark navy text for contrast,
-  thin borders, and soft shadows. Colors carry meaning only: green passed,
-  red failed/rejected, amber missing or synthetic, blue pending/info.
+  picker and identity card, a page title with a mode badge, a warning
+  banner for synthetic or unlabeled bundles, filter chips and segmented
+  tabs, and tables with a detail panel.
+- **Style** is restrained glassmorphism: translucent frosted panels over a
+  pastel gradient with blurred light orbs, dark navy text for contrast,
+  thin translucent white borders, and soft tinted shadows. Colors carry
+  meaning only: green passed, red failed/rejected, amber missing or
+  synthetic, blue pending/info.
+- **Tokens:** every color, glass opacity, blur, gradient, shadow, radius,
+  spacing step and type style comes from `../design-system/tokens.css`, which
+  the design system owns and documents in `../design-system/index.html`. Vite
+  inlines it into the dashboard CSS at build time, so nothing outside
+  `dashboard/` is served. `styles.css` maps dashboard roles (`--good`,
+  `--muted`, ...) onto those tokens. The only raw colors left are white, the
+  opaque image checkerboard, and the region overlay colors.
+- **Fonts:** Inter and JetBrains Mono load from Google Fonts, as on the design
+  system page. Offline, the token font stacks fall back to system fonts.
 - **Target sizes:** sized for a 1440×1000 judging screen. The overview fits
   the outcome and history above the fold. Breakpoints at 1280 px and 980 px
   keep it usable on laptops.
