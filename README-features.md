@@ -80,7 +80,7 @@ From this worktree with dependencies and managed sign-in ready, exactly one CLI 
 python -m features.pipeline --pilot --request "Implement Contrast"
 ```
 
-Fixed budget: 600 seconds total; at most two discovery invocations sharing 90 seconds / 20 UI
+Fixed budget: 1200 seconds total; up to five isolated harness repairs within a shared 300-second repair window; stop after two repeated failures; at most two discovery invocations sharing 90 seconds / 20 UI
 actions / 24 observations; at most two recoverable UI-action corrections and one specification correction; zero fresh-browser/reference retries; one diagnostic default
 setup check and two fresh-document procedure replays; at most four fresh investigation
 experiments; two candidates; 12 builder calls and six evidence reads per candidate;
@@ -99,3 +99,10 @@ once-only final checks. An unresolved specification, procedure failure, mismatch
 timeout or cancelled job is an honest outcome, never a working-feature claim.
 Acceptance remains scoped to recorded cases and an isolated candidate workspace;
 promoting it requires a separate later action.
+
+Harness repair is limited to output_schema and visible row resolution. It requires a
+trusted reproducer failing before the patch and passing afterward, plus regression
+checks. Model patches remain isolated artifacts; no canonical source is promoted.
+Unknown faults stop. Evaluators, thresholds, expected outputs and capability brokers
+cannot be patched. Tested patches can be recalled only with matching host hashes and
+fresh offline regression gates; live discovery must still validate the procedure.

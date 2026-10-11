@@ -150,7 +150,7 @@ def candidate(request,directory):
                 page.locator('input[type=file]').set_input_files(first['input'])
                 expect(page.get_by_role('img',name='Original image preview: '+Path(first['input']).name,exact=True)).to_be_visible()
                 page.get_by_role('menuitem',name=op['ui_menu'] if op else 'Effects',exact=True).click()
-                page.get_by_role('menuitem',name=op['ui_item'] if op else 'Gaussian Blur…',exact=True).click()
+                page.get_by_role('menuitem',name=op['ui_item'] if op else 'Gaussian Blurâ€¦',exact=True).click()
                 import re
                 dialog=page.get_by_role('dialog'); slider=dialog.get_by_role('slider',name=re.compile('^'+(op['ui_parameter'] if op else 'Percentage')+r'(?::.*)?$'))
                 slider.press('Home')
@@ -189,6 +189,10 @@ def main():
     d=within(args.directory,EVIDENCE/'learning'); d.mkdir(parents=True,exist_ok=True)
     try:
         request=json.loads(args.request.read_text())
+        if request.get('harness_patch'):
+            if args.kind not in ('feature-discovery','feature-reference'): raise ValueError('Harness patches restricted to feature reference workers')
+            from features.repair import install_file
+            install_file(request['harness_patch'])
         result={'status':'passed'}
         if args.kind=='reference': result=reference(request,d)
         elif args.kind=='brightness-reference':

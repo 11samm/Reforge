@@ -29,6 +29,10 @@ class AdjustmentHarness(Harness):
                 if (base/name).is_file(): self.protected[str(base/name)]=digest(base/name)
         save(self.directory/'protected-manifest.json',self.protected)
         self.op=operation_spec('contrast',spec)
+    def worker(self,kind,request,directory,timeout,*args,**kwargs):
+        patch=getattr(self,'harness_patch',None)
+        if patch and kind=='feature-reference': request={**request,'harness_patch':str(patch)}
+        return super().worker(kind,request,directory,timeout,*args,**kwargs)
     def ask(self,*args,**kwargs):
         try: return super().ask(*args,**kwargs)
         finally:
@@ -77,7 +81,7 @@ class AdjustmentHarness(Harness):
         self.emit('evaluation',label=label,result=r); return r
     def builder(self,index,previous):
         sources={n:(self.app/n).read_text(encoding='utf-8') for n in ('src/main.tsx','src/current-image.ts')}
-        prompt='Implement Contrast independently from only supplied evidence and contract. No brightness formula or neutral assumption. Write src/contrast.ts exporting applyContrast(raster: Raster, value: number): Raster. Preserve input immutability, dimensions, codec, brightness and every existing baseline. Wire Image -> Contrast… with accessible Contrast slider and Apply/Close; disable with no image. Source/config/dependency restrictions apply. No reference internals, execution or other tools. Only src/main.tsx, src/contrast.ts and README.md writable. '+json.dumps({'observed_domain':self.domain,'claims':self.claims,'evidence':self.compact(),'previous':previous,'policy':self.suite['policy']},separators=(',',':'))
+        prompt='Implement Contrast independently from only supplied evidence and contract. No brightness formula or neutral assumption. Write src/contrast.ts exporting applyContrast(raster: Raster, value: number): Raster. Preserve input immutability, dimensions, codec, brightness and every existing baseline. Wire Image -> Contrastâ€¦ with accessible Contrast slider and Apply/Close; disable with no image. Source/config/dependency restrictions apply. No reference internals, execution or other tools. Only src/main.tsx, src/contrast.ts and README.md writable. '+json.dumps({'observed_domain':self.domain,'claims':self.claims,'evidence':self.compact(),'previous':previous,'policy':self.suite['policy']},separators=(',',':'))
         reader=packets.EvidenceReader({e['id']:{'input':e['input'],'export':e['expected']} for e in self.evidence},self.config['evidence_reads'])
         self.ask(prompt,'builder-'+str(index),None,True,role='repair' if previous else 'builder',supplied=sources,reader=reader)
     def finish(self,final,final_baseline):

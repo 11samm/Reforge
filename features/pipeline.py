@@ -13,7 +13,7 @@ from learning.core import DEFAULTS, save, digest, decide
 from .spec import request_id, parameter, value_in_domain
 from .learning import AdjustmentHarness
 
-BUDGET={'seconds':600,'discovery_seconds':90,'discovery_invocations':2,'action_corrections':2,'discovery_actions':20,'observations':24,'validation_replays':2,'default_check':1,'experiments':4,'candidates':2,'reference_retries':0,'builder_tool_calls':12,'evidence_reads':6,'final_cases':2}
+BUDGET={'seconds':1200,'harness_repairs':5,'repair_seconds':300,'same_failure_limit':2,'discovery_seconds':90,'discovery_invocations':2,'action_corrections':2,'discovery_actions':20,'observations':24,'validation_replays':2,'default_check':1,'experiments':4,'candidates':2,'reference_retries':0,'builder_tool_calls':12,'evidence_reads':6,'final_cases':2}
 
 def diagnostic(path):
     im=Image.new('RGBA',(17,9)); im.putdata([(v,v,v,255) for y in range(9) for v in (0,1,2,15,31,63,64,127,128,129,191,223,239,253,254,255,32)])
@@ -44,12 +44,32 @@ def run(request, job_id, emit):
     # Harness process/deadline helper, without constructing or modifying an accepted workspace.
     from learning.run import Harness
     from learning.core import Budget
-    control=object.__new__(Harness); control.config=copy.deepcopy(DEFAULTS); control.config.update(run_seconds=600,reserve_seconds=100)
+    control=object.__new__(Harness); control.config=copy.deepcopy(DEFAULTS); control.config.update(run_seconds=1200,reserve_seconds=100)
     control.budget=Budget(control.config); control.directory=directory
-    def worker(kind,request,d,timeout): return Harness.worker(control,kind,request,d,timeout)
+    patch=None
+    def worker(kind,request,d,timeout):
+        if patch and kind in ('feature-discovery','feature-reference'): request={**request,'harness_patch':str(patch)}
+        return Harness.worker(control,kind,request,d,timeout)
     path=directory/'inputs/diagnostic.png'; diagnostic(path)
     emit('stage',stage='Discover',activity='Inspecting visible menus and adjustment controls')
-    r=worker('feature-discovery',{'request':request,'input_path':str(path),'input_sha256':digest(path),'timeout':90},directory/'discovery'/'attempt',100)
+    from .repair import classify, repair, RepairBudget, recall, remember
+    patch=recall(directory/'repairs',emit)
+    repairs=RepairBudget(seconds=300,attempts=5); history=[]; latest_case=None
+    for attempt in range(6):
+        attempt_dir=directory/'discovery'/('attempt' if attempt==0 else 'attempt-'+str(attempt+1))
+        r=worker('feature-discovery',{'request':request,'input_path':str(path),'input_sha256':digest(path),'timeout':90},attempt_dir,100)
+        history.append({'attempt':attempt+1,'status':r.get('status'),'error':r.get('error')})
+        save(directory/'repair-summary.json',{'attempts':history,'repairs_used':repairs.used,'host_modified':bool(patch),'canonical_host_modified':False})
+        if r.get('status')=='discovered':
+            if patch and latest_case: remember(patch,latest_case)
+            break
+        case=classify(attempt_dir,r)
+        if case is None or not repairs.admit(case): break
+        emit('activity',activity='Classified reproducible harness defect; isolated repair '+str(repairs.used)+'/5')
+        candidate=repair(case,directory/'repairs'/str(repairs.used),emit,min(repairs.remaining(),control.budget.remaining()-100),prior=patch)
+        if candidate is None: break
+        patch=candidate; latest_case=case
+    emit('evidence',artifact='repair-summary.json',activity='Original attempts and repair history retained')
     save(directory/'discovery-summary.json',{'status':r.get('status'),'error':r.get('error'),'unresolved':r.get('spec',{}).get('unresolved',[]),'observation_ids':r.get('observation_ids',[])})
     emit('evidence',artifact='discovery-summary.json',activity='Discovery outcome recorded')
     if r.get('spec'):
@@ -71,8 +91,9 @@ def run(request, job_id, emit):
     app=ROOT/'dev-workspaces'/('feature-'+job_id)
     shutil.copytree(ROOT/'generated-app',app,ignore=shutil.ignore_patterns('node_modules','dist'))
     shutil.copytree(ROOT/'generated-app/node_modules',app/'node_modules')
-    config=copy.deepcopy(DEFAULTS); config.update(fresh_experiments=4,candidates=2,retries=0,run_seconds=max(120,int(600-(time.monotonic()-start))),reserve_seconds=100,command_seconds=90)
+    config=copy.deepcopy(DEFAULTS); config.update(fresh_experiments=4,candidates=2,retries=0,run_seconds=max(120,min(600,int(1200-(time.monotonic()-start)))),reserve_seconds=100,command_seconds=90)
     h=AdjustmentHarness(config,app,spec,validation,notify=emit)
+    h.harness_patch=patch
     # Save presentation records under the job root; only explicitly copied artifacts are served.
     h.run(); save(directory/'visible-report.json',h.report); emit('evidence',artifact='visible-report.json',activity='Frozen visible gate outcome recorded')
     if h.report['status']!='accepted': return {'status':'unresolved','classification':h.report['stop_reason']}
@@ -85,7 +106,7 @@ def run(request, job_id, emit):
         ident='final-'+str(i); final_input=directory/'final/inputs'/(ident+'.png'); final_input.parent.mkdir(parents=True,exist_ok=True)
         render({'kind':kind,'width':43+i*4,'height':13+i*4}).save(final_input)
         value=p['min']+p['step']*round((p['max']-p['min'])/p['step']*(0.2 if i==0 else 0.8))
-        r=Harness.worker(control,'feature-reference',{'spec':spec,'input_path':str(final_input),'input_sha256':digest(final_input),'value':value},directory/'final/experiments'/ident,60,cleanup=True)
+        r=Harness.worker(control,'feature-reference',{'spec':spec,'input_path':str(final_input),'input_sha256':digest(final_input),'value':value,**({'harness_patch':str(patch)} if patch else {})},directory/'final/experiments'/ident,60,cleanup=True)
         if r.get('status')!='observed': return {'status':'failed','classification':'final_procedure_failure'}
         rows.append({'id':ident,'value':value,'input':str(final_input),'expected':r['output_path'],'input_sha256':digest(final_input),'expected_sha256':digest(r['output_path']),'regions':{'full':[0,0,43+i*4,13+i*4]}})
     suite={'id':'final-contrast-v1','policy':load_policy(),'cases':rows}; save(directory/'final/suite.json',suite)
@@ -93,7 +114,7 @@ def run(request, job_id, emit):
     result['baseline_pass']=h.report['final_baseline_pass']; accepted,reason=decide(result)
     save(directory/'final-summary.json',{'status':'accepted' if accepted else 'unresolved','classification':reason,'cases':[{k:c.get(k) for k in ('case_id','status','classification','metrics')} for c in result.get('cases',[])],'promoted':False})
     emit('evidence',artifact='final-summary.json',activity='Independent final evaluation complete')
-    return {'status':'accepted' if accepted else 'unresolved','classification':reason,'promoted':False,'scope':'frozen visible and two once-only fresh cases; isolated workspace'}
+    return {'status':'accepted' if accepted else 'unresolved','classification':reason,'promoted':False,'harness_repaired':bool(patch),'scope':'frozen visible and two once-only fresh cases; isolated workspace'}
 
 def main():
     parser=argparse.ArgumentParser(); parser.add_argument('--pilot',action='store_true'); parser.add_argument('--request',default='Implement Contrast'); args=parser.parse_args()

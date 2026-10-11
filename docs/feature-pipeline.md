@@ -147,3 +147,21 @@ Specification recoveries are counted only after validation. Arbitrary learned co
 reference algorithms, final outputs and evaluator modifications are not accepted.
 The model does not modify the trusted harness; unknown host defects still stop and
 require a separately tested code repair. Recovery is offline-tested, not live-validated.
+
+## Bounded harness repair
+
+Jobs have a visible 1200-second total deadline. Discovery infrastructure failures may
+trigger up to five proposals within a shared 300-second repair window. Stop when the
+same failure repeats after two attempted fixes, budgets expire, or no failing offline
+reproducer / passing patched gate can establish progress. Only output_schema and
+resolve functions are patchable, under static syntax/call restrictions. Models cannot
+write tests, select shell commands, change evaluator policies or capability brokers,
+or read final expected outputs. Other host defects stop honestly.
+
+Patches run in owned worker interpreters and reference-free gate subprocesses, never
+as canonical repository edits. Trusted schema/mock-row reproducers must fail before
+the repair model is called, then pass with the patch along with regression tests.
+Every original attempt, patch, diagnostic, gate and usage record is retained. Accepted
+feature results indicate whether infrastructure was repaired. Matching-host validated
+patches can be recalled after rerunning offline gates, while current reference discovery
+and verification remain mandatory. Procedural memory is not target algorithm evidence.

@@ -26,6 +26,7 @@ def main():
                 for m in (p.parent/'model').glob('*/invocation.json'): usages.append(json.loads(m.read_text()).get('usage'))
         except ValueError: pass
     for p in (d/'discovery').rglob('invocation.json'): usages.append(json.loads(p.read_text()).get('usage'))
+    for p in (d/'repairs').rglob('invocation.json'): usages.append(json.loads(p.read_text()).get('usage'))
     result['usage']=[u for u in usages if u is not None] or None
     save(d/'job-result.json',result)
 
