@@ -98,6 +98,10 @@ def run(request, job_id, emit):
     # Save presentation records under the job root; only explicitly copied artifacts are served.
     h.run(); save(directory/'visible-report.json',h.report); emit('evidence',artifact='visible-report.json',activity='Frozen visible gate outcome recorded')
     if h.report['status']!='accepted': return {'status':'unresolved','classification':h.report['stop_reason']}
+    return final_check(spec,app,h,directory,emit,patch)
+
+def final_check(spec,app,control,directory,emit,patch=None):
+    from learning.run import Harness
     # One final set, after all repair/model calls finish. Never supplied to a model.
     emit('stage',stage='Verify',activity='Once-only fresh final evaluation, with no repair context')
     from learning.brightness import render
@@ -112,13 +116,50 @@ def run(request, job_id, emit):
         rows.append({'id':ident,'value':value,'input':str(final_input),'expected':r['output_path'],'input_sha256':digest(final_input),'expected_sha256':digest(r['output_path']),'regions':{'full':[0,0,43+i*4,13+i*4]}})
     suite={'id':'final-contrast-v1','policy':load_policy(),'cases':rows}; save(directory/'final/suite.json',suite)
     result=Harness.worker(control,'candidate',{'operation':'contrast','spec':spec,'app':str(app),'suite':suite,'suite_sha256':digest(directory/'final/suite.json')},directory/'final/evaluation',90,cleanup=True)
-    result['baseline_pass']=h.report['final_baseline_pass']; accepted,reason=decide(result)
+    result['baseline_pass']=control.report['final_baseline_pass']; accepted,reason=decide(result)
     save(directory/'final-summary.json',{'status':'accepted' if accepted else 'unresolved','classification':reason,'cases':[{k:c.get(k) for k in ('case_id','status','classification','metrics')} for c in result.get('cases',[])],'promoted':False})
     emit('evidence',artifact='final-summary.json',activity='Independent final evaluation complete')
     return {'status':'accepted' if accepted else 'unresolved','classification':reason,'promoted':False,'harness_repaired':bool(patch),'scope':'frozen visible and two once-only fresh cases; isolated workspace'}
 
+def continue_job(source_job,job_id,emit):
+    import re
+    from adapter.png import within
+    if not re.fullmatch(r'[a-f0-9]{32}',source_job): raise ValueError('Invalid resume job ID')
+    directory=ROOT/'evidence/learning'/('feature-'+job_id); directory.mkdir(parents=True,exist_ok=False)
+    old=ROOT/'evidence/learning'/('feature-'+source_job)
+    spec=json.loads((old/'spec.json').read_text(encoding='utf-8'))
+    validation=json.loads((old/'validation.json').read_text(encoding='utf-8'))
+    # Find only the visible learning record tied to this exact isolated source job.
+    sources=[]
+    source_app=ROOT/'dev-workspaces'/('feature-'+source_job)
+    for item in (ROOT/'evidence/learning').glob('*/provenance.json'):
+        provenance=json.loads(item.read_text(encoding='utf-8'))
+        if provenance.get('app','').replace('\\','/')==source_app.as_posix(): sources.append(item.parent)
+    if len(sources)!=1: raise ValueError('Ambiguous resume source')
+    source=sources[0]
+    manifest=json.loads((source/'checkpoints/experimental-base-start/manifest.json').read_text(encoding='utf-8'))
+    for name,expected in manifest['files'].items():
+        path=within(source_app/name,source_app)
+        if expected is None:
+            if path.exists(): raise ValueError('Resume workspace differs from restored checkpoint')
+        elif not path.is_file() or digest(path)!=expected: raise ValueError('Resume workspace changed')
+    app=ROOT/'dev-workspaces'/('feature-'+job_id)
+    shutil.copytree(source_app,app,ignore=shutil.ignore_patterns('node_modules','dist'))
+    shutil.copytree(source_app/'node_modules',app/'node_modules')
+    save(directory/'spec.json',spec); save(directory/'validation.json',validation)
+    save(directory/'continuation.json',{'source_job':source_job,'mode':'development_resume_saved_evidence','new_reference_experiments':0})
+    config=copy.deepcopy(DEFAULTS); config.update(fresh_experiments=4,candidates=2,retries=0,run_seconds=600,reserve_seconds=100,command_seconds=90)
+    h=AdjustmentHarness(config,app,spec,validation,notify=emit); h.resume_source=source
+    h.provenance.update(source_job=source_job,resume_source=source.name,clean_start_autonomous_demonstration=False)
+    save(h.directory/'provenance.json',h.provenance)
+    emit('stage',stage='Investigate',activity='Resuming saved visible experiments; no new reference investigation')
+    h.run(); save(directory/'visible-report.json',h.report); emit('evidence',artifact='visible-report.json',activity='Continuation gate outcome recorded')
+    if h.report['status']!='accepted': return {'status':'unresolved','classification':h.report['stop_reason'],'mode':'development_resume_saved_evidence'}
+    result=final_check(spec,app,h,directory,emit)
+    result['mode']='development_resume_saved_evidence'; return result
+
 def main():
-    parser=argparse.ArgumentParser(); parser.add_argument('--pilot',action='store_true'); parser.add_argument('--request',default='Implement Contrast'); args=parser.parse_args()
+    parser=argparse.ArgumentParser(); parser.add_argument('--pilot',action='store_true'); parser.add_argument('--request',default='Implement Contrast'); parser.add_argument('--resume-job'); args=parser.parse_args()
     request_id(args.request)
     if not args.pilot:
         print(json.dumps({'mode':'prepare-only','budget':BUDGET,'model_invoked':False})); return 0
@@ -126,6 +167,10 @@ def main():
     from .jobs import BrowserLock
     with BrowserLock('feature-service'):
         store=JobStore(ROOT/'evidence/feature-jobs',recover=True); job=store.create(args.request)
+        if args.resume_job:
+            import re
+            if not re.fullmatch(r'[a-f0-9]{32}',args.resume_job): raise ValueError('Invalid resume job ID')
+            job['resume_job']=args.resume_job; store.persist(job)
         execute(store,job['id'])
     print(json.dumps(store.get(job['id']))); return 0 if store.get(job['id'])['status']=='accepted' else 1
 

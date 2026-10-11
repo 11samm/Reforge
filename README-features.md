@@ -108,3 +108,10 @@ cannot be patched. Tested patches can be recalled only with matching host hashes
 fresh offline regression gates; live discovery must still validate the procedure.
 
 Interaction map and bounded inspection: see docs/interaction-map.md. No live pilot was run for this addition.
+
+
+### Resume a pre-candidate contract failure
+
+The Contrast contract schema enumerates the existing evidence/case IDs. Future test descriptions belong in unresolved questions, not verification_cases. One rejected contract may be corrected using the same frozen evidence and remaining time budget; another rejection stops the run.
+
+For a saved job that stopped before any candidate, use `python -m features.pipeline --pilot --request "Implement Contrast" --resume-job JOB_ID`. This creates a new isolated job, verifies the restored source checkpoint, original suite hash, current evaluator policy, feature specification and every visible PNG hash, and copies the saved visible experiments. It skips discovery, planning and new reference experiments. Candidate gates remain unchanged; fresh final cases run only after visible acceptance. Original evidence and failed invocations remain intact. This is a development continuation, not a clean-start autonomous demonstration.

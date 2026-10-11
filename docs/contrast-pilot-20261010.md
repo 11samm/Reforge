@@ -133,3 +133,16 @@ Stopped unresolved after 247.234 seconds. Three model invocations reported 188,2
 total tokens: 184,899 input including 135,808 cached, and 3,382 output including 501
 reasoning tokens. Original decisions and failures remain preserved. No second pilot,
 editor promotion, merge or push occurred.
+
+
+## Contract correction and saved-evidence continuation (2026-10-11)
+
+The failed contract from job `191c3c8ad682433c845c4b19198952d5` cited prose in verification_cases instead of real case IDs. Contract schemas now enumerate the frozen evidence/case IDs and exclude premature VERIFIED_WITHIN_SCOPE. Validation allows one bounded correction with the same evidence, preserving rejected invocations and errors.
+
+Continuation job `60226a1088ef4178bde41f09622a7f59` reused all four visible experiments after checking source checkpoint, specification, policy and PNG hashes. No new discovery, planner or investigation exports ran. The contract passed first try. Candidate 1 built and matched all four RGBA cases exactly, with original baselines intact, but the UI gate tried clicking a disabled Contrast menu before image import. Candidate 2 stopped on a denied model capability request; the fail-closed boundary is preserved. Automated job elapsed: 199.094 seconds, unresolved. Three model calls totaled 340646 tokens (335379 input including 256384 cached; 5267 output).
+
+The evaluator contradicted the builder instruction to disable Contrast without an image. Its empty-image gate now accepts either a disabled menu item or an accessible dialog with disabled slider and Apply. After import, the operation must still execute through the UI and export exactly the same pixels as batch execution. No evaluator thresholds were relaxed.
+
+The preserved candidate-1 checkpoint was copied, hash-verified, into `dev-workspaces/contrast-ui-diagnostic-60226a10`. Local re-evaluation passed all four visible pixel cases and the loaded-image UI/export gate. Two once-only fresh final reference cases then passed exact RGBA comparison: 559 and 799 pixels, zero changed pixels or channel error. No additional model call was made, and final outputs were never supplied to a model. Final evidence: `evidence/learning/20261011T081839Z-1b33db71-dev-resume/ui-diagnostic/final-summary.json`. Original failed jobs were not rewritten. This is accepted within six tested cases via developer evaluator correction, not a clean-start autonomous pass, exhaustive Contrast-domain proof, promotion, merge or push.
+
+Validation: 127 Python tests passed after the evaluator fix, including dynamic citation isolation and bounded correction exhaustion; git diff --check passed. The isolated accepted candidate remains available for review.

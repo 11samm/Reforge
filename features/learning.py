@@ -1,5 +1,7 @@
 """Small parameterized adjustment harness built on existing trusted learning gates."""
 import json
+import copy
+import shutil
 from learning.run import Harness, SCOPE
 from learning.brightness import BrightnessBroker, DEFINITIONS, render
 from learning.core import exact, strings, text, integer, save, digest, validate_claims, decide
@@ -13,6 +15,16 @@ class AdjustmentBroker(BrightnessBroker):
     writable={'src/main.tsx','src/contrast.ts','README.md'}
 
 PLAN=model.obj({'question':model.S,'hypotheses':model.arr(model.S),'input':model.obj({'kind':{'type':'string','enum':list(DEFINITIONS)},'width':model.I,'height':model.I}),'value':{'type':'number'},'predictions':model.arr(model.S),'usefulness':model.S})
+
+def contract_schema(evidence_ids,case_ids):
+    schema=copy.deepcopy(model.CONTRACT)
+    claims=schema['properties']['claims']; claims['minItems']=1; claims['maxItems']=16
+    props=claims['items']['properties']
+    for field in ('supporting_evidence','contradicting_evidence'):
+        props[field]={'type':'array','items':{'type':'string','enum':list(evidence_ids)}}
+    props['verification_cases']={'type':'array','items':{'type':'string','enum':list(case_ids)}}
+    props['status']={'type':'string','enum':[v for v in model.STATUSES if v!='VERIFIED_WITHIN_SCOPE']}
+    return schema
 
 class AdjustmentHarness(Harness):
     operation='contrast'; source_scope=SCOPE|{'src/brightness.ts','src/contrast.ts'}
@@ -82,27 +94,79 @@ class AdjustmentHarness(Harness):
         self.emit('evaluation',label=label,result=r); return r
     def builder(self,index,previous):
         sources={n:(self.app/n).read_text(encoding='utf-8') for n in ('src/main.tsx','src/current-image.ts')}
-        prompt='Implement Contrast independently from only supplied evidence and contract. No brightness formula or neutral assumption. Write src/contrast.ts exporting applyContrast(raster: Raster, value: number): Raster. Preserve input immutability, dimensions, codec, brightness and every existing baseline. Wire Image -> ContrastÃ¢â‚¬Â¦ with accessible Contrast slider and Apply/Close; disable with no image. Source/config/dependency restrictions apply. No reference internals, execution or other tools. Only src/main.tsx, src/contrast.ts and README.md writable. '+json.dumps({'observed_domain':self.domain,'claims':self.claims,'evidence':self.compact(),'previous':previous,'policy':self.suite['policy']},separators=(',',':'))
+        prompt='Implement Contrast independently from only supplied evidence and contract. No brightness formula or neutral assumption. Write src/contrast.ts exporting applyContrast(raster: Raster, value: number): Raster. Preserve input immutability, dimensions, codec, brightness and every existing baseline. Wire Image -> Contrast... with accessible Contrast slider and Apply/Close; disable with no image. Source/config/dependency restrictions apply. No reference internals, execution or other tools. Only src/main.tsx, src/contrast.ts and README.md writable. '+json.dumps({'observed_domain':self.domain,'claims':self.claims,'evidence':self.compact(),'previous':previous,'policy':self.suite['policy']},separators=(',',':'))
         reader=packets.EvidenceReader({e['id']:{'input':e['input'],'export':e['expected']} for e in self.evidence},self.config['evidence_reads'])
         self.ask(prompt,'builder-'+str(index),None,True,role='repair' if previous else 'builder',supplied=sources,reader=reader)
     def finish(self,final,final_baseline):
         self.report={'status':'accepted' if self.first_acceptance and final_baseline and final.get('status')=='passed' else 'unresolved','first_acceptance':self.first_acceptance,'stop_reason':self.stop,'final_build':final,'final_baseline_pass':final_baseline,'candidate_attempts':self.attempts,'evidence_ids':[e['id'] for e in self.evidence],'suite_sha256':getattr(self,'suite_hash',None),'budget':self.budget.snapshot(),'promoted':False,'scope':'frozen visible suite only; final evaluation separate'}
         save(self.directory/'report.json',self.report); self.emit('stop',status=self.report['status'],reason=self.stop)
+    def build_contract(self):
+        ids=[e['id'] for e in self.evidence]; schema=contract_schema(ids,ids)
+        prompt='Build evidence-backed claims. No VERIFIED status before independent acceptance. Cite exact IDs only in supporting_evidence, contradicting_evidence and verification_cases. verification_cases may be empty; future test descriptions belong in unresolved, never case IDs. '+json.dumps({'spec':self.spec,'evidence':self.compact(),'allowed_case_ids':ids})
+        failures=[]
+        for index in range(2):
+            answer=self.ask(prompt,'contract' if index==0 else 'contract-correction',schema,role='contract')
+            try:
+                claims=validate_claims(answer['claims'],ids,ids,domain=(self.domain['min'],self.domain['max']))
+            except ValueError as error:
+                failures.append({'attempt':index+1,'error':str(error)[:1000]})
+                save(self.directory/'contract-failures.json',failures)
+                self.emit('contract_validation_failure',attempt=index+1,error=str(error)[:1000])
+                if index: raise
+                prompt += ' Correct this rejected contract using the same frozen evidence. Validation error: '+str(error)[:1000]+' Previous contract: '+json.dumps(answer)
+            else:
+                self.claims=claims; save(self.directory/'contract.json',answer)
+                self.emit('claim_update',decision=answer['decision']); return
+
+    def reuse_evidence(self,source):
+        from adapter.png import within
+        from build_shell import APP
+        from evaluator.compare import load_policy
+        from learning.diagnostics import describe
+        source=within(source,APP.parent/'evidence/learning')
+        report=json.loads((source/'report.json').read_text(encoding='utf-8'))
+        if digest(source/'suite.json')!=report['suite_sha256']: raise ValueError('Resume suite hash changed')
+        suite=json.loads((source/'suite.json').read_text(encoding='utf-8'))
+        if suite['policy']!=load_policy(): raise ValueError('Resume evaluator policy changed')
+        if report['candidate_attempts'] or report['first_acceptance'] or report['stop_reason']!='procedure_infrastructure_failure': raise ValueError('Only pre-candidate contract failure can resume here')
+        provenance=json.loads((source/'provenance.json').read_text(encoding='utf-8'))
+        if provenance.get('feature_spec')!=self.spec: raise ValueError('Resume feature specification changed')
+        ids=[row['id'] for row in suite['cases']]
+        if ids!=report['evidence_ids'] or not 2<=len(ids)<=4 or len(set(ids))!=len(ids): raise ValueError('Resume evidence IDs invalid')
+        for row in suite['cases']:
+            import re
+            if not re.fullmatch(r'adjustment-[1-4]',row['id']): raise ValueError('Resume evidence ID invalid')
+            record=json.loads((source/'evidence'/(row['id']+'.json')).read_text(encoding='utf-8'))
+            if record['id']!=row['id'] or record['value']!=row['value']: raise ValueError('Resume case metadata changed')
+            value_in_domain(self.domain,record['value'])
+            for field in ('input','expected'):
+                path=within(row[field],source)
+                if digest(path)!=row[field+'_sha256'] or record[field+'_sha256']!=row[field+'_sha256']: raise ValueError('Resume evidence hash changed')
+                target=self.directory/('inputs' if field=='input' else 'reused-visible')/(row['id']+'.png')
+                target.parent.mkdir(parents=True,exist_ok=True); shutil.copyfile(path,target); record[field]=str(target)
+            record['input_samples']=describe(record['input']); record['export_samples']=describe(record['expected'])
+            self.evidence.append(record); save(self.directory/'evidence'/(record['id']+'.json'),record)
+        self.budget.experiments=len(self.evidence)
+        self.freeze()
+        save(self.directory/'continuation.json',{'mode':'development_resume_saved_evidence','source':source.name,'source_suite_sha256':report['suite_sha256'],'new_reference_experiments':0,'source_untouched':True})
+        self.guard()
+
     def run(self):
         try:
             if (self.app/'src/contrast.ts').exists() or 'applyContrast' in (self.app/'src/main.tsx').read_text(): raise ValueError('Contrast must be absent')
             if self.worker('build',{'app':str(self.app)},self.directory/'initial-build',self.config['command_seconds'])['status']!='passed' or not self.baseline('initial'): raise ValueError('Initial baseline failed')
             if self.worker('selfcheck',{},self.directory/'selfcheck',self.config['command_seconds'])['status']!='passed': raise ValueError('Evaluator suspect')
             self.notify('stage',stage='Investigate')
-            # Supplied generators are bounded image probes, not Contrast evidence or algorithm assumptions.
-            answer=self.ask('Plan 2..4 bounded experiments distinguishing competing Contrast hypotheses. Choose values from the observed domain; at least two distinct values. Choose diagnostic images for the questions, not brightness formula assumptions. '+json.dumps({'spec':self.spec,'generators':DEFINITIONS,'budget':self.budget.snapshot()}),'planner',model.obj({'plans':model.arr(PLAN)}),role='planner')
-            plans=answer['plans']
-            if not 2<=len(plans)<=self.config['fresh_experiments'] or len({p['value'] for p in plans})<2: raise ValueError('Require distinguishing bounded experiments')
-            for p in plans: self.experiment(p)
-            self.freeze()
-            answer=self.ask('Build evidence-backed claims. No VERIFIED status before independent acceptance. Separate observed behavior from hypotheses; cite exact evidence IDs. '+json.dumps({'spec':self.spec,'evidence':self.compact()}),'contract',model.CONTRACT,role='contract')
-            self.claims=validate_claims(answer['claims'],[e['id'] for e in self.evidence],[e['id'] for e in self.evidence],domain=(self.domain['min'],self.domain['max']))
-            save(self.directory/'contract.json',answer); self.emit('claim_update',decision=answer['decision'])
+            if getattr(self,'resume_source',None):
+                self.reuse_evidence(self.resume_source)
+            else:
+                # Supplied generators are probes, not Contrast evidence.
+                answer=self.ask('Plan 2..4 bounded experiments distinguishing competing Contrast hypotheses. Choose values from the observed domain; at least two distinct values. '+json.dumps({'spec':self.spec,'generators':DEFINITIONS,'budget':self.budget.snapshot()}),'planner',model.obj({'plans':model.arr(PLAN)}),role='planner')
+                plans=answer['plans']
+                if not 2<=len(plans)<=self.config['fresh_experiments'] or len({p['value'] for p in plans})<2: raise ValueError('Require distinguishing bounded experiments')
+                for p in plans: self.experiment(p)
+                self.freeze()
+            self.build_contract()
             previous=None
             for index in range(1,self.config['candidates']+1):
                 self.budget.spend('candidate'); label='candidate-'+str(index); self.notify('stage',stage='Reconstruct')

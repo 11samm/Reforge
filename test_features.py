@@ -376,3 +376,33 @@ class JobTests(unittest.TestCase):
             finally: s.shutdown(); s.server_close(); thread.join()
 
 if __name__=='__main__': unittest.main()
+
+
+class ContractCorrectionTests(unittest.TestCase):
+    def test_citations_are_enumerated_without_mutating_base_schema(self):
+        from features.learning import contract_schema
+        from learning import model
+        before=copy.deepcopy(model.CONTRACT)
+        props=contract_schema(['adjustment-1'],['adjustment-2'])['properties']['claims']['items']['properties']
+        self.assertEqual(props['verification_cases']['items']['enum'],['adjustment-2'])
+        self.assertEqual(props['supporting_evidence']['items']['enum'],['adjustment-1'])
+        self.assertNotIn('VERIFIED_WITHIN_SCOPE',props['status']['enum'])
+        self.assertEqual(model.CONTRACT,before)
+
+    def test_one_correction_uses_same_evidence_and_preserves_failure(self):
+        from features.learning import AdjustmentHarness
+        claim={'id':'claim-1','statement':'Observed contrast','status':'OBSERVED','target_version':'mock','setup':'diagnostic','parameter_domain':{'min':-10,'max':10},'scope':'visible cases','supporting_evidence':['adjustment-1'],'contradicting_evidence':[],'alternatives':[],'unresolved':[],'verification_cases':['Future full-ramp test']}
+        with tempfile.TemporaryDirectory() as td:
+            h=object.__new__(AdjustmentHarness); h.directory=Path(td); h.evidence=[{'id':'adjustment-1'}]; h.spec=specification(); h.domain={'min':-10,'max':10}; h.compact=lambda:[]; h.emit=lambda *a,**k:None
+            labels=[]
+            def ask(prompt,label,schema,**kwargs):
+                labels.append(label); result=copy.deepcopy(claim)
+                if label=='contract-correction': result['verification_cases']=[]
+                return {'decision':'Observed','claims':[result]}
+            h.ask=ask; h.build_contract()
+            self.assertEqual(labels,['contract','contract-correction'])
+            self.assertEqual(h.claims[0]['verification_cases'],[])
+            self.assertEqual(json.loads((h.directory/'contract-failures.json').read_text())[0]['error'],'Claim cites unknown case')
+            h.ask=lambda *a,**k:{'decision':'Observed','claims':[claim]}
+            with self.assertRaisesRegex(ValueError,'unknown case'): h.build_contract()
+            self.assertEqual(len(json.loads((h.directory/'contract-failures.json').read_text())),2)

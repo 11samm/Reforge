@@ -3,7 +3,7 @@ import json
 import sys
 from adapter.png import ROOT
 from learning.core import save
-from .pipeline import run
+from .pipeline import run, continue_job
 from .jobs import JobStore
 
 def main():
@@ -14,7 +14,7 @@ def main():
     if not re.fullmatch(r'[a-f0-9]{32}',ident): raise ValueError('Invalid job ID')
     job=json.loads((ROOT/'evidence/feature-jobs'/ident/'job.json').read_text())
     def emit(kind,**data): print(json.dumps({'feature_event':True,'event':kind,'data':data}),flush=True)
-    try: result=run(job['request'],ident,emit)
+    try: result=continue_job(job['resume_job'],ident,emit) if job.get('resume_job') else run(job['request'],ident,emit)
     except Exception as e: result={'status':'failed','classification':type(e).__name__+': '+str(e)[:1000]}
     d=ROOT/'evidence/learning'/('feature-'+ident)
     usages=[]

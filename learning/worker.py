@@ -142,11 +142,17 @@ def candidate(request,directory):
                 page.goto(f'http://127.0.0.1:{server.server_port}',wait_until='networkidle')
                 if op:
                     page.get_by_role('menuitem',name=op['ui_menu'],exact=True).click()
-                    page.get_by_role('menuitem',name=op['ui_item'],exact=True).click()
-                    empty=page.get_by_role('dialog')
-                    expect(empty.get_by_role('slider',name=op['ui_parameter'],exact=False)).to_be_disabled()
-                    expect(empty.get_by_role('button',name='Apply',exact=True)).to_be_disabled()
-                    empty.get_by_role('button',name='Close',exact=True).click()
+                    item=page.get_by_role('menuitem',name=op['ui_item'],exact=True)
+                    # An unavailable operation may disable its menu item or its dialog controls.
+                    if item.is_disabled():
+                        expect(item).to_be_disabled()
+                        page.get_by_role('menuitem',name=op['ui_menu'],exact=True).click()
+                    else:
+                        item.click()
+                        empty=page.get_by_role('dialog')
+                        expect(empty.get_by_role('slider',name=op['ui_parameter'],exact=False)).to_be_disabled()
+                        expect(empty.get_by_role('button',name='Apply',exact=True)).to_be_disabled()
+                        empty.get_by_role('button',name='Close',exact=True).click()
                 page.locator('input[type=file]').set_input_files(first['input'])
                 expect(page.get_by_role('img',name='Original image preview: '+Path(first['input']).name,exact=True)).to_be_visible()
                 page.get_by_role('menuitem',name=op['ui_menu'] if op else 'Effects',exact=True).click()
