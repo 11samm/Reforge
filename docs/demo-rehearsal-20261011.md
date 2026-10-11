@@ -2,7 +2,7 @@
 
 **Recommendation: replay recommended.** Three new sequential clean-start Brightness attempts produced zero acceptances. All used the same learning code, provider and budgets. The post-rehearsal fixes below have no new model-based repeatability evidence; the three-run authorization is exhausted. Do not describe the bundled older success or deterministic browser checks as a new acceptance.
 
-Use [the launch and presentation guide](demo-launch.md). The dashboard can present both accepted recordings while the backend is stopped. Leave a fallback tab ready before any live presentation. Next presentation action: open `http://127.0.0.1:5181/`, select **Brightness accepted real run**, press **Restart replay**, then **Replay run** at 20× speed. **Jump to end → Candidates** opens archived images and raw metrics.
+Use [the launch and presentation guide](demo-launch.md). The dashboard can present both accepted recordings while the backend is stopped. Leave a fallback tab ready before any live presentation. Next presentation action: open `http://127.0.0.1:5181/`, select **Brightness accepted real run**, press **Restart replay**, then **Play** at 20× speed. **Jump to end → Candidates** opens archived images and raw metrics.
 
 ## Rehearsal configuration and evidence
 

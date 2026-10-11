@@ -44,7 +44,7 @@ For a new machine, create a Python environment, install `requirements-adapter.tx
 
 ## Fast fallback
 
-Leave the dashboard open in a second browser tab before presenting. In that tab choose **Overview → Run bundle → Brightness accepted real run (Oct 11, 2026)**. Use **Restart replay**, choose **20× speed**, then **Replay run**. Use **Jump to end → Candidates** for comparisons, baseline rejection/repair history and final evidence. Repeat with Contrast if useful. Labels must say **RECORDED PLAYBACK**; these are archived images, not live browser sessions.
+Leave the dashboard open in a second browser tab before presenting. In that tab choose **Overview → Run bundle → Brightness accepted real run (Oct 11, 2026)**. Use **Restart replay**, choose **20× speed**, then **Play**. Use **Jump to end → Candidates** for comparisons, baseline rejection/repair history and final evidence. Repeat with Contrast if useful. Labels must say **RECORDED PLAYBACK**; these are archived images, not live browser sessions. If Run bundle is hidden in a narrow window, expand the browser or use **Implement a feature → Replay saved run** to import the file.
 
 The backend can be stopped. **Replay saved run** also imports either exact file from any directory:
 
