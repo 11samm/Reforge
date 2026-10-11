@@ -21,7 +21,7 @@ class BrightnessTests(unittest.TestCase):
     with self.assertRaises(ValueError): b.path(name)
    for name in ['src/current-image.ts','src/style.css','package.json']:
     with self.assertRaises(ValueError): b.path(name,True)
-   self.assertEqual(b.path('src/brightness.ts',True),Path(d)/'src/brightness.ts')
+   self.assertEqual(b.path('src/brightness.ts',True),(Path(d)/'src/brightness.ts').resolve())
  def test_coverage_and_exact_policy(self):
   for kind in DEFINITIONS:
    im=render({'kind':kind,'width':35,'height':9}); self.assertEqual(im.size,(35,9))
