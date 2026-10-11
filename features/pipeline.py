@@ -44,7 +44,7 @@ def run(request, job_id, emit):
     # Harness process/deadline helper, without constructing or modifying an accepted workspace.
     from learning.run import Harness
     from learning.core import Budget
-    control=object.__new__(Harness); control.config=copy.deepcopy(DEFAULTS); control.config.update(run_seconds=1200,reserve_seconds=100)
+    control=object.__new__(Harness); control.config=copy.deepcopy(DEFAULTS); control.config.update(run_seconds=600,reserve_seconds=100)
     control.budget=Budget(control.config); control.directory=directory
     patch=None
     def worker(kind,request,d,timeout):

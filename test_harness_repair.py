@@ -9,6 +9,16 @@ from features.repair import check_patch, gate, classify, RepairBudget, repair
 from features.discovery import output_schema
 
 class RepairTests(unittest.TestCase):
+    def test_parent_budget_does_not_relax_learning_budget(self):
+        import copy
+        from learning.core import DEFAULTS, Budget
+        from features.pipeline import BUDGET
+        config=copy.deepcopy(DEFAULTS); config.update(run_seconds=600,reserve_seconds=100)
+        budget=Budget(config)
+        self.assertLessEqual(budget.remaining(),600)
+        self.assertEqual(BUDGET['seconds'],1200)
+        self.assertEqual(BUDGET['harness_repairs'],5)
+
     def test_schema_reproducer_fails_broken_and_passes_current(self):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d); case={'kind':'schema'}
