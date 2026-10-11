@@ -1,0 +1,670 @@
+{
+  "schema_version": 1,
+  "run_id": "20261011T012950Z-0ee26b62",
+  "operation": "brightness",
+  "mode": "clean_start",
+  "clean_start_definition": "Brightness unavailable in candidate and restricted runtime context. Development agent has read prior results; no claim of model knowledge absence.",
+  "status": "accepted",
+  "unattended_visible_acceptance": true,
+  "live_trajectory_human_interventions": 0,
+  "post_start_host_selector_evaluator_policy_or_implementation_edits": 0,
+  "checkpoint": "local-only:Reforge/evidence/learning/20261011T010106Z-25785e7a/checkpoints/no-blur-start",
+  "checkpoint_manifest_sha256": "791d79f1f6e289a176fc809e20ac835476784cb7020d24871cd3c106d53ff311",
+  "checkpoint_files": {
+    "README.md": "cdf72793bff17e5bd7c0f4623bbc3c88ba62bbed2559c9bd1660bc91e6137a9d",
+    "index.html": "386a23c1c3ff31abbdbc8b4fcafb2b76f3546ef31a22631ac2b9467138ed9ef8",
+    "package-lock.json": "0f0c6aa01564130d672f647bc293bba4a8e3893d36bfd3bf16ab39e6b0e0ef69",
+    "package.json": "882b343488c410bcc612b82c7dc14978384525cff43b4de5418a4a36e52277f9",
+    "src/current-image.ts": "deb0c575a3fb79e3151eccde7a58232f2b724a666b90f07e071dfb7f527ed84f",
+    "src/main.tsx": "141942106f6abe59509ee333e68443f47be3008c641cc1ab274b7cdc038c23d4",
+    "src/style.css": "d21d0ef9945645793b02594bda53b1b66329a5d2819517c74a46342850da70d6",
+    "tsconfig.json": "6d839ab5d73095297ef9128243838c093c616d55f454f73416cf0c9ac8c05da4",
+    "vite.config.ts": "19f18fa380d4e9fa01cb38a62a130e40f88e7c4d33e1dcae00ad218e55463d27"
+  },
+  "executed_command": "Set-Location -LiteralPath 'D:\\Samuel\\Downloads\\Code\\ReforgerData\\brightness-clean-start-verification'\n& 'D:\\Samuel\\Downloads\\Code\\Reforge\\.venv\\Scripts\\python.exe' -m learning.brightness --config brightness.config.json *> 'verification\\live-console.log'\nexit $LASTEXITCODE",
+  "isolated_root": "local-only:isolated-workspace/.",
+  "precheck": "local-only:isolated-workspace/verification/precheck.json",
+  "precheck_tests_passed": 31,
+  "runtime_boundary_audit": "local-only:isolated-workspace/verification/runtime-boundary-audit.json",
+  "approved_evidence_provenance": [
+    "evidence/learning/brightness-preparation/inputs/opaque.png",
+    "evidence/learning/brightness-preparation/experiments/neutral-1/reference-record.json",
+    "evidence/learning/brightness-preparation/experiments/neutral-1/output.png",
+    "evidence/learning/brightness-preparation/experiments/nonneutral-1/reference-record.json",
+    "evidence/learning/brightness-preparation/experiments/nonneutral-1/output.png"
+  ],
+  "source_host_commit": "380484c08e23e14444bc2061c3b39fc0f57a99d0",
+  "experiments": [
+    {
+      "id": "brightness-fresh-01",
+      "input": {
+        "kind": "channel_ramps",
+        "width": 257,
+        "height": 9
+      },
+      "brightness": -37,
+      "selected_by": "runtime",
+      "hypotheses_preregistered": true,
+      "status": "observed",
+      "original_confirmation": {
+        "dimensions_equal": true,
+        "rgba_equal": true,
+        "different_pixels": 0,
+        "max_channel_delta": 0
+      },
+      "elapsed_seconds": 4.444,
+      "target": {
+        "name": "miniPaint",
+        "url": "https://viliusle.github.io/miniPaint/",
+        "visible_about_version": "4.14.3",
+        "collected_version": "4.14.3",
+        "version_discrepancy": false,
+        "build": "unknown; hosted URL is unpinned",
+        "observed_at": "2026-10-11T01:30:38.929523+00:00",
+        "chromium_version": "153.0.8010.12",
+        "headed": true,
+        "requested_window_position": [
+          1600,
+          0
+        ],
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "device_scale_factor": 1
+      }
+    },
+    {
+      "id": "brightness-fresh-02",
+      "input": {
+        "kind": "patches",
+        "width": 17,
+        "height": 3
+      },
+      "brightness": 25,
+      "selected_by": "runtime",
+      "hypotheses_preregistered": true,
+      "status": "observed",
+      "original_confirmation": {
+        "dimensions_equal": true,
+        "rgba_equal": true,
+        "different_pixels": 0,
+        "max_channel_delta": 0
+      },
+      "elapsed_seconds": 3.502,
+      "target": {
+        "name": "miniPaint",
+        "url": "https://viliusle.github.io/miniPaint/",
+        "visible_about_version": "4.14.3",
+        "collected_version": "4.14.3",
+        "version_discrepancy": false,
+        "build": "unknown; hosted URL is unpinned",
+        "observed_at": "2026-10-11T01:30:43.710372+00:00",
+        "chromium_version": "153.0.8010.12",
+        "headed": true,
+        "requested_window_position": [
+          1600,
+          0
+        ],
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "device_scale_factor": 1
+      }
+    },
+    {
+      "id": "brightness-fresh-03",
+      "input": {
+        "kind": "alpha_shapes",
+        "width": 6,
+        "height": 3
+      },
+      "brightness": -37,
+      "selected_by": "runtime",
+      "hypotheses_preregistered": true,
+      "status": "observed",
+      "original_confirmation": {
+        "dimensions_equal": true,
+        "rgba_equal": true,
+        "different_pixels": 0,
+        "max_channel_delta": 0
+      },
+      "elapsed_seconds": 3.753,
+      "target": {
+        "name": "miniPaint",
+        "url": "https://viliusle.github.io/miniPaint/",
+        "visible_about_version": "4.14.3",
+        "collected_version": "4.14.3",
+        "version_discrepancy": false,
+        "build": "unknown; hosted URL is unpinned",
+        "observed_at": "2026-10-11T01:30:47.735685+00:00",
+        "chromium_version": "153.0.8010.12",
+        "headed": true,
+        "requested_window_position": [
+          1600,
+          0
+        ],
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "device_scale_factor": 1
+      }
+    },
+    {
+      "id": "brightness-fresh-04",
+      "input": {
+        "kind": "gray_ramp",
+        "width": 257,
+        "height": 3
+      },
+      "brightness": -100,
+      "selected_by": "runtime",
+      "hypotheses_preregistered": true,
+      "status": "observed",
+      "original_confirmation": {
+        "dimensions_equal": true,
+        "rgba_equal": true,
+        "different_pixels": 0,
+        "max_channel_delta": 0
+      },
+      "elapsed_seconds": 4.303,
+      "target": {
+        "name": "miniPaint",
+        "url": "https://viliusle.github.io/miniPaint/",
+        "visible_about_version": "4.14.3",
+        "collected_version": "4.14.3",
+        "version_discrepancy": false,
+        "build": "unknown; hosted URL is unpinned",
+        "observed_at": "2026-10-11T01:30:52.026071+00:00",
+        "chromium_version": "153.0.8010.12",
+        "headed": true,
+        "requested_window_position": [
+          1600,
+          0
+        ],
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "device_scale_factor": 1
+      }
+    }
+  ],
+  "fresh_learning_experiments": 4,
+  "new_final_reference_experiments": 4,
+  "fresh_reference_experiments_total": 8,
+  "candidate_outcomes": [
+    {
+      "id": "candidate-1",
+      "status": "accepted",
+      "reason": "all_gates_pass",
+      "checkpoint": "local-only:isolated-workspace/evidence/learning/20261011T012950Z-0ee26b62/checkpoints/candidate-1",
+      "build": true,
+      "independent": true,
+      "ui_batch_agreement": true,
+      "baseline_pass": true,
+      "visible_cases": [
+        {
+          "case_id": "scope-neutral-1",
+          "status": "passed",
+          "metrics": {
+            "pixel_count": 297,
+            "rgb_mae_per_channel": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "rgb_mae": 0.0,
+            "rgb_max": 0,
+            "alpha_mae": 0.0,
+            "alpha_max": 0,
+            "rgb_fraction_within_tolerance": 1.0,
+            "alpha_fraction_within_tolerance": 1.0,
+            "different_pixels": 0
+          }
+        },
+        {
+          "case_id": "scope-nonneutral-1",
+          "status": "passed",
+          "metrics": {
+            "pixel_count": 297,
+            "rgb_mae_per_channel": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "rgb_mae": 0.0,
+            "rgb_max": 0,
+            "alpha_mae": 0.0,
+            "alpha_max": 0,
+            "rgb_fraction_within_tolerance": 1.0,
+            "alpha_fraction_within_tolerance": 1.0,
+            "different_pixels": 0
+          }
+        },
+        {
+          "case_id": "brightness-fresh-01",
+          "status": "passed",
+          "metrics": {
+            "pixel_count": 2313,
+            "rgb_mae_per_channel": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "rgb_mae": 0.0,
+            "rgb_max": 0,
+            "alpha_mae": 0.0,
+            "alpha_max": 0,
+            "rgb_fraction_within_tolerance": 1.0,
+            "alpha_fraction_within_tolerance": 1.0,
+            "different_pixels": 0
+          }
+        },
+        {
+          "case_id": "brightness-fresh-02",
+          "status": "passed",
+          "metrics": {
+            "pixel_count": 51,
+            "rgb_mae_per_channel": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "rgb_mae": 0.0,
+            "rgb_max": 0,
+            "alpha_mae": 0.0,
+            "alpha_max": 0,
+            "rgb_fraction_within_tolerance": 1.0,
+            "alpha_fraction_within_tolerance": 1.0,
+            "different_pixels": 0
+          }
+        },
+        {
+          "case_id": "brightness-fresh-03",
+          "status": "passed",
+          "metrics": {
+            "pixel_count": 18,
+            "rgb_mae_per_channel": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "rgb_mae": 0.0,
+            "rgb_max": 0,
+            "alpha_mae": 0.0,
+            "alpha_max": 0,
+            "rgb_fraction_within_tolerance": 1.0,
+            "alpha_fraction_within_tolerance": 1.0,
+            "different_pixels": 0
+          }
+        },
+        {
+          "case_id": "brightness-fresh-04",
+          "status": "passed",
+          "metrics": {
+            "pixel_count": 771,
+            "rgb_mae_per_channel": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "rgb_mae": 0.0,
+            "rgb_max": 0,
+            "alpha_mae": 0.0,
+            "alpha_max": 0,
+            "rgb_fraction_within_tolerance": 1.0,
+            "alpha_fraction_within_tolerance": 1.0,
+            "different_pixels": 0
+          }
+        }
+      ]
+    }
+  ],
+  "visible_suite_sha256": "bff2d8904e73ca618856ed0f699eff609bc82372781b8fb629a4858c96b6f946",
+  "first_acceptance_seconds": 156.418,
+  "live_run_with_cleanup_seconds": 165.748,
+  "final_verification_seconds": 21.177,
+  "total_wall_from_clean_start_to_final_seconds": 200.836,
+  "provider_usage": {
+    "totalTokens": 120827,
+    "inputTokens": 115384,
+    "cachedInputTokens": 62208,
+    "cacheWriteInputTokens": 0,
+    "outputTokens": 5443,
+    "reasoningOutputTokens": 989
+  },
+  "model_invocations": [
+    {
+      "role": "builder-1",
+      "elapsed_seconds": 49.608,
+      "usage": {
+        "totalTokens": 92376,
+        "inputTokens": 89847,
+        "cachedInputTokens": 62208,
+        "cacheWriteInputTokens": 0,
+        "outputTokens": 2529,
+        "reasoningOutputTokens": 359
+      }
+    },
+    {
+      "role": "contract-1",
+      "elapsed_seconds": 30.35,
+      "usage": {
+        "totalTokens": 16855,
+        "inputTokens": 15351,
+        "cachedInputTokens": 0,
+        "cacheWriteInputTokens": 0,
+        "outputTokens": 1504,
+        "reasoningOutputTokens": 114
+      }
+    },
+    {
+      "role": "planner",
+      "elapsed_seconds": 37.003,
+      "usage": {
+        "totalTokens": 11596,
+        "inputTokens": 10186,
+        "cachedInputTokens": 0,
+        "cacheWriteInputTokens": 0,
+        "outputTokens": 1410,
+        "reasoningOutputTokens": 516
+      }
+    }
+  ],
+  "final_status": "passed",
+  "final_cases": [
+    {
+      "case_id": "final-new-opaque-negative",
+      "status": "passed",
+      "metrics": {
+        "pixel_count": 161,
+        "rgb_mae_per_channel": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rgb_mae": 0.0,
+        "rgb_max": 0,
+        "alpha_mae": 0.0,
+        "alpha_max": 0,
+        "rgb_fraction_within_tolerance": 1.0,
+        "alpha_fraction_within_tolerance": 1.0,
+        "different_pixels": 0
+      }
+    },
+    {
+      "case_id": "final-new-opaque-positive",
+      "status": "passed",
+      "metrics": {
+        "pixel_count": 209,
+        "rgb_mae_per_channel": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rgb_mae": 0.0,
+        "rgb_max": 0,
+        "alpha_mae": 0.0,
+        "alpha_max": 0,
+        "rgb_fraction_within_tolerance": 1.0,
+        "alpha_fraction_within_tolerance": 1.0,
+        "different_pixels": 0
+      }
+    },
+    {
+      "case_id": "final-new-alpha-positive",
+      "status": "passed",
+      "metrics": {
+        "pixel_count": 117,
+        "rgb_mae_per_channel": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rgb_mae": 0.0,
+        "rgb_max": 0,
+        "alpha_mae": 0.0,
+        "alpha_max": 0,
+        "rgb_fraction_within_tolerance": 1.0,
+        "alpha_fraction_within_tolerance": 1.0,
+        "different_pixels": 0
+      }
+    },
+    {
+      "case_id": "final-new-neutral",
+      "status": "passed",
+      "metrics": {
+        "pixel_count": 221,
+        "rgb_mae_per_channel": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rgb_mae": 0.0,
+        "rgb_max": 0,
+        "alpha_mae": 0.0,
+        "alpha_max": 0,
+        "rgb_fraction_within_tolerance": 1.0,
+        "alpha_fraction_within_tolerance": 1.0,
+        "different_pixels": 0
+      }
+    }
+  ],
+  "final_experiments": [
+    {
+      "id": "final-new-opaque-negative",
+      "brightness": -61,
+      "status": "observed",
+      "original_confirmation": {
+        "dimensions_equal": true,
+        "rgba_equal": true,
+        "different_pixels": 0,
+        "max_channel_delta": 0
+      },
+      "elapsed_seconds": 3.687,
+      "error": null
+    },
+    {
+      "id": "final-new-opaque-positive",
+      "brightness": 26,
+      "status": "observed",
+      "original_confirmation": {
+        "dimensions_equal": true,
+        "rgba_equal": true,
+        "different_pixels": 0,
+        "max_channel_delta": 0
+      },
+      "elapsed_seconds": 3.373,
+      "error": null
+    },
+    {
+      "id": "final-new-alpha-positive",
+      "brightness": 79,
+      "status": "observed",
+      "original_confirmation": {
+        "dimensions_equal": true,
+        "rgba_equal": true,
+        "different_pixels": 0,
+        "max_channel_delta": 0
+      },
+      "elapsed_seconds": 3.787,
+      "error": null
+    },
+    {
+      "id": "final-new-neutral",
+      "brightness": 0,
+      "status": "observed",
+      "original_confirmation": {
+        "dimensions_equal": true,
+        "rgba_equal": true,
+        "different_pixels": 0,
+        "max_channel_delta": 0
+      },
+      "elapsed_seconds": 3.328,
+      "error": null
+    }
+  ],
+  "final_evaluated_once_no_repairs": true,
+  "final_freeze_unchanged": true,
+  "preservation": {
+    "main_source_dist_and_configuration_hashes_unchanged": true,
+    "experimental_sources_unchanged": true,
+    "protected_file_count": 25,
+    "main_dependency_hashes_match_pre_run_copy": true,
+    "dependency_file_count": 604,
+    "git_status_unchanged": true,
+    "main_head": "380484c08e23e14444bc2061c3b39fc0f57a99d0",
+    "no_main_build_or_write": true,
+    "no_dashboard_changes_commit_or_push": true,
+    "unrelated_work_verification": "Full Git status unchanged; declared experimental source trees and all generated-app files hashed. Unrelated artifact contents were not broadly inspected."
+  },
+  "limits": {
+    "fresh_experiments": 4,
+    "candidates": 2,
+    "run_seconds": 600,
+    "reserve_seconds": 100,
+    "model_seconds": 120,
+    "builder_seconds": 160,
+    "reference_seconds": 60,
+    "command_seconds": 90,
+    "retries": 0,
+    "percentage_min": 0,
+    "percentage_max": 10,
+    "window_position": [
+      1600,
+      0
+    ],
+    "builder_tool_calls": 12,
+    "evidence_reads": 6,
+    "packet_limits": {
+      "planner": {
+        "bytes": 8000,
+        "tokens": 11000
+      },
+      "contract": {
+        "bytes": 40000,
+        "tokens": 26000
+      },
+      "route": {
+        "bytes": 32000,
+        "tokens": 22000
+      },
+      "builder": {
+        "bytes": 60000,
+        "tokens": 30000
+      },
+      "repair": {
+        "bytes": 60000,
+        "tokens": 30000
+      }
+    }
+  },
+  "packets": [
+    {
+      "label": "planner",
+      "role": "planner",
+      "bytes": 7117,
+      "estimated_tokens": 10163,
+      "parts": {
+        "prompt": {
+          "bytes": 6334,
+          "tokens": 2236
+        },
+        "output_schema": {
+          "bytes": 783,
+          "tokens": 207
+        }
+      },
+      "expected_tool_rounds": 1,
+      "projected_cumulative_input_tokens": 10163,
+      "method": "regex-piece estimate + 7720 fixed runtime/system overhead; calibrated on recorded gpt-6.1-sol decision-call inputTokens (planner, contract-1, route-1/2; <=0.6% error). Not the provider tokenizer; tool-loop cumulative input is a projection.",
+      "limits": {
+        "bytes": 8000,
+        "tokens": 11000
+      },
+      "within_limits": true,
+      "dry_run": false
+    },
+    {
+      "label": "contract-1",
+      "role": "contract",
+      "bytes": 16918,
+      "estimated_tokens": 15390,
+      "parts": {
+        "prompt": {
+          "bytes": 15266,
+          "tokens": 7208
+        },
+        "output_schema": {
+          "bytes": 1652,
+          "tokens": 462
+        }
+      },
+      "expected_tool_rounds": 1,
+      "projected_cumulative_input_tokens": 15390,
+      "method": "regex-piece estimate + 7720 fixed runtime/system overhead; calibrated on recorded gpt-6.1-sol decision-call inputTokens (planner, contract-1, route-1/2; <=0.6% error). Not the provider tokenizer; tool-loop cumulative input is a projection.",
+      "limits": {
+        "bytes": 40000,
+        "tokens": 26000
+      },
+      "within_limits": true,
+      "dry_run": false
+    },
+    {
+      "label": "builder-1",
+      "role": "builder",
+      "bytes": 36289,
+      "estimated_tokens": 20422,
+      "parts": {
+        "prompt": {
+          "bytes": 20759,
+          "tokens": 8430
+        },
+        "output_schema": {
+          "bytes": 0,
+          "tokens": 0
+        },
+        "supplied:src/main.tsx": {
+          "bytes": 13131,
+          "tokens": 3571
+        },
+        "supplied:src/current-image.ts": {
+          "bytes": 2399,
+          "tokens": 701
+        }
+      },
+      "expected_tool_rounds": 6,
+      "projected_cumulative_input_tokens": 122532,
+      "method": "regex-piece estimate + 7720 fixed runtime/system overhead; calibrated on recorded gpt-6.1-sol decision-call inputTokens (planner, contract-1, route-1/2; <=0.6% error). Not the provider tokenizer; tool-loop cumulative input is a projection.",
+      "limits": {
+        "bytes": 60000,
+        "tokens": 30000
+      },
+      "within_limits": true,
+      "dry_run": false
+    }
+  ],
+  "artifacts": {
+    "live_report": "local-only:isolated-workspace/evidence/learning/20261011T012950Z-0ee26b62/report.json",
+    "live_readable_report": "local-only:isolated-workspace/evidence/learning/20261011T012950Z-0ee26b62/report.md",
+    "final_report": "local-only:isolated-workspace/evidence/learning/new-final-brightness/final-report.json",
+    "frozen_final_manifest": "local-only:isolated-workspace/evidence/learning/new-final-brightness/freeze-before-final.json",
+    "main_before": "local-only:isolated-workspace/verification/main-before.json",
+    "main_after": "local-only:isolated-workspace/verification/main-after.json"
+  },
+  "limitations": [
+    "One run, discrete 8-bit PNG inputs and parameters, single imported raster layer. No whole-editor or all-input claim.",
+    "Reference About 4.14.3, hosted build unpinned; headed fixed browser/viewport.",
+    "Clean start concerns candidate capability and restricted runtime context; developer had read prior results and the model may have prior knowledge.",
+    "Tool/file capability restriction and guarded execution; trusted host is not an OS sandbox.",
+    "Initial scope packets premeasured; actual fresh-evidence packets enforced before sending. Packet tokens are estimates, provider usage is actual.",
+    "Existing supplied input generators, scope observations, browser procedures, evaluator, and policy remain human/development contributions.",
+    "Historical autonomous failure remains a separate failure; this new successful run does not rewrite it.",
+    "Final set is developer-selected after visible acceptance, expected outputs unavailable to the closed repair loop.",
+    "Routing evidence-ID validation was prechecked; no rejection occurred, so live rejection/repair routing was not exercised.",
+    "Prechecks required ordinary host process launch outside the shell sandbox before the sole live run; no inference occurred during prechecks."
+  ]
+}

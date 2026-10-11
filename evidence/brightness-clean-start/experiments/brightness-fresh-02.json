@@ -1,0 +1,24 @@
+{
+  "selected_by": "runtime",
+  "plan": {
+    "question": "How are fractional outputs quantized, and where does positive clipping begin?",
+    "hypotheses": [
+      "H1: Multiply by 1.25, floor, then clip.",
+      "H2: Multiply by 1.25, round to nearest with ties to even, then clip; disfavored by existing +17 evidence.",
+      "H3: Multiply by 1.25, round half upward, then clip; disfavored by existing +17 evidence."
+    ],
+    "input": {
+      "kind": "patches",
+      "width": 17,
+      "height": 3
+    },
+    "brightness": 25,
+    "predictions": [
+      "For inputs [1,2,15,63,127,129,191,223], H1 predicts [1,2,18,78,158,161,238,255].",
+      "H2 predicts [1,2,19,79,159,161,239,255]; H3 predicts [1,3,19,79,159,161,239,255].",
+      "H1 clips every input >=204 to 255; supplied patches 223 through 255 must all become 255. Alpha stays 255."
+    ],
+    "usefulness": "Tests fresh quarter-step and tie cases, low values and highlight clipping. Require exact neutral roundtrip; all non-brightness controls stay 0."
+  },
+  "before_execution": true
+}

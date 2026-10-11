@@ -1,0 +1,22 @@
+{
+  "selected_by": "runtime",
+  "plan": {
+    "question": "Does the negative endpoint reach exact black rather than retaining residual intensity?",
+    "hypotheses": [
+      "H1: Linear multiplier 1+b/100 reaches zero at -100.",
+      "H2: Reciprocal negative multiplier 1/(1-b/100) retains half intensity at -100."
+    ],
+    "input": {
+      "kind": "gray_ramp",
+      "width": 257,
+      "height": 3
+    },
+    "brightness": -100,
+    "predictions": [
+      "H1 predicts RGB=0 for every pixel, alpha=255.",
+      "H2 predicts outputs [0,32,64,127] for inputs [0,64,128,255], alpha=255."
+    ],
+    "usefulness": "Checks the parameter endpoint across the full intensity range, complementing the interior negative test. Require exact neutral roundtrip and keep all other controls at 0."
+  },
+  "before_execution": true
+}

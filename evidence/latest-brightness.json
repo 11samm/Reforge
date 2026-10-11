@@ -5,5 +5,7 @@
   "original_run_status": "unresolved",
   "raw_run_report": "evidence/brightness/original-run-report.json",
   "host_revalidation": "evidence/brightness/visible-report.json",
-  "fresh_evaluation": "evidence/brightness/fresh-report.json"
+  "fresh_evaluation": "evidence/brightness/fresh-report.json",
+  "latest_verification": "evidence/brightness-clean-start/integration.json",
+  "latest_verification_status": "accepted_without_human_intervention"
 }

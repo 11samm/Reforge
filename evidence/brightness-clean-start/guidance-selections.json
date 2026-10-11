@@ -1,0 +1,17 @@
+{
+  "planner": {
+    "role": "planner",
+    "signals": [
+      "planning"
+    ],
+    "strategy_ids": [
+      "G1-verify-roundtrip",
+      "G3-matched-experiments",
+      "G4-numerical-profiles"
+    ],
+    "id": "global-investigation-strategies",
+    "version": "1.0.0",
+    "source": "learning/investigation-guidance.json",
+    "sha256": "d8ed872721aa089c9c33c1cdfa4df1267a63b07fdb3aaf7d6b5ea1c7c762808c"
+  }
+}

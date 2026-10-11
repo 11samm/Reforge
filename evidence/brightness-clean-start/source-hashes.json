@@ -1,0 +1,12 @@
+{
+  "README.md": "0821f4d0e71e3a0757d200c12d62b7352b9268f41798620bef013f04dfaa80c0",
+  "index.html": "f838532333df0e5f4ddbb31531f2ff1859d743cbac94d4fb4159c8ba0ab9915b",
+  "package-lock.json": "3222e1a19b14da5ce3e3b04b821c4c6a396f8d7e63c4b2c92c37087bc47747f7",
+  "package.json": "2af11af902bdff045a78fe6b4e7fddba05a274fc2b752a3d9376514593145b69",
+  "src/brightness.ts": "1da05e2484ef4dc6682705d4414620b578df8fa2acb7b5fe2fb21f1abc590030",
+  "src/current-image.ts": "deb0c575a3fb79e3151eccde7a58232f2b724a666b90f07e071dfb7f527ed84f",
+  "src/main.tsx": "025c2d9ebb782a1eb9936c3dd449363dd912464eda0804fa653f9efbd15a055f",
+  "src/style.css": "7ad8204b3d47249c58a29a34ed312707ba2350bd646f70020646b12503ce8568",
+  "tsconfig.json": "4b1fcc68dcc293b9d94d66513060ae4ef6ca862b55e6532c69133818f3d36308",
+  "vite.config.ts": "96515456b0c8776b5cc4e5519dd8bb5fe04dd5160ce37cb3b1ffac9cb60cf997"
+}

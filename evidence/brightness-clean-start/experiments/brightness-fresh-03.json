@@ -1,0 +1,24 @@
+{
+  "selected_by": "runtime",
+  "plan": {
+    "question": "Is brightness alpha-independent on partially transparent saturated colors?",
+    "hypotheses": [
+      "H1: Straight RGB uses floor(0.63*RGB) regardless of alpha; alpha preserved.",
+      "H2: The effective brightness decrement is weighted by alpha: floor(RGB*(1-0.37*A/255)); alpha preserved.",
+      "H3: Straight RGB follows H1 internally, but premultiplied export introduces alpha-dependent RGB quantization."
+    ],
+    "input": {
+      "kind": "alpha_shapes",
+      "width": 6,
+      "height": 3
+    },
+    "brightness": -37,
+    "predictions": [
+      "H1 predicts green [0,160,0,A] and magenta [160,0,160,A] for A in [255,128,17].",
+      "H2 predicts nonzero RGB components [160,207,248] across alpha rows [255,128,17].",
+      "H3 predicts approximately 160 in each nonzero component, with potentially larger quantization deviations at A=17; alpha must remain exactly [255,128,17]."
+    ],
+    "usefulness": "Separates alpha-weighted processing from straight-color processing and export artifacts. Accept behavior evidence only after exact neutral import/export confirmation."
+  },
+  "before_execution": true
+}

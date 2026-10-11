@@ -1,0 +1,111 @@
+[
+  {
+    "invocation": "model\\builder-1\\invocation.json",
+    "cwd": "local-only:isolated-workspace/generated-app",
+    "environments": [],
+    "capability_roots": [],
+    "completed_item_types": [
+      "userMessage",
+      "dynamicToolCall",
+      "dynamicToolCall",
+      "reasoning",
+      "agentMessage",
+      "dynamicToolCall",
+      "dynamicToolCall",
+      "reasoning",
+      "dynamicToolCall",
+      "dynamicToolCall",
+      "agentMessage"
+    ],
+    "tool_requests": [
+      {
+        "method": "item/tool/call",
+        "tool": "shell_read_file",
+        "success": true
+      },
+      {
+        "method": "item/tool/call",
+        "tool": "shell_read_file",
+        "success": true
+      },
+      {
+        "method": "item/tool/call",
+        "tool": "shell_write_file",
+        "success": true
+      },
+      {
+        "method": "item/tool/call",
+        "tool": "shell_read_file",
+        "success": true
+      },
+      {
+        "method": "item/tool/call",
+        "tool": "shell_write_file",
+        "success": true
+      },
+      {
+        "method": "item/tool/call",
+        "tool": "shell_write_file",
+        "success": true
+      }
+    ],
+    "audit": [
+      {
+        "tool": "shell_read_file",
+        "path": "src/main.tsx"
+      },
+      {
+        "tool": "shell_read_file",
+        "path": "src/current-image.ts"
+      },
+      {
+        "tool": "shell_write_file",
+        "path": "src/brightness.ts",
+        "sha256": "b9ea8d0cfd6a1baccf932fc40a25c52daf2d506a23688731feabe13a926fe888",
+        "written_source_artifact": "local-only:isolated-workspace/evidence/learning/20261011T012950Z-0ee26b62/model/builder-1/written-sources/03-src_brightness.ts"
+      },
+      {
+        "tool": "shell_read_file",
+        "path": "src/main.tsx"
+      },
+      {
+        "tool": "shell_write_file",
+        "path": "src/main.tsx",
+        "sha256": "fd7027d18d033f5b24ab71e94b755e914497ee8e3c243c45cad8a31b79e25315",
+        "written_source_artifact": "local-only:isolated-workspace/evidence/learning/20261011T012950Z-0ee26b62/model/builder-1/written-sources/05-src_main.tsx"
+      },
+      {
+        "tool": "shell_write_file",
+        "path": "README.md",
+        "sha256": "de67b41b2afc7a8efb9fe88221ac8fbfe8118ab2bd5ae2385873be9838f6be91",
+        "written_source_artifact": "local-only:isolated-workspace/evidence/learning/20261011T012950Z-0ee26b62/model/builder-1/written-sources/06-README.md"
+      }
+    ]
+  },
+  {
+    "invocation": "model\\contract-1\\invocation.json",
+    "cwd": "local-only:isolated-workspace/generated-app",
+    "environments": [],
+    "capability_roots": [],
+    "completed_item_types": [
+      "userMessage",
+      "reasoning",
+      "agentMessage"
+    ],
+    "tool_requests": [],
+    "audit": []
+  },
+  {
+    "invocation": "model\\planner\\invocation.json",
+    "cwd": "local-only:isolated-workspace/generated-app",
+    "environments": [],
+    "capability_roots": [],
+    "completed_item_types": [
+      "userMessage",
+      "reasoning",
+      "agentMessage"
+    ],
+    "tool_requests": [],
+    "audit": []
+  }
+]

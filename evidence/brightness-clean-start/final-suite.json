@@ -1,0 +1,85 @@
+{
+  "id": "new-final-brightness-once-v1",
+  "cases": [
+    {
+      "id": "final-new-opaque-negative",
+      "input": "evidence/brightness-clean-start/fixtures/final/final-new-opaque-negative-input.png",
+      "expected": "evidence/brightness-clean-start/fixtures/final/final-new-opaque-negative-expected.png",
+      "input_sha256": "cee3c598073abeab386514e524bfb13e87bb22b3a3d0a78d2f23e5b565471ce1",
+      "expected_sha256": "1c914732f8c4c0b87b5c25a7bfa9405a503c38fb6fc326e8d645ef84bea11b27",
+      "brightness": -61,
+      "regions": {
+        "full": [
+          0,
+          0,
+          23,
+          7
+        ]
+      }
+    },
+    {
+      "id": "final-new-opaque-positive",
+      "input": "evidence/brightness-clean-start/fixtures/final/final-new-opaque-positive-input.png",
+      "expected": "evidence/brightness-clean-start/fixtures/final/final-new-opaque-positive-expected.png",
+      "input_sha256": "f98dcc459c3599eae3963eee4f16a8f823fd0c0996b05ec675e57156b1d5a4f7",
+      "expected_sha256": "920ae43c0edba9369f906b7bb5a7dc4ca4c39ebf38cfbb01e2fd392ccd676907",
+      "brightness": 26,
+      "regions": {
+        "full": [
+          0,
+          0,
+          19,
+          11
+        ]
+      }
+    },
+    {
+      "id": "final-new-alpha-positive",
+      "input": "evidence/brightness-clean-start/fixtures/final/final-new-alpha-positive-input.png",
+      "expected": "evidence/brightness-clean-start/fixtures/final/final-new-alpha-positive-expected.png",
+      "input_sha256": "3fb96cdd2c106d50cf9719f2c64bd82532480dd0d84e323059eb431af6b0a713",
+      "expected_sha256": "b086b572106e79626acb5d82df3f0ee5e5a0b9cd16aebdf166dee9e72bc9ce0a",
+      "brightness": 79,
+      "regions": {
+        "full": [
+          0,
+          0,
+          13,
+          9
+        ]
+      }
+    },
+    {
+      "id": "final-new-neutral",
+      "input": "evidence/brightness-clean-start/fixtures/final/final-new-neutral-input.png",
+      "expected": "evidence/brightness-clean-start/fixtures/final/final-new-neutral-expected.png",
+      "input_sha256": "6e28a2bb445651eeb5271ffb6793c07341e22c5d26f0ee01248c7667cad09c93",
+      "expected_sha256": "cc7f64cda1efe7c1da54f4f4affc91ea04fb6e6ddda63cd51ca4de0f66135dc7",
+      "brightness": 0,
+      "regions": {
+        "full": [
+          0,
+          0,
+          17,
+          13
+        ]
+      }
+    }
+  ],
+  "policy": {
+    "id": "exact-rgba-v1",
+    "version": 1,
+    "mode": "exact",
+    "rgb_mean_max": 0,
+    "rgb_pixel_tolerance": 0,
+    "rgb_fraction_min": 1,
+    "alpha_mean_max": 0,
+    "alpha_max": 0,
+    "alpha_pixel_tolerance": 0,
+    "alpha_fraction_min": 1,
+    "description": "Exact decoded 8-bit RGBA equality for baseline regressions."
+  },
+  "neutral_identity_required": true,
+  "original_frozen_suite_sha256": "cda48e99e9de6fac0ffdd8bdcea4493e19bfa55db8b4d1a8954bbbd8ba82167f",
+  "publication_note": "Paths relocated; original frozen suite hash identifies historical run bytes. Fixture hashes unchanged."
+}

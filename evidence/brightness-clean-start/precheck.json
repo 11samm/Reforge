@@ -1,0 +1,245 @@
+{
+  "status": "passed",
+  "no_model_calls": true,
+  "baseline_cases": [
+    {
+      "case_id": "opaque-upload-export",
+      "status": "passed",
+      "metrics": {
+        "pixel_count": 12513,
+        "rgb_mae_per_channel": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rgb_mae": 0.0,
+        "rgb_max": 0,
+        "alpha_mae": 0.0,
+        "alpha_max": 0,
+        "rgb_fraction_within_tolerance": 1.0,
+        "alpha_fraction_within_tolerance": 1.0,
+        "different_pixels": 0
+      }
+    },
+    {
+      "case_id": "transparent-upload-export",
+      "status": "passed",
+      "metrics": {
+        "pixel_count": 3185,
+        "rgb_mae_per_channel": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rgb_mae": 0.0,
+        "rgb_max": 0,
+        "alpha_mae": 0.0,
+        "alpha_max": 0,
+        "rgb_fraction_within_tolerance": 1.0,
+        "alpha_fraction_within_tolerance": 1.0,
+        "different_pixels": 0
+      }
+    },
+    {
+      "case_id": "replace-uploaded-image",
+      "status": "passed",
+      "metrics": {
+        "pixel_count": 3185,
+        "rgb_mae_per_channel": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rgb_mae": 0.0,
+        "rgb_max": 0,
+        "alpha_mae": 0.0,
+        "alpha_max": 0,
+        "rgb_fraction_within_tolerance": 1.0,
+        "alpha_fraction_within_tolerance": 1.0,
+        "different_pixels": 0
+      }
+    },
+    {
+      "case_id": "current-state-modification",
+      "status": "passed",
+      "metrics": {
+        "pixel_count": 12,
+        "rgb_mae_per_channel": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rgb_mae": 0.0,
+        "rgb_max": 0,
+        "alpha_mae": 0.0,
+        "alpha_max": 0,
+        "rgb_fraction_within_tolerance": 1.0,
+        "alpha_fraction_within_tolerance": 1.0,
+        "different_pixels": 0
+      }
+    }
+  ],
+  "packets": [
+    {
+      "label": "contract-scope-dry",
+      "role": "contract",
+      "bytes": 6108,
+      "estimated_tokens": 9971,
+      "parts": {
+        "prompt": {
+          "bytes": 4732,
+          "tokens": 1873
+        },
+        "output_schema": {
+          "bytes": 1376,
+          "tokens": 378
+        }
+      },
+      "expected_tool_rounds": 1,
+      "projected_cumulative_input_tokens": 9971,
+      "method": "regex-piece estimate + 7720 fixed runtime/system overhead; calibrated on recorded gpt-6.1-sol decision-call inputTokens (planner, contract-1, route-1/2; <=0.6% error). Not the provider tokenizer; tool-loop cumulative input is a projection.",
+      "limits": {
+        "bytes": 40000,
+        "tokens": 26000
+      }
+    },
+    {
+      "label": "builder-1",
+      "role": "builder",
+      "bytes": 21452,
+      "estimated_tokens": 14130,
+      "parts": {
+        "prompt": {
+          "bytes": 5922,
+          "tokens": 2138
+        },
+        "output_schema": {
+          "bytes": 0,
+          "tokens": 0
+        },
+        "supplied:src/main.tsx": {
+          "bytes": 13131,
+          "tokens": 3571
+        },
+        "supplied:src/current-image.ts": {
+          "bytes": 2399,
+          "tokens": 701
+        }
+      },
+      "expected_tool_rounds": 6,
+      "projected_cumulative_input_tokens": 84780,
+      "method": "regex-piece estimate + 7720 fixed runtime/system overhead; calibrated on recorded gpt-6.1-sol decision-call inputTokens (planner, contract-1, route-1/2; <=0.6% error). Not the provider tokenizer; tool-loop cumulative input is a projection.",
+      "limits": {
+        "bytes": 60000,
+        "tokens": 30000
+      }
+    },
+    {
+      "label": "planner-dry",
+      "role": "planner",
+      "bytes": 7113,
+      "estimated_tokens": 10161,
+      "parts": {
+        "prompt": {
+          "bytes": 6330,
+          "tokens": 2234
+        },
+        "output_schema": {
+          "bytes": 783,
+          "tokens": 207
+        }
+      },
+      "expected_tool_rounds": 1,
+      "projected_cumulative_input_tokens": 10161,
+      "method": "regex-piece estimate + 7720 fixed runtime/system overhead; calibrated on recorded gpt-6.1-sol decision-call inputTokens (planner, contract-1, route-1/2; <=0.6% error). Not the provider tokenizer; tool-loop cumulative input is a projection.",
+      "limits": {
+        "bytes": 8000,
+        "tokens": 11000
+      }
+    }
+  ],
+  "packet_limit_scope": "Initial scope packets measured now; all actual packets enforced before sending. Future fresh evidence depends on planner selections.",
+  "config": {
+    "fresh_experiments": 4,
+    "candidates": 2,
+    "run_seconds": 600,
+    "reserve_seconds": 100,
+    "model_seconds": 120,
+    "builder_seconds": 160,
+    "reference_seconds": 60,
+    "command_seconds": 90,
+    "retries": 0,
+    "percentage_min": 0,
+    "percentage_max": 10,
+    "window_position": [
+      1600,
+      0
+    ],
+    "builder_tool_calls": 12,
+    "evidence_reads": 6,
+    "packet_limits": {
+      "planner": {
+        "bytes": 8000,
+        "tokens": 11000
+      },
+      "contract": {
+        "bytes": 40000,
+        "tokens": 26000
+      },
+      "route": {
+        "bytes": 32000,
+        "tokens": 22000
+      },
+      "builder": {
+        "bytes": 60000,
+        "tokens": 30000
+      },
+      "repair": {
+        "bytes": 60000,
+        "tokens": 30000
+      }
+    }
+  },
+  "boundary": {
+    "app": "local-only:isolated-workspace/generated-app",
+    "allowed_reads": [
+      "README.md",
+      "src/brightness.ts",
+      "src/current-image.ts",
+      "src/main.tsx",
+      "src/style.css"
+    ],
+    "allowed_writes": [
+      "README.md",
+      "src/brightness.ts",
+      "src/main.tsx"
+    ],
+    "denied_reads": [
+      "../generated-app/src/brightness.ts",
+      "../../Reforge/generated-app/src/brightness.ts",
+      "evidence/brightness/fresh-report.json",
+      "src/gaussian-blur.ts",
+      "layout-packet/observation.md",
+      "src/main.tsx:stream",
+      "package.json"
+    ],
+    "evidence": "Only neutral-1 and nonneutral-1 developer scope PNGs plus runtime-selected exports; bounded evidence reader, maximum six calls.",
+    "no_native_capabilities": true,
+    "host_is_not_OS_sandbox": true
+  },
+  "authentication_catalog": {
+    "type": "chatgpt",
+    "plan": "plus",
+    "runtime_version": "codex-cli 0.162.0-alpha.17.2",
+    "model": "gpt-6.1-sol",
+    "effort": "medium",
+    "inference_calls": 0
+  },
+  "corrected_host_checks": [
+    "operation-specific menu/UTF-8 selectors",
+    "valid named full-image region",
+    "actual reference metadata in packets",
+    "route evidence-ID enum and validation"
+  ],
+  "command": "D:\\Samuel\\Downloads\\Code\\ReforgerData\\brightness-clean-start-verification : python -m learning.brightness --config brightness.config.json"
+}

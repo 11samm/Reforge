@@ -1,0 +1,88 @@
+{
+  "method": "regex-piece estimate + 7720 fixed runtime/system overhead; calibrated on recorded gpt-6.1-sol decision-call inputTokens (planner, contract-1, route-1/2; <=0.6% error). Not the provider tokenizer; tool-loop cumulative input is a projection.",
+  "packets": [
+    {
+      "label": "planner",
+      "role": "planner",
+      "bytes": 7117,
+      "estimated_tokens": 10163,
+      "parts": {
+        "prompt": {
+          "bytes": 6334,
+          "tokens": 2236
+        },
+        "output_schema": {
+          "bytes": 783,
+          "tokens": 207
+        }
+      },
+      "expected_tool_rounds": 1,
+      "projected_cumulative_input_tokens": 10163,
+      "method": "regex-piece estimate + 7720 fixed runtime/system overhead; calibrated on recorded gpt-6.1-sol decision-call inputTokens (planner, contract-1, route-1/2; <=0.6% error). Not the provider tokenizer; tool-loop cumulative input is a projection.",
+      "limits": {
+        "bytes": 8000,
+        "tokens": 11000
+      },
+      "within_limits": true,
+      "dry_run": false
+    },
+    {
+      "label": "contract-1",
+      "role": "contract",
+      "bytes": 16918,
+      "estimated_tokens": 15390,
+      "parts": {
+        "prompt": {
+          "bytes": 15266,
+          "tokens": 7208
+        },
+        "output_schema": {
+          "bytes": 1652,
+          "tokens": 462
+        }
+      },
+      "expected_tool_rounds": 1,
+      "projected_cumulative_input_tokens": 15390,
+      "method": "regex-piece estimate + 7720 fixed runtime/system overhead; calibrated on recorded gpt-6.1-sol decision-call inputTokens (planner, contract-1, route-1/2; <=0.6% error). Not the provider tokenizer; tool-loop cumulative input is a projection.",
+      "limits": {
+        "bytes": 40000,
+        "tokens": 26000
+      },
+      "within_limits": true,
+      "dry_run": false
+    },
+    {
+      "label": "builder-1",
+      "role": "builder",
+      "bytes": 36289,
+      "estimated_tokens": 20422,
+      "parts": {
+        "prompt": {
+          "bytes": 20759,
+          "tokens": 8430
+        },
+        "output_schema": {
+          "bytes": 0,
+          "tokens": 0
+        },
+        "supplied:src/main.tsx": {
+          "bytes": 13131,
+          "tokens": 3571
+        },
+        "supplied:src/current-image.ts": {
+          "bytes": 2399,
+          "tokens": 701
+        }
+      },
+      "expected_tool_rounds": 6,
+      "projected_cumulative_input_tokens": 122532,
+      "method": "regex-piece estimate + 7720 fixed runtime/system overhead; calibrated on recorded gpt-6.1-sol decision-call inputTokens (planner, contract-1, route-1/2; <=0.6% error). Not the provider tokenizer; tool-loop cumulative input is a projection.",
+      "limits": {
+        "bytes": 60000,
+        "tokens": 30000
+      },
+      "within_limits": true,
+      "dry_run": false
+    }
+  ]
+}

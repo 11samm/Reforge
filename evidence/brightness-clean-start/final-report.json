@@ -1,0 +1,501 @@
+{
+  "build_valid": true,
+  "independent": true,
+  "app": "local-only:isolated-workspace/generated-app",
+  "cases": [
+    {
+      "schema_version": 1,
+      "case_id": "final-new-opaque-negative",
+      "status": "passed",
+      "classification": "match",
+      "policy": {
+        "id": "exact-rgba-v1",
+        "version": 1,
+        "mode": "exact",
+        "rgb_mean_max": 0,
+        "rgb_pixel_tolerance": 0,
+        "rgb_fraction_min": 1,
+        "alpha_mean_max": 0,
+        "alpha_max": 0,
+        "alpha_pixel_tolerance": 0,
+        "alpha_fraction_min": 1,
+        "description": "Exact decoded 8-bit RGBA equality for baseline regressions."
+      },
+      "policy_sha256": "7b797f2dccaf177ec68ec8ba0e20b7aaa1c34d7bf460dd8e6ba2ba28bbd15f8f",
+      "dimensions_equal": true,
+      "dimensions": {
+        "reference": [
+          23,
+          7
+        ],
+        "candidate": [
+          23,
+          7
+        ]
+      },
+      "metrics": {
+        "pixel_count": 161,
+        "rgb_mae_per_channel": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rgb_mae": 0.0,
+        "rgb_max": 0,
+        "alpha_mae": 0.0,
+        "alpha_max": 0,
+        "rgb_fraction_within_tolerance": 1.0,
+        "alpha_fraction_within_tolerance": 1.0,
+        "different_pixels": 0
+      },
+      "regions": {
+        "full": {
+          "box": [
+            0,
+            0,
+            23,
+            7
+          ],
+          "metrics": {
+            "pixel_count": 161,
+            "rgb_mae_per_channel": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "rgb_mae": 0.0,
+            "rgb_max": 0,
+            "alpha_mae": 0.0,
+            "alpha_max": 0,
+            "rgb_fraction_within_tolerance": 1.0,
+            "alpha_fraction_within_tolerance": 1.0,
+            "different_pixels": 0
+          },
+          "passed": true,
+          "reasons": []
+        }
+      },
+      "reasons": [],
+      "artifacts": {
+        "reference_raw": "reference-raw.png",
+        "candidate_raw": "candidate-raw.png",
+        "alpha-difference-x16": "alpha-difference-x16.png",
+        "candidate-raw": "candidate-raw.png",
+        "reference-raw": "reference-raw.png",
+        "region-full-alpha-difference-x16": "region-full-alpha-difference-x16.png",
+        "region-full-rgb-difference-x16": "region-full-rgb-difference-x16.png",
+        "region-full-side-by-side": "region-full-side-by-side.png",
+        "rgb-difference-x16": "rgb-difference-x16.png",
+        "side-by-side": "side-by-side.png"
+      },
+      "display": {
+        "checker_size": 8,
+        "difference_gain": 16,
+        "side_by_side_order": [
+          "reference",
+          "candidate"
+        ],
+        "scoring": "raw unpremultiplied 8-bit RGBA; no compositing",
+        "changed_bounds": null
+      },
+      "reference_path": "local-only:isolated-workspace/evidence/learning/new-final-brightness/references/final-new-opaque-negative/output.png",
+      "candidate_path": "local-only:isolated-workspace/evidence/learning/new-final-brightness/evaluation-once/final-new-opaque-negative.png"
+    },
+    {
+      "schema_version": 1,
+      "case_id": "final-new-opaque-positive",
+      "status": "passed",
+      "classification": "match",
+      "policy": {
+        "id": "exact-rgba-v1",
+        "version": 1,
+        "mode": "exact",
+        "rgb_mean_max": 0,
+        "rgb_pixel_tolerance": 0,
+        "rgb_fraction_min": 1,
+        "alpha_mean_max": 0,
+        "alpha_max": 0,
+        "alpha_pixel_tolerance": 0,
+        "alpha_fraction_min": 1,
+        "description": "Exact decoded 8-bit RGBA equality for baseline regressions."
+      },
+      "policy_sha256": "7b797f2dccaf177ec68ec8ba0e20b7aaa1c34d7bf460dd8e6ba2ba28bbd15f8f",
+      "dimensions_equal": true,
+      "dimensions": {
+        "reference": [
+          19,
+          11
+        ],
+        "candidate": [
+          19,
+          11
+        ]
+      },
+      "metrics": {
+        "pixel_count": 209,
+        "rgb_mae_per_channel": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rgb_mae": 0.0,
+        "rgb_max": 0,
+        "alpha_mae": 0.0,
+        "alpha_max": 0,
+        "rgb_fraction_within_tolerance": 1.0,
+        "alpha_fraction_within_tolerance": 1.0,
+        "different_pixels": 0
+      },
+      "regions": {
+        "full": {
+          "box": [
+            0,
+            0,
+            19,
+            11
+          ],
+          "metrics": {
+            "pixel_count": 209,
+            "rgb_mae_per_channel": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "rgb_mae": 0.0,
+            "rgb_max": 0,
+            "alpha_mae": 0.0,
+            "alpha_max": 0,
+            "rgb_fraction_within_tolerance": 1.0,
+            "alpha_fraction_within_tolerance": 1.0,
+            "different_pixels": 0
+          },
+          "passed": true,
+          "reasons": []
+        }
+      },
+      "reasons": [],
+      "artifacts": {
+        "reference_raw": "reference-raw.png",
+        "candidate_raw": "candidate-raw.png",
+        "alpha-difference-x16": "alpha-difference-x16.png",
+        "candidate-raw": "candidate-raw.png",
+        "reference-raw": "reference-raw.png",
+        "region-full-alpha-difference-x16": "region-full-alpha-difference-x16.png",
+        "region-full-rgb-difference-x16": "region-full-rgb-difference-x16.png",
+        "region-full-side-by-side": "region-full-side-by-side.png",
+        "rgb-difference-x16": "rgb-difference-x16.png",
+        "side-by-side": "side-by-side.png"
+      },
+      "display": {
+        "checker_size": 8,
+        "difference_gain": 16,
+        "side_by_side_order": [
+          "reference",
+          "candidate"
+        ],
+        "scoring": "raw unpremultiplied 8-bit RGBA; no compositing",
+        "changed_bounds": null
+      },
+      "reference_path": "local-only:isolated-workspace/evidence/learning/new-final-brightness/references/final-new-opaque-positive/output.png",
+      "candidate_path": "local-only:isolated-workspace/evidence/learning/new-final-brightness/evaluation-once/final-new-opaque-positive.png"
+    },
+    {
+      "schema_version": 1,
+      "case_id": "final-new-alpha-positive",
+      "status": "passed",
+      "classification": "match",
+      "policy": {
+        "id": "exact-rgba-v1",
+        "version": 1,
+        "mode": "exact",
+        "rgb_mean_max": 0,
+        "rgb_pixel_tolerance": 0,
+        "rgb_fraction_min": 1,
+        "alpha_mean_max": 0,
+        "alpha_max": 0,
+        "alpha_pixel_tolerance": 0,
+        "alpha_fraction_min": 1,
+        "description": "Exact decoded 8-bit RGBA equality for baseline regressions."
+      },
+      "policy_sha256": "7b797f2dccaf177ec68ec8ba0e20b7aaa1c34d7bf460dd8e6ba2ba28bbd15f8f",
+      "dimensions_equal": true,
+      "dimensions": {
+        "reference": [
+          13,
+          9
+        ],
+        "candidate": [
+          13,
+          9
+        ]
+      },
+      "metrics": {
+        "pixel_count": 117,
+        "rgb_mae_per_channel": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rgb_mae": 0.0,
+        "rgb_max": 0,
+        "alpha_mae": 0.0,
+        "alpha_max": 0,
+        "rgb_fraction_within_tolerance": 1.0,
+        "alpha_fraction_within_tolerance": 1.0,
+        "different_pixels": 0
+      },
+      "regions": {
+        "full": {
+          "box": [
+            0,
+            0,
+            13,
+            9
+          ],
+          "metrics": {
+            "pixel_count": 117,
+            "rgb_mae_per_channel": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "rgb_mae": 0.0,
+            "rgb_max": 0,
+            "alpha_mae": 0.0,
+            "alpha_max": 0,
+            "rgb_fraction_within_tolerance": 1.0,
+            "alpha_fraction_within_tolerance": 1.0,
+            "different_pixels": 0
+          },
+          "passed": true,
+          "reasons": []
+        }
+      },
+      "reasons": [],
+      "artifacts": {
+        "reference_raw": "reference-raw.png",
+        "candidate_raw": "candidate-raw.png",
+        "alpha-difference-x16": "alpha-difference-x16.png",
+        "candidate-raw": "candidate-raw.png",
+        "reference-raw": "reference-raw.png",
+        "region-full-alpha-difference-x16": "region-full-alpha-difference-x16.png",
+        "region-full-rgb-difference-x16": "region-full-rgb-difference-x16.png",
+        "region-full-side-by-side": "region-full-side-by-side.png",
+        "rgb-difference-x16": "rgb-difference-x16.png",
+        "side-by-side": "side-by-side.png"
+      },
+      "display": {
+        "checker_size": 8,
+        "difference_gain": 16,
+        "side_by_side_order": [
+          "reference",
+          "candidate"
+        ],
+        "scoring": "raw unpremultiplied 8-bit RGBA; no compositing",
+        "changed_bounds": null
+      },
+      "reference_path": "local-only:isolated-workspace/evidence/learning/new-final-brightness/references/final-new-alpha-positive/output.png",
+      "candidate_path": "local-only:isolated-workspace/evidence/learning/new-final-brightness/evaluation-once/final-new-alpha-positive.png"
+    },
+    {
+      "schema_version": 1,
+      "case_id": "final-new-neutral",
+      "status": "passed",
+      "classification": "match",
+      "policy": {
+        "id": "exact-rgba-v1",
+        "version": 1,
+        "mode": "exact",
+        "rgb_mean_max": 0,
+        "rgb_pixel_tolerance": 0,
+        "rgb_fraction_min": 1,
+        "alpha_mean_max": 0,
+        "alpha_max": 0,
+        "alpha_pixel_tolerance": 0,
+        "alpha_fraction_min": 1,
+        "description": "Exact decoded 8-bit RGBA equality for baseline regressions."
+      },
+      "policy_sha256": "7b797f2dccaf177ec68ec8ba0e20b7aaa1c34d7bf460dd8e6ba2ba28bbd15f8f",
+      "dimensions_equal": true,
+      "dimensions": {
+        "reference": [
+          17,
+          13
+        ],
+        "candidate": [
+          17,
+          13
+        ]
+      },
+      "metrics": {
+        "pixel_count": 221,
+        "rgb_mae_per_channel": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rgb_mae": 0.0,
+        "rgb_max": 0,
+        "alpha_mae": 0.0,
+        "alpha_max": 0,
+        "rgb_fraction_within_tolerance": 1.0,
+        "alpha_fraction_within_tolerance": 1.0,
+        "different_pixels": 0
+      },
+      "regions": {
+        "full": {
+          "box": [
+            0,
+            0,
+            17,
+            13
+          ],
+          "metrics": {
+            "pixel_count": 221,
+            "rgb_mae_per_channel": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "rgb_mae": 0.0,
+            "rgb_max": 0,
+            "alpha_mae": 0.0,
+            "alpha_max": 0,
+            "rgb_fraction_within_tolerance": 1.0,
+            "alpha_fraction_within_tolerance": 1.0,
+            "different_pixels": 0
+          },
+          "passed": true,
+          "reasons": []
+        }
+      },
+      "reasons": [],
+      "artifacts": {
+        "reference_raw": "reference-raw.png",
+        "candidate_raw": "candidate-raw.png",
+        "alpha-difference-x16": "alpha-difference-x16.png",
+        "candidate-raw": "candidate-raw.png",
+        "reference-raw": "reference-raw.png",
+        "region-full-alpha-difference-x16": "region-full-alpha-difference-x16.png",
+        "region-full-rgb-difference-x16": "region-full-rgb-difference-x16.png",
+        "region-full-side-by-side": "region-full-side-by-side.png",
+        "rgb-difference-x16": "rgb-difference-x16.png",
+        "side-by-side": "side-by-side.png"
+      },
+      "display": {
+        "checker_size": 8,
+        "difference_gain": 16,
+        "side_by_side_order": [
+          "reference",
+          "candidate"
+        ],
+        "scoring": "raw unpremultiplied 8-bit RGBA; no compositing",
+        "changed_bounds": null
+      },
+      "reference_path": "local-only:isolated-workspace/evidence/learning/new-final-brightness/references/final-new-neutral/output.png",
+      "candidate_path": "local-only:isolated-workspace/evidence/learning/new-final-brightness/evaluation-once/final-new-neutral.png"
+    }
+  ],
+  "suite_sha256": "cda48e99e9de6fac0ffdd8bdcea4493e19bfa55db8b4d1a8954bbbd8ba82167f",
+  "evaluator_suspect": false,
+  "ui_valid": true,
+  "execution": {
+    "reference_browser_closed": true,
+    "input_only_batch": [
+      {
+        "input": "local-only:isolated-workspace/evidence/learning/new-final-brightness/inputs/final-new-opaque-negative.png",
+        "brightness": -61,
+        "output": "local-only:isolated-workspace/evidence/learning/new-final-brightness/evaluation-once/final-new-opaque-negative.png"
+      },
+      {
+        "input": "local-only:isolated-workspace/evidence/learning/new-final-brightness/inputs/final-new-opaque-positive.png",
+        "brightness": 26,
+        "output": "local-only:isolated-workspace/evidence/learning/new-final-brightness/evaluation-once/final-new-opaque-positive.png"
+      },
+      {
+        "input": "local-only:isolated-workspace/evidence/learning/new-final-brightness/inputs/final-new-alpha-positive.png",
+        "brightness": 79,
+        "output": "local-only:isolated-workspace/evidence/learning/new-final-brightness/evaluation-once/final-new-alpha-positive.png"
+      },
+      {
+        "input": "local-only:isolated-workspace/evidence/learning/new-final-brightness/inputs/final-new-neutral.png",
+        "brightness": 0,
+        "output": "local-only:isolated-workspace/evidence/learning/new-final-brightness/evaluation-once/final-new-neutral.png"
+      }
+    ],
+    "node_permission_guard": true,
+    "standard_network_api_guard": "three probes denied; not an OS sandbox"
+  },
+  "ui_check": {
+    "case_id": "final-new-opaque-negative",
+    "comparison": {
+      "dimensions_equal": true,
+      "rgba_equal": true,
+      "different_pixels": 0,
+      "max_channel_delta": 0
+    },
+    "external_requests": [],
+    "browser_errors": []
+  },
+  "status": "passed",
+  "elapsed_seconds": 21.177,
+  "elapsed_total_since_clean_start": 200.836,
+  "experiments": [
+    {
+      "id": "final-new-opaque-negative",
+      "brightness": -61,
+      "status": "observed",
+      "original_confirmation": {
+        "dimensions_equal": true,
+        "rgba_equal": true,
+        "different_pixels": 0,
+        "max_channel_delta": 0
+      },
+      "elapsed_seconds": 3.687,
+      "error": null
+    },
+    {
+      "id": "final-new-opaque-positive",
+      "brightness": 26,
+      "status": "observed",
+      "original_confirmation": {
+        "dimensions_equal": true,
+        "rgba_equal": true,
+        "different_pixels": 0,
+        "max_channel_delta": 0
+      },
+      "elapsed_seconds": 3.373,
+      "error": null
+    },
+    {
+      "id": "final-new-alpha-positive",
+      "brightness": 79,
+      "status": "observed",
+      "original_confirmation": {
+        "dimensions_equal": true,
+        "rgba_equal": true,
+        "different_pixels": 0,
+        "max_channel_delta": 0
+      },
+      "elapsed_seconds": 3.787,
+      "error": null
+    },
+    {
+      "id": "final-new-neutral",
+      "brightness": 0,
+      "status": "observed",
+      "original_confirmation": {
+        "dimensions_equal": true,
+        "rgba_equal": true,
+        "different_pixels": 0,
+        "max_channel_delta": 0
+      },
+      "elapsed_seconds": 3.328,
+      "error": null
+    }
+  ],
+  "no_repairs": true,
+  "model_calls": 0,
+  "expected_outputs_outside_repair_context": true,
+  "frozen_unchanged": true
+}

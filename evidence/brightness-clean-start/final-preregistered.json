@@ -1,0 +1,36 @@
+{
+  "definitions": [
+    [
+      "final-new-opaque-negative",
+      23,
+      7,
+      -61,
+      "opaque-a"
+    ],
+    [
+      "final-new-opaque-positive",
+      19,
+      11,
+      26,
+      "opaque-b"
+    ],
+    [
+      "final-new-alpha-positive",
+      13,
+      9,
+      79,
+      "alpha"
+    ],
+    [
+      "final-new-neutral",
+      17,
+      13,
+      0,
+      "opaque-c"
+    ]
+  ],
+  "fresh_inputs_created_after_visible_acceptance": true,
+  "expected_outputs_outside_repair_context": true,
+  "reused_old_fresh_cases": false,
+  "seed_rule": "Opaque RGB uses distinct deterministic coordinate formulas; alpha uses new nonalternating saturated-color blocks."
+}

@@ -1,0 +1,23 @@
+{
+  "selected_by": "runtime",
+  "plan": {
+    "question": "Does negative brightness apply the same multiplier independently to R, G and B?",
+    "hypotheses": [
+      "H1: RGB'=floor(RGB*(1+b/100)), clipped to [0,255]; alpha unchanged. Supported by the supplied +17 observation.",
+      "H2: Negative brightness uses RGB'=floor(RGB/(1-b/100)).",
+      "H3: Negative brightness subtracts 255*abs(b)/100, then floors and clips."
+    ],
+    "input": {
+      "kind": "channel_ramps",
+      "width": 257,
+      "height": 9
+    },
+    "brightness": -37,
+    "predictions": [
+      "For active-channel inputs [0,64,128,255], H1 predicts [0,40,80,160], H2 [0,46,93,186], H3 [0,0,33,160].",
+      "Inactive channels remain 0 and alpha remains 255 under all three hypotheses; compare all three channel profiles."
+    ],
+    "usefulness": "Fresh negative test distinguishes transfer laws and channel-specific behavior. Require exact brightness-0 roundtrip first; freeze every other control at 0."
+  },
+  "before_execution": true
+}

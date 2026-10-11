@@ -66,5 +66,22 @@
   "report": "evidence/brightness-results.md",
   "raw_run_report": "evidence/brightness/original-run-report.json",
   "canonical_contract": "evidence/brightness/canonical-contract.json",
-  "repair_loop": "closed"
+  "repair_loop": "closed",
+  "corrected_harness_clean_start": {
+    "status": "accepted_without_human_intervention",
+    "run_id": "20261011T012950Z-0ee26b62",
+    "report": "evidence/brightness-clean-start/README.md",
+    "integration": "evidence/brightness-clean-start/integration.json",
+    "visible_passed": 6,
+    "visible_total": 6,
+    "new_final_passed": 4,
+    "new_final_total": 4,
+    "candidate_attempts": 1,
+    "runtime_selected_experiments": 4,
+    "learning_with_cleanup_seconds": 165.748,
+    "total_through_final_seconds": 200.836,
+    "main_app_preserved": true,
+    "new_candidate_promoted": false,
+    "historical_original_run_status_unchanged": true
+  }
 }

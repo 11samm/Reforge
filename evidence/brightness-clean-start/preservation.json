@@ -1,0 +1,12 @@
+{
+  "main_source_dist_and_configuration_hashes_unchanged": true,
+  "experimental_sources_unchanged": true,
+  "protected_file_count": 25,
+  "main_dependency_hashes_match_pre_run_copy": true,
+  "dependency_file_count": 604,
+  "git_status_unchanged": true,
+  "main_head": "380484c08e23e14444bc2061c3b39fc0f57a99d0",
+  "no_main_build_or_write": true,
+  "no_dashboard_changes_commit_or_push": true,
+  "unrelated_work_verification": "Full Git status unchanged; declared experimental source trees and all generated-app files hashed. Unrelated artifact contents were not broadly inspected."
+}

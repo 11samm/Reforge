@@ -1,0 +1,183 @@
+{
+  "claims": [
+    {
+      "id": "brightness-zero",
+      "statement": "Brightness 0 exported RGBA exactly equal to the supplied opaque input.",
+      "status": "OBSERVED",
+      "target_version": "miniPaint 4.14.3; hosted build unknown and unpinned",
+      "setup": "Fresh transparent document; one imported raster layer; offset 0, rotation 0, opacity 100; no other layers. Contrast, Saturation, Hue, Luminance, Red channel, Green channel, Blue channel all frozen at 0. PNG All layers, resolution 72, no resize.",
+      "parameter_domain": {
+        "min": 0,
+        "max": 0
+      },
+      "scope": "Supplied 33\u00d79 opaque raster only.",
+      "supporting_evidence": [
+        "scope-neutral-1"
+      ],
+      "contradicting_evidence": [],
+      "alternatives": [],
+      "unresolved": [
+        "Identity for partially or fully transparent inputs is untested."
+      ],
+      "verification_cases": [
+        "scope-neutral-1"
+      ]
+    },
+    {
+      "id": "opaque-brightness-candidate",
+      "statement": "Candidate opaque RGB contract: for each channel c, output min(255, floor(c \u00d7 (1 + brightness/100))). This describes supplied samples, not a hidden implementation mechanism.",
+      "status": "HYPOTHESIS",
+      "target_version": "miniPaint 4.14.3; hosted build unknown and unpinned",
+      "setup": "Same fresh-document/import/export setup; all other Color Corrections controls frozen at 0.",
+      "parameter_domain": {
+        "min": -100,
+        "max": 100
+      },
+      "scope": "Candidate for alpha-255 pixels; evidence covers brightness -100, -37, 0, 17 and 25, not the full parameter domain.",
+      "supporting_evidence": [
+        "scope-neutral-1",
+        "scope-nonneutral-1",
+        "brightness-fresh-01",
+        "brightness-fresh-02",
+        "brightness-fresh-04"
+      ],
+      "contradicting_evidence": [],
+      "alternatives": [
+        "Other mappings can agree on the sampled brightness values."
+      ],
+      "unresolved": [
+        "Untested brightness values, including +100.",
+        "Generalization to arbitrary mixed-color rasters.",
+        "Trusted acceptance under exact-rgba-v1."
+      ],
+      "verification_cases": [
+        "scope-neutral-1",
+        "scope-nonneutral-1",
+        "brightness-fresh-01",
+        "brightness-fresh-02",
+        "brightness-fresh-04"
+      ]
+    },
+    {
+      "id": "alpha-sensitive-export",
+      "statement": "At brightness -37, input channel 255 exported as 160 at alpha 255, 159 at alpha 128, and 165 at alpha 17; zero channels remained zero. The opaque candidate formula alone therefore does not specify exact RGBA for these translucent pixels.",
+      "status": "OBSERVED",
+      "target_version": "miniPaint 4.14.3; hosted build unknown and unpinned",
+      "setup": "Same fresh-document/import/export setup; all other Color Corrections controls frozen at 0.",
+      "parameter_domain": {
+        "min": -37,
+        "max": -37
+      },
+      "scope": "Supplied 6\u00d73 alpha-shapes raster.",
+      "supporting_evidence": [
+        "brightness-fresh-03"
+      ],
+      "contradicting_evidence": [],
+      "alternatives": [],
+      "unresolved": [
+        "Cause of alpha-dependent RGB differences is unknown.",
+        "Exact translucent mapping for other channels, alpha values and brightness values.",
+        "Fully transparent pixels."
+      ],
+      "verification_cases": [
+        "brightness-fresh-03"
+      ]
+    },
+    {
+      "id": "minus-100-black",
+      "statement": "Brightness -100 exported the supplied opaque grayscale ramp with every RGB channel zero and alpha 255.",
+      "status": "OBSERVED",
+      "target_version": "miniPaint 4.14.3; hosted build unknown and unpinned",
+      "setup": "Same fresh-document/import/export setup; all other Color Corrections controls frozen at 0.",
+      "parameter_domain": {
+        "min": -100,
+        "max": -100
+      },
+      "scope": "Supplied 257\u00d73 opaque grayscale ramp.",
+      "supporting_evidence": [
+        "brightness-fresh-04"
+      ],
+      "contradicting_evidence": [],
+      "alternatives": [],
+      "unresolved": [
+        "Behavior on translucent and arbitrary colored inputs at -100."
+      ],
+      "verification_cases": [
+        "brightness-fresh-04"
+      ]
+    },
+    {
+      "id": "sampled-size-alpha",
+      "statement": "Export dimensions and reported alpha samples, extrema and sums were unchanged in all six supplied cases.",
+      "status": "OBSERVED",
+      "target_version": "miniPaint 4.14.3; hosted build unknown and unpinned",
+      "setup": "Same fresh-document/import/export setup; all other Color Corrections controls frozen at 0.",
+      "parameter_domain": {
+        "min": -100,
+        "max": 25
+      },
+      "scope": "Only the six supplied cases at brightness -100, -37, 0, 17 and 25; not continuous interval coverage.",
+      "supporting_evidence": [
+        "scope-neutral-1",
+        "scope-nonneutral-1",
+        "brightness-fresh-01",
+        "brightness-fresh-02",
+        "brightness-fresh-03",
+        "brightness-fresh-04"
+      ],
+      "contradicting_evidence": [],
+      "alternatives": [],
+      "unresolved": [
+        "Universal per-pixel alpha preservation remains unaccepted."
+      ],
+      "verification_cases": [
+        "scope-neutral-1",
+        "scope-nonneutral-1",
+        "brightness-fresh-01",
+        "brightness-fresh-02",
+        "brightness-fresh-03",
+        "brightness-fresh-04"
+      ]
+    },
+    {
+      "id": "independent-visible-parity",
+      "statement": "Independent brightness passes every exact visible RGB/alpha and baseline gate on this frozen suite.",
+      "status": "VERIFIED_WITHIN_SCOPE",
+      "target_version": "4.14.3 hosted unpinned",
+      "setup": "Fresh transparent document; one imported raster layer, offset 0, rotation 0, opacity 100; no other layers; PNG All layers at resolution 72, no resize.",
+      "parameter_domain": {
+        "min": -100,
+        "max": 25
+      },
+      "scope": "visible-brightness-v1 discrete cases only",
+      "supporting_evidence": [
+        "scope-neutral-1",
+        "scope-nonneutral-1",
+        "brightness-fresh-01",
+        "brightness-fresh-02",
+        "brightness-fresh-03",
+        "brightness-fresh-04"
+      ],
+      "contradicting_evidence": [],
+      "alternatives": [
+        "Hidden mechanisms may agree on these observations"
+      ],
+      "unresolved": [
+        "Fresh evaluation and untested inputs/parameters"
+      ],
+      "verification_cases": [
+        "scope-neutral-1",
+        "scope-nonneutral-1",
+        "brightness-fresh-01",
+        "brightness-fresh-02",
+        "brightness-fresh-03",
+        "brightness-fresh-04"
+      ]
+    }
+  ],
+  "verification": {
+    "candidate_id": "candidate-1",
+    "suite_sha256": "bff2d8904e73ca618856ed0f699eff609bc82372781b8fb629a4858c96b6f946",
+    "elapsed_seconds": 156.418
+  }
+}

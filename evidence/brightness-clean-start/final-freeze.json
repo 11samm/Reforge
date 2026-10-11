@@ -1,0 +1,32 @@
+{
+  "candidate": {
+    "README.md": "de67b41b2afc7a8efb9fe88221ac8fbfe8118ab2bd5ae2385873be9838f6be91",
+    "index.html": "386a23c1c3ff31abbdbc8b4fcafb2b76f3546ef31a22631ac2b9467138ed9ef8",
+    "package-lock.json": "0f0c6aa01564130d672f647bc293bba4a8e3893d36bfd3bf16ab39e6b0e0ef69",
+    "package.json": "882b343488c410bcc612b82c7dc14978384525cff43b4de5418a4a36e52277f9",
+    "src/brightness.ts": "b9ea8d0cfd6a1baccf932fc40a25c52daf2d506a23688731feabe13a926fe888",
+    "src/current-image.ts": "deb0c575a3fb79e3151eccde7a58232f2b724a666b90f07e071dfb7f527ed84f",
+    "src/main.tsx": "fd7027d18d033f5b24ab71e94b755e914497ee8e3c243c45cad8a31b79e25315",
+    "src/style.css": "d21d0ef9945645793b02594bda53b1b66329a5d2819517c74a46342850da70d6",
+    "tsconfig.json": "6d839ab5d73095297ef9128243838c093c616d55f454f73416cf0c9ac8c05da4",
+    "vite.config.ts": "19f18fa380d4e9fa01cb38a62a130e40f88e7c4d33e1dcae00ad218e55463d27"
+  },
+  "contract_sha256": "fa51bda470c6a8717e70c3d32385338d493220e16fc2291271cf0e3d16046fe9",
+  "suite_sha256": "bff2d8904e73ca618856ed0f699eff609bc82372781b8fb629a4858c96b6f946",
+  "policy": {
+    "id": "exact-rgba-v1",
+    "version": 1,
+    "mode": "exact",
+    "rgb_mean_max": 0,
+    "rgb_pixel_tolerance": 0,
+    "rgb_fraction_min": 1,
+    "alpha_mean_max": 0,
+    "alpha_max": 0,
+    "alpha_pixel_tolerance": 0,
+    "alpha_fraction_min": 1,
+    "description": "Exact decoded 8-bit RGBA equality for baseline regressions."
+  },
+  "policy_sha256": "b9bb9c844e0164ab07df9e47a3954cad4b4f19c3d998816fcf3a2479adfe454a",
+  "runtime_repair_closed": true,
+  "no_model_calls": true
+}

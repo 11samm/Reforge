@@ -1,0 +1,944 @@
+{
+  "status": "accepted",
+  "operation": {
+    "id": "brightness",
+    "version": 1,
+    "name": "Brightness (Color Corrections)",
+    "menu": [
+      "Image",
+      "Color Corrections ..."
+    ],
+    "dialog": "Color Corrections",
+    "parameter": {
+      "name": "Brightness",
+      "key": "brightness",
+      "min": -100,
+      "max": 100,
+      "default": 0,
+      "step": 1
+    },
+    "frozen_controls": {
+      "Contrast": 0,
+      "Saturation": 0,
+      "Hue": 0,
+      "Luminance": 0,
+      "Red channel": 0,
+      "Green channel": 0,
+      "Blue channel": 0
+    },
+    "scope": "Fresh transparent document; one imported raster layer, offset 0, rotation 0, opacity 100; no other layers; PNG All layers at resolution 72, no resize.",
+    "source": "src/brightness.ts",
+    "export": "applyBrightness",
+    "interface": "applyBrightness(raster: Raster, brightness: number): Raster",
+    "ui_menu": "Image",
+    "ui_item": "Color Corrections\u2026",
+    "ui_parameter": "Brightness",
+    "policy": "exact-rgba-v1",
+    "provenance": "evidence/learning/brightness-preparation/imported-scope-2/parameters.json"
+  },
+  "provenance": {
+    "mode": "clean_start",
+    "clean_start_autonomous_demonstration": true,
+    "app": "local-only:isolated-workspace/generated-app",
+    "investigation_guidance": {
+      "id": "global-investigation-strategies",
+      "version": "1.0.0",
+      "source": "learning/investigation-guidance.json",
+      "sha256": "d8ed872721aa089c9c33c1cdfa4df1267a63b07fdb3aaf7d6b5ea1c7c762808c"
+    },
+    "operation": {
+      "id": "brightness",
+      "version": 1,
+      "name": "Brightness (Color Corrections)",
+      "menu": [
+        "Image",
+        "Color Corrections ..."
+      ],
+      "dialog": "Color Corrections",
+      "parameter": {
+        "name": "Brightness",
+        "key": "brightness",
+        "min": -100,
+        "max": 100,
+        "default": 0,
+        "step": 1
+      },
+      "frozen_controls": {
+        "Contrast": 0,
+        "Saturation": 0,
+        "Hue": 0,
+        "Luminance": 0,
+        "Red channel": 0,
+        "Green channel": 0,
+        "Blue channel": 0
+      },
+      "scope": "Fresh transparent document; one imported raster layer, offset 0, rotation 0, opacity 100; no other layers; PNG All layers at resolution 72, no resize.",
+      "source": "src/brightness.ts",
+      "export": "applyBrightness",
+      "interface": "applyBrightness(raster: Raster, brightness: number): Raster",
+      "ui_menu": "Image",
+      "ui_item": "Color Corrections\u2026",
+      "ui_parameter": "Brightness",
+      "policy": "exact-rgba-v1",
+      "provenance": "evidence/learning/brightness-preparation/imported-scope-2/parameters.json"
+    },
+    "brightness_absent_at_start": true,
+    "preparation": "local-only:isolated-workspace/evidence/learning/brightness-preparation",
+    "blur_status": "experimental, preserved in isolated workspace; not accepted"
+  },
+  "stop_reason": "first_acceptance_all_visible_gates_pass",
+  "elapsed_seconds": 165.748,
+  "fresh_reference_attempts": 4,
+  "preparation_reference_operations": 4,
+  "candidate_attempts": [
+    {
+      "id": "candidate-1",
+      "status": "accepted",
+      "reason": "all_gates_pass",
+      "evaluation": {
+        "build_valid": true,
+        "independent": true,
+        "app": "local-only:isolated-workspace/generated-app",
+        "cases": [
+          {
+            "schema_version": 1,
+            "case_id": "scope-neutral-1",
+            "status": "passed",
+            "classification": "match",
+            "policy": {
+              "id": "exact-rgba-v1",
+              "version": 1,
+              "mode": "exact",
+              "rgb_mean_max": 0,
+              "rgb_pixel_tolerance": 0,
+              "rgb_fraction_min": 1,
+              "alpha_mean_max": 0,
+              "alpha_max": 0,
+              "alpha_pixel_tolerance": 0,
+              "alpha_fraction_min": 1,
+              "description": "Exact decoded 8-bit RGBA equality for baseline regressions."
+            },
+            "policy_sha256": "7b797f2dccaf177ec68ec8ba0e20b7aaa1c34d7bf460dd8e6ba2ba28bbd15f8f",
+            "dimensions_equal": true,
+            "dimensions": {
+              "reference": [
+                33,
+                9
+              ],
+              "candidate": [
+                33,
+                9
+              ]
+            },
+            "metrics": {
+              "pixel_count": 297,
+              "rgb_mae_per_channel": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "rgb_mae": 0.0,
+              "rgb_max": 0,
+              "alpha_mae": 0.0,
+              "alpha_max": 0,
+              "rgb_fraction_within_tolerance": 1.0,
+              "alpha_fraction_within_tolerance": 1.0,
+              "different_pixels": 0
+            },
+            "regions": {
+              "full": {
+                "box": [
+                  0,
+                  0,
+                  33,
+                  9
+                ],
+                "metrics": {
+                  "pixel_count": 297,
+                  "rgb_mae_per_channel": [
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  "rgb_mae": 0.0,
+                  "rgb_max": 0,
+                  "alpha_mae": 0.0,
+                  "alpha_max": 0,
+                  "rgb_fraction_within_tolerance": 1.0,
+                  "alpha_fraction_within_tolerance": 1.0,
+                  "different_pixels": 0
+                },
+                "passed": true,
+                "reasons": []
+              }
+            },
+            "reasons": [],
+            "artifacts": {
+              "reference_raw": "reference-raw.png",
+              "candidate_raw": "candidate-raw.png",
+              "alpha-difference-x16": "alpha-difference-x16.png",
+              "candidate-raw": "candidate-raw.png",
+              "reference-raw": "reference-raw.png",
+              "region-full-alpha-difference-x16": "region-full-alpha-difference-x16.png",
+              "region-full-rgb-difference-x16": "region-full-rgb-difference-x16.png",
+              "region-full-side-by-side": "region-full-side-by-side.png",
+              "rgb-difference-x16": "rgb-difference-x16.png",
+              "side-by-side": "side-by-side.png"
+            },
+            "display": {
+              "checker_size": 8,
+              "difference_gain": 16,
+              "side_by_side_order": [
+                "reference",
+                "candidate"
+              ],
+              "scoring": "raw unpremultiplied 8-bit RGBA; no compositing",
+              "changed_bounds": null
+            },
+            "reference_path": "local-only:isolated-workspace/evidence/learning/brightness-preparation/experiments/neutral-1/output.png",
+            "candidate_path": "local-only:isolated-workspace/evidence/learning/20261011T012950Z-0ee26b62/evaluations/candidate-1/scope-neutral-1.png"
+          },
+          {
+            "schema_version": 1,
+            "case_id": "scope-nonneutral-1",
+            "status": "passed",
+            "classification": "match",
+            "policy": {
+              "id": "exact-rgba-v1",
+              "version": 1,
+              "mode": "exact",
+              "rgb_mean_max": 0,
+              "rgb_pixel_tolerance": 0,
+              "rgb_fraction_min": 1,
+              "alpha_mean_max": 0,
+              "alpha_max": 0,
+              "alpha_pixel_tolerance": 0,
+              "alpha_fraction_min": 1,
+              "description": "Exact decoded 8-bit RGBA equality for baseline regressions."
+            },
+            "policy_sha256": "7b797f2dccaf177ec68ec8ba0e20b7aaa1c34d7bf460dd8e6ba2ba28bbd15f8f",
+            "dimensions_equal": true,
+            "dimensions": {
+              "reference": [
+                33,
+                9
+              ],
+              "candidate": [
+                33,
+                9
+              ]
+            },
+            "metrics": {
+              "pixel_count": 297,
+              "rgb_mae_per_channel": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "rgb_mae": 0.0,
+              "rgb_max": 0,
+              "alpha_mae": 0.0,
+              "alpha_max": 0,
+              "rgb_fraction_within_tolerance": 1.0,
+              "alpha_fraction_within_tolerance": 1.0,
+              "different_pixels": 0
+            },
+            "regions": {
+              "full": {
+                "box": [
+                  0,
+                  0,
+                  33,
+                  9
+                ],
+                "metrics": {
+                  "pixel_count": 297,
+                  "rgb_mae_per_channel": [
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  "rgb_mae": 0.0,
+                  "rgb_max": 0,
+                  "alpha_mae": 0.0,
+                  "alpha_max": 0,
+                  "rgb_fraction_within_tolerance": 1.0,
+                  "alpha_fraction_within_tolerance": 1.0,
+                  "different_pixels": 0
+                },
+                "passed": true,
+                "reasons": []
+              }
+            },
+            "reasons": [],
+            "artifacts": {
+              "reference_raw": "reference-raw.png",
+              "candidate_raw": "candidate-raw.png",
+              "alpha-difference-x16": "alpha-difference-x16.png",
+              "candidate-raw": "candidate-raw.png",
+              "reference-raw": "reference-raw.png",
+              "region-full-alpha-difference-x16": "region-full-alpha-difference-x16.png",
+              "region-full-rgb-difference-x16": "region-full-rgb-difference-x16.png",
+              "region-full-side-by-side": "region-full-side-by-side.png",
+              "rgb-difference-x16": "rgb-difference-x16.png",
+              "side-by-side": "side-by-side.png"
+            },
+            "display": {
+              "checker_size": 8,
+              "difference_gain": 16,
+              "side_by_side_order": [
+                "reference",
+                "candidate"
+              ],
+              "scoring": "raw unpremultiplied 8-bit RGBA; no compositing",
+              "changed_bounds": null
+            },
+            "reference_path": "local-only:isolated-workspace/evidence/learning/brightness-preparation/experiments/nonneutral-1/output.png",
+            "candidate_path": "local-only:isolated-workspace/evidence/learning/20261011T012950Z-0ee26b62/evaluations/candidate-1/scope-nonneutral-1.png"
+          },
+          {
+            "schema_version": 1,
+            "case_id": "brightness-fresh-01",
+            "status": "passed",
+            "classification": "match",
+            "policy": {
+              "id": "exact-rgba-v1",
+              "version": 1,
+              "mode": "exact",
+              "rgb_mean_max": 0,
+              "rgb_pixel_tolerance": 0,
+              "rgb_fraction_min": 1,
+              "alpha_mean_max": 0,
+              "alpha_max": 0,
+              "alpha_pixel_tolerance": 0,
+              "alpha_fraction_min": 1,
+              "description": "Exact decoded 8-bit RGBA equality for baseline regressions."
+            },
+            "policy_sha256": "7b797f2dccaf177ec68ec8ba0e20b7aaa1c34d7bf460dd8e6ba2ba28bbd15f8f",
+            "dimensions_equal": true,
+            "dimensions": {
+              "reference": [
+                257,
+                9
+              ],
+              "candidate": [
+                257,
+                9
+              ]
+            },
+            "metrics": {
+              "pixel_count": 2313,
+              "rgb_mae_per_channel": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "rgb_mae": 0.0,
+              "rgb_max": 0,
+              "alpha_mae": 0.0,
+              "alpha_max": 0,
+              "rgb_fraction_within_tolerance": 1.0,
+              "alpha_fraction_within_tolerance": 1.0,
+              "different_pixels": 0
+            },
+            "regions": {
+              "full": {
+                "box": [
+                  0,
+                  0,
+                  257,
+                  9
+                ],
+                "metrics": {
+                  "pixel_count": 2313,
+                  "rgb_mae_per_channel": [
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  "rgb_mae": 0.0,
+                  "rgb_max": 0,
+                  "alpha_mae": 0.0,
+                  "alpha_max": 0,
+                  "rgb_fraction_within_tolerance": 1.0,
+                  "alpha_fraction_within_tolerance": 1.0,
+                  "different_pixels": 0
+                },
+                "passed": true,
+                "reasons": []
+              }
+            },
+            "reasons": [],
+            "artifacts": {
+              "reference_raw": "reference-raw.png",
+              "candidate_raw": "candidate-raw.png",
+              "alpha-difference-x16": "alpha-difference-x16.png",
+              "candidate-raw": "candidate-raw.png",
+              "reference-raw": "reference-raw.png",
+              "region-full-alpha-difference-x16": "region-full-alpha-difference-x16.png",
+              "region-full-rgb-difference-x16": "region-full-rgb-difference-x16.png",
+              "region-full-side-by-side": "region-full-side-by-side.png",
+              "rgb-difference-x16": "rgb-difference-x16.png",
+              "side-by-side": "side-by-side.png"
+            },
+            "display": {
+              "checker_size": 8,
+              "difference_gain": 16,
+              "side_by_side_order": [
+                "reference",
+                "candidate"
+              ],
+              "scoring": "raw unpremultiplied 8-bit RGBA; no compositing",
+              "changed_bounds": null
+            },
+            "reference_path": "local-only:isolated-workspace/evidence/learning/20261011T012950Z-0ee26b62/experiments/brightness-fresh-01/output.png",
+            "candidate_path": "local-only:isolated-workspace/evidence/learning/20261011T012950Z-0ee26b62/evaluations/candidate-1/brightness-fresh-01.png"
+          },
+          {
+            "schema_version": 1,
+            "case_id": "brightness-fresh-02",
+            "status": "passed",
+            "classification": "match",
+            "policy": {
+              "id": "exact-rgba-v1",
+              "version": 1,
+              "mode": "exact",
+              "rgb_mean_max": 0,
+              "rgb_pixel_tolerance": 0,
+              "rgb_fraction_min": 1,
+              "alpha_mean_max": 0,
+              "alpha_max": 0,
+              "alpha_pixel_tolerance": 0,
+              "alpha_fraction_min": 1,
+              "description": "Exact decoded 8-bit RGBA equality for baseline regressions."
+            },
+            "policy_sha256": "7b797f2dccaf177ec68ec8ba0e20b7aaa1c34d7bf460dd8e6ba2ba28bbd15f8f",
+            "dimensions_equal": true,
+            "dimensions": {
+              "reference": [
+                17,
+                3
+              ],
+              "candidate": [
+                17,
+                3
+              ]
+            },
+            "metrics": {
+              "pixel_count": 51,
+              "rgb_mae_per_channel": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "rgb_mae": 0.0,
+              "rgb_max": 0,
+              "alpha_mae": 0.0,
+              "alpha_max": 0,
+              "rgb_fraction_within_tolerance": 1.0,
+              "alpha_fraction_within_tolerance": 1.0,
+              "different_pixels": 0
+            },
+            "regions": {
+              "full": {
+                "box": [
+                  0,
+                  0,
+                  17,
+                  3
+                ],
+                "metrics": {
+                  "pixel_count": 51,
+                  "rgb_mae_per_channel": [
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  "rgb_mae": 0.0,
+                  "rgb_max": 0,
+                  "alpha_mae": 0.0,
+                  "alpha_max": 0,
+                  "rgb_fraction_within_tolerance": 1.0,
+                  "alpha_fraction_within_tolerance": 1.0,
+                  "different_pixels": 0
+                },
+                "passed": true,
+                "reasons": []
+              }
+            },
+            "reasons": [],
+            "artifacts": {
+              "reference_raw": "reference-raw.png",
+              "candidate_raw": "candidate-raw.png",
+              "alpha-difference-x16": "alpha-difference-x16.png",
+              "candidate-raw": "candidate-raw.png",
+              "reference-raw": "reference-raw.png",
+              "region-full-alpha-difference-x16": "region-full-alpha-difference-x16.png",
+              "region-full-rgb-difference-x16": "region-full-rgb-difference-x16.png",
+              "region-full-side-by-side": "region-full-side-by-side.png",
+              "rgb-difference-x16": "rgb-difference-x16.png",
+              "side-by-side": "side-by-side.png"
+            },
+            "display": {
+              "checker_size": 8,
+              "difference_gain": 16,
+              "side_by_side_order": [
+                "reference",
+                "candidate"
+              ],
+              "scoring": "raw unpremultiplied 8-bit RGBA; no compositing",
+              "changed_bounds": null
+            },
+            "reference_path": "local-only:isolated-workspace/evidence/learning/20261011T012950Z-0ee26b62/experiments/brightness-fresh-02/output.png",
+            "candidate_path": "local-only:isolated-workspace/evidence/learning/20261011T012950Z-0ee26b62/evaluations/candidate-1/brightness-fresh-02.png"
+          },
+          {
+            "schema_version": 1,
+            "case_id": "brightness-fresh-03",
+            "status": "passed",
+            "classification": "match",
+            "policy": {
+              "id": "exact-rgba-v1",
+              "version": 1,
+              "mode": "exact",
+              "rgb_mean_max": 0,
+              "rgb_pixel_tolerance": 0,
+              "rgb_fraction_min": 1,
+              "alpha_mean_max": 0,
+              "alpha_max": 0,
+              "alpha_pixel_tolerance": 0,
+              "alpha_fraction_min": 1,
+              "description": "Exact decoded 8-bit RGBA equality for baseline regressions."
+            },
+            "policy_sha256": "7b797f2dccaf177ec68ec8ba0e20b7aaa1c34d7bf460dd8e6ba2ba28bbd15f8f",
+            "dimensions_equal": true,
+            "dimensions": {
+              "reference": [
+                6,
+                3
+              ],
+              "candidate": [
+                6,
+                3
+              ]
+            },
+            "metrics": {
+              "pixel_count": 18,
+              "rgb_mae_per_channel": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "rgb_mae": 0.0,
+              "rgb_max": 0,
+              "alpha_mae": 0.0,
+              "alpha_max": 0,
+              "rgb_fraction_within_tolerance": 1.0,
+              "alpha_fraction_within_tolerance": 1.0,
+              "different_pixels": 0
+            },
+            "regions": {
+              "full": {
+                "box": [
+                  0,
+                  0,
+                  6,
+                  3
+                ],
+                "metrics": {
+                  "pixel_count": 18,
+                  "rgb_mae_per_channel": [
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  "rgb_mae": 0.0,
+                  "rgb_max": 0,
+                  "alpha_mae": 0.0,
+                  "alpha_max": 0,
+                  "rgb_fraction_within_tolerance": 1.0,
+                  "alpha_fraction_within_tolerance": 1.0,
+                  "different_pixels": 0
+                },
+                "passed": true,
+                "reasons": []
+              }
+            },
+            "reasons": [],
+            "artifacts": {
+              "reference_raw": "reference-raw.png",
+              "candidate_raw": "candidate-raw.png",
+              "alpha-difference-x16": "alpha-difference-x16.png",
+              "candidate-raw": "candidate-raw.png",
+              "reference-raw": "reference-raw.png",
+              "region-full-alpha-difference-x16": "region-full-alpha-difference-x16.png",
+              "region-full-rgb-difference-x16": "region-full-rgb-difference-x16.png",
+              "region-full-side-by-side": "region-full-side-by-side.png",
+              "rgb-difference-x16": "rgb-difference-x16.png",
+              "side-by-side": "side-by-side.png"
+            },
+            "display": {
+              "checker_size": 8,
+              "difference_gain": 16,
+              "side_by_side_order": [
+                "reference",
+                "candidate"
+              ],
+              "scoring": "raw unpremultiplied 8-bit RGBA; no compositing",
+              "changed_bounds": null
+            },
+            "reference_path": "local-only:isolated-workspace/evidence/learning/20261011T012950Z-0ee26b62/experiments/brightness-fresh-03/output.png",
+            "candidate_path": "local-only:isolated-workspace/evidence/learning/20261011T012950Z-0ee26b62/evaluations/candidate-1/brightness-fresh-03.png"
+          },
+          {
+            "schema_version": 1,
+            "case_id": "brightness-fresh-04",
+            "status": "passed",
+            "classification": "match",
+            "policy": {
+              "id": "exact-rgba-v1",
+              "version": 1,
+              "mode": "exact",
+              "rgb_mean_max": 0,
+              "rgb_pixel_tolerance": 0,
+              "rgb_fraction_min": 1,
+              "alpha_mean_max": 0,
+              "alpha_max": 0,
+              "alpha_pixel_tolerance": 0,
+              "alpha_fraction_min": 1,
+              "description": "Exact decoded 8-bit RGBA equality for baseline regressions."
+            },
+            "policy_sha256": "7b797f2dccaf177ec68ec8ba0e20b7aaa1c34d7bf460dd8e6ba2ba28bbd15f8f",
+            "dimensions_equal": true,
+            "dimensions": {
+              "reference": [
+                257,
+                3
+              ],
+              "candidate": [
+                257,
+                3
+              ]
+            },
+            "metrics": {
+              "pixel_count": 771,
+              "rgb_mae_per_channel": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "rgb_mae": 0.0,
+              "rgb_max": 0,
+              "alpha_mae": 0.0,
+              "alpha_max": 0,
+              "rgb_fraction_within_tolerance": 1.0,
+              "alpha_fraction_within_tolerance": 1.0,
+              "different_pixels": 0
+            },
+            "regions": {
+              "full": {
+                "box": [
+                  0,
+                  0,
+                  257,
+                  3
+                ],
+                "metrics": {
+                  "pixel_count": 771,
+                  "rgb_mae_per_channel": [
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  "rgb_mae": 0.0,
+                  "rgb_max": 0,
+                  "alpha_mae": 0.0,
+                  "alpha_max": 0,
+                  "rgb_fraction_within_tolerance": 1.0,
+                  "alpha_fraction_within_tolerance": 1.0,
+                  "different_pixels": 0
+                },
+                "passed": true,
+                "reasons": []
+              }
+            },
+            "reasons": [],
+            "artifacts": {
+              "reference_raw": "reference-raw.png",
+              "candidate_raw": "candidate-raw.png",
+              "alpha-difference-x16": "alpha-difference-x16.png",
+              "candidate-raw": "candidate-raw.png",
+              "reference-raw": "reference-raw.png",
+              "region-full-alpha-difference-x16": "region-full-alpha-difference-x16.png",
+              "region-full-rgb-difference-x16": "region-full-rgb-difference-x16.png",
+              "region-full-side-by-side": "region-full-side-by-side.png",
+              "rgb-difference-x16": "rgb-difference-x16.png",
+              "side-by-side": "side-by-side.png"
+            },
+            "display": {
+              "checker_size": 8,
+              "difference_gain": 16,
+              "side_by_side_order": [
+                "reference",
+                "candidate"
+              ],
+              "scoring": "raw unpremultiplied 8-bit RGBA; no compositing",
+              "changed_bounds": null
+            },
+            "reference_path": "local-only:isolated-workspace/evidence/learning/20261011T012950Z-0ee26b62/experiments/brightness-fresh-04/output.png",
+            "candidate_path": "local-only:isolated-workspace/evidence/learning/20261011T012950Z-0ee26b62/evaluations/candidate-1/brightness-fresh-04.png"
+          }
+        ],
+        "suite_sha256": "bff2d8904e73ca618856ed0f699eff609bc82372781b8fb629a4858c96b6f946",
+        "evaluator_suspect": false,
+        "ui_valid": true,
+        "execution": {
+          "reference_browser_closed": true,
+          "input_only_batch": [
+            {
+              "input": "local-only:isolated-workspace/evidence/learning/brightness-preparation/inputs/opaque.png",
+              "brightness": 0,
+              "output": "local-only:isolated-workspace/evidence/learning/20261011T012950Z-0ee26b62/evaluations/candidate-1/scope-neutral-1.png"
+            },
+            {
+              "input": "local-only:isolated-workspace/evidence/learning/brightness-preparation/inputs/opaque.png",
+              "brightness": 17,
+              "output": "local-only:isolated-workspace/evidence/learning/20261011T012950Z-0ee26b62/evaluations/candidate-1/scope-nonneutral-1.png"
+            },
+            {
+              "input": "local-only:isolated-workspace/evidence/learning/20261011T012950Z-0ee26b62/inputs/brightness-fresh-01.png",
+              "brightness": -37,
+              "output": "local-only:isolated-workspace/evidence/learning/20261011T012950Z-0ee26b62/evaluations/candidate-1/brightness-fresh-01.png"
+            },
+            {
+              "input": "local-only:isolated-workspace/evidence/learning/20261011T012950Z-0ee26b62/inputs/brightness-fresh-02.png",
+              "brightness": 25,
+              "output": "local-only:isolated-workspace/evidence/learning/20261011T012950Z-0ee26b62/evaluations/candidate-1/brightness-fresh-02.png"
+            },
+            {
+              "input": "local-only:isolated-workspace/evidence/learning/20261011T012950Z-0ee26b62/inputs/brightness-fresh-03.png",
+              "brightness": -37,
+              "output": "local-only:isolated-workspace/evidence/learning/20261011T012950Z-0ee26b62/evaluations/candidate-1/brightness-fresh-03.png"
+            },
+            {
+              "input": "local-only:isolated-workspace/evidence/learning/20261011T012950Z-0ee26b62/inputs/brightness-fresh-04.png",
+              "brightness": -100,
+              "output": "local-only:isolated-workspace/evidence/learning/20261011T012950Z-0ee26b62/evaluations/candidate-1/brightness-fresh-04.png"
+            }
+          ],
+          "node_permission_guard": true,
+          "standard_network_api_guard": "three probes denied; not an OS sandbox"
+        },
+        "ui_check": {
+          "case_id": "scope-nonneutral-1",
+          "comparison": {
+            "dimensions_equal": true,
+            "rgba_equal": true,
+            "different_pixels": 0,
+            "max_channel_delta": 0
+          },
+          "external_requests": [],
+          "browser_errors": []
+        },
+        "baseline_pass": true
+      },
+      "checkpoint": "local-only:isolated-workspace/evidence/learning/20261011T012950Z-0ee26b62/checkpoints/candidate-1"
+    }
+  ],
+  "first_acceptance": {
+    "candidate_id": "candidate-1",
+    "suite_sha256": "bff2d8904e73ca618856ed0f699eff609bc82372781b8fb629a4858c96b6f946",
+    "elapsed_seconds": 156.418
+  },
+  "suite_sha256": "bff2d8904e73ca618856ed0f699eff609bc82372781b8fb629a4858c96b6f946",
+  "best_checkpoint": "local-only:isolated-workspace/evidence/learning/20261011T012950Z-0ee26b62/checkpoints/candidate-1",
+  "final_build": {
+    "status": "passed"
+  },
+  "final_baseline_pass": true,
+  "budget": {
+    "remaining_seconds": 434.252,
+    "fresh_experiments_remaining": 0,
+    "candidates_remaining": 1
+  },
+  "model_usage": [
+    {
+      "invocation": "model\\builder-1\\invocation.json",
+      "elapsed_seconds": 49.608,
+      "usage": {
+        "total": {
+          "totalTokens": 92376,
+          "inputTokens": 89847,
+          "cachedInputTokens": 62208,
+          "cacheWriteInputTokens": 0,
+          "outputTokens": 2529,
+          "reasoningOutputTokens": 359
+        },
+        "last": {
+          "totalTokens": 27119,
+          "inputTokens": 27060,
+          "cachedInputTokens": 25216,
+          "cacheWriteInputTokens": 0,
+          "outputTokens": 59,
+          "reasoningOutputTokens": 0
+        },
+        "modelContextWindow": 258400
+      },
+      "model": "gpt-6.1-sol",
+      "effort": "medium"
+    },
+    {
+      "invocation": "model\\contract-1\\invocation.json",
+      "elapsed_seconds": 30.35,
+      "usage": {
+        "total": {
+          "totalTokens": 16855,
+          "inputTokens": 15351,
+          "cachedInputTokens": 0,
+          "cacheWriteInputTokens": 0,
+          "outputTokens": 1504,
+          "reasoningOutputTokens": 114
+        },
+        "last": {
+          "totalTokens": 16855,
+          "inputTokens": 15351,
+          "cachedInputTokens": 0,
+          "cacheWriteInputTokens": 0,
+          "outputTokens": 1504,
+          "reasoningOutputTokens": 114
+        },
+        "modelContextWindow": 258400
+      },
+      "model": "gpt-6.1-sol",
+      "effort": "medium"
+    },
+    {
+      "invocation": "model\\planner\\invocation.json",
+      "elapsed_seconds": 37.003,
+      "usage": {
+        "total": {
+          "totalTokens": 11596,
+          "inputTokens": 10186,
+          "cachedInputTokens": 0,
+          "cacheWriteInputTokens": 0,
+          "outputTokens": 1410,
+          "reasoningOutputTokens": 516
+        },
+        "last": {
+          "totalTokens": 11596,
+          "inputTokens": 10186,
+          "cachedInputTokens": 0,
+          "cacheWriteInputTokens": 0,
+          "outputTokens": 1410,
+          "reasoningOutputTokens": 516
+        },
+        "modelContextWindow": 258400
+      },
+      "model": "gpt-6.1-sol",
+      "effort": "medium"
+    }
+  ],
+  "packet_sizes": [
+    {
+      "label": "planner",
+      "role": "planner",
+      "bytes": 7117,
+      "estimated_tokens": 10163,
+      "parts": {
+        "prompt": {
+          "bytes": 6334,
+          "tokens": 2236
+        },
+        "output_schema": {
+          "bytes": 783,
+          "tokens": 207
+        }
+      },
+      "expected_tool_rounds": 1,
+      "projected_cumulative_input_tokens": 10163,
+      "method": "regex-piece estimate + 7720 fixed runtime/system overhead; calibrated on recorded gpt-6.1-sol decision-call inputTokens (planner, contract-1, route-1/2; <=0.6% error). Not the provider tokenizer; tool-loop cumulative input is a projection.",
+      "limits": {
+        "bytes": 8000,
+        "tokens": 11000
+      },
+      "within_limits": true,
+      "dry_run": false
+    },
+    {
+      "label": "contract-1",
+      "role": "contract",
+      "bytes": 16918,
+      "estimated_tokens": 15390,
+      "parts": {
+        "prompt": {
+          "bytes": 15266,
+          "tokens": 7208
+        },
+        "output_schema": {
+          "bytes": 1652,
+          "tokens": 462
+        }
+      },
+      "expected_tool_rounds": 1,
+      "projected_cumulative_input_tokens": 15390,
+      "method": "regex-piece estimate + 7720 fixed runtime/system overhead; calibrated on recorded gpt-6.1-sol decision-call inputTokens (planner, contract-1, route-1/2; <=0.6% error). Not the provider tokenizer; tool-loop cumulative input is a projection.",
+      "limits": {
+        "bytes": 40000,
+        "tokens": 26000
+      },
+      "within_limits": true,
+      "dry_run": false
+    },
+    {
+      "label": "builder-1",
+      "role": "builder",
+      "bytes": 36289,
+      "estimated_tokens": 20422,
+      "parts": {
+        "prompt": {
+          "bytes": 20759,
+          "tokens": 8430
+        },
+        "output_schema": {
+          "bytes": 0,
+          "tokens": 0
+        },
+        "supplied:src/main.tsx": {
+          "bytes": 13131,
+          "tokens": 3571
+        },
+        "supplied:src/current-image.ts": {
+          "bytes": 2399,
+          "tokens": 701
+        }
+      },
+      "expected_tool_rounds": 6,
+      "projected_cumulative_input_tokens": 122532,
+      "method": "regex-piece estimate + 7720 fixed runtime/system overhead; calibrated on recorded gpt-6.1-sol decision-call inputTokens (planner, contract-1, route-1/2; <=0.6% error). Not the provider tokenizer; tool-loop cumulative input is a projection.",
+      "limits": {
+        "bytes": 60000,
+        "tokens": 30000
+      },
+      "within_limits": true,
+      "dry_run": false
+    }
+  ],
+  "guidance_selections": {
+    "planner": {
+      "role": "planner",
+      "signals": [
+        "planning"
+      ],
+      "strategy_ids": [
+        "G1-verify-roundtrip",
+        "G3-matched-experiments",
+        "G4-numerical-profiles"
+      ],
+      "id": "global-investigation-strategies",
+      "version": "1.0.0",
+      "source": "learning/investigation-guidance.json",
+      "sha256": "d8ed872721aa089c9c33c1cdfa4df1267a63b07fdb3aaf7d6b5ea1c7c762808c"
+    }
+  },
+  "blur_status": "experimental 5/10 original, 7/14 expanded; isolated sources hash-preserved; no blur integration or promotion"
+}

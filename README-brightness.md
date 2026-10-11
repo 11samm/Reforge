@@ -109,3 +109,20 @@ the baseline host only allows the Image-menu exception when an implementation ex
 ## Committed evidence
 
 The [minimal evidence bundle](evidence/brightness/README.md) contains relocatable input/expected PNGs and reports. Full run archives mentioned above are local-only and are not required to reproduce pixel checks.
+
+## Corrected-harness clean-start verification
+
+One separate clean-start run (`20261011T012950Z-0ee26b62`) now accepted candidate 1
+without human intervention: six visible and four NEW final cases pass exact RGBA,
+with build, independent input-only execution, UI/batch agreement and all four exact
+baselines. Learning including cleanup took 165.748 seconds; wall time through the
+once-only final check was approximately 200.836 seconds. No live host/implementation
+fixes or second run occurred. Main accepted app and experimental sources were preserved.
+
+See [clean-start evidence and offline reproduction](evidence/brightness-clean-start/README.md)
+and [dashboard handoff](evidence/brightness-clean-start/integration.json). The earlier
+failed run and later trusted revalidation remain separate historical records.
+Clean start means unavailable brightness in the candidate and restricted runtime
+context, not absence of developer/model prior knowledge. The archived new candidate
+is not promoted into main generated-app. The new final set is evaluation evidence;
+using it for repair would convert it to development evidence.
