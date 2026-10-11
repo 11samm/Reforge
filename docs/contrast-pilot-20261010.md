@@ -89,3 +89,25 @@ forbidden patches, repeated-failure and repair-count stops, rejection without a 
 reproducer, rejected regressions, isolated patch retention and matching-host recall.
 No live autonomous host repair or recalled-patch success has yet been demonstrated.
 No editor promotion, merge or push occurred.
+
+## Interaction-map pilot - October 11, 2026
+
+Job 0ad03820b98845a3a3ba7ded63f37157, implementation 5c14d48.
+Stopped after 79.827 seconds at Discover. Visible actions and inspections succeeded
+without oversized observations. Four actions and six observations were retained.
+The first specification's scope included prose and was rejected. The autonomous
+correction produced the exact scope, but the final specification left other controls'
+neutral settings unresolved; grounding raised "Other control neutrality unresolved".
+No validated route, procedure replay, investigation or candidate reconstruction followed.
+No harness patch was proposed for this specification failure.
+
+The JSON interaction map was populated from delivered visible observations and retained
+for future jobs. This establishes live map recording, not successful cross-job route reuse
+or pagination of a large live menu. The model called map_route twice (no cached route
+was available); it did not call map_query. The map retained 121 nodes and zero validated routes.
+
+Two model invocations reported 165,013 total tokens; 162,137 input including 107,136
+cached; 2,876 output including 283 reasoning tokens. Cached/reasoning values are included
+in their parent totals. The correction loop was exercised but did not complete discovery.
+Original failed decisions and diagnostics remain preserved. No further pilot, editor
+promotion, merge or push occurred.
