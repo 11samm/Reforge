@@ -68,11 +68,15 @@ steps are in [DATA-CONTRACT.md](DATA-CONTRACT.md).
   thin translucent white borders, and soft tinted shadows. Colors carry
   meaning only: green passed, red failed/rejected, amber missing or
   synthetic, blue pending/info.
-- **Tokens:** every color, glass opacity, blur, gradient and shadow comes
-  from `src/tokens.css`, the single source of truth shared with the design
-  system page in `../design-system/index.html`. `styles.css` maps dashboard
-  roles (`--good`, `--muted`, ...) onto those tokens. The only raw colors left
-  are white, the opaque image checkerboard, and the region overlay colors.
+- **Tokens:** every color, glass opacity, blur, gradient, shadow, radius,
+  spacing step and type style comes from `../design-system/tokens.css`, which
+  the design system owns and documents in `../design-system/index.html`. Vite
+  inlines it into the dashboard CSS at build time, so nothing outside
+  `dashboard/` is served. `styles.css` maps dashboard roles (`--good`,
+  `--muted`, ...) onto those tokens. The only raw colors left are white, the
+  opaque image checkerboard, and the region overlay colors.
+- **Fonts:** Inter and JetBrains Mono load from Google Fonts, as on the design
+  system page. Offline, the token font stacks fall back to system fonts.
 - **Target sizes:** sized for a 1440×1000 judging screen. The overview fits
   the outcome and history above the fold. Breakpoints at 1280 px and 980 px
   keep it usable on laptops.

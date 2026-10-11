@@ -7,9 +7,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <!-- ============================================================
-     1. GLOBAL DESIGN TOKENS (source of truth: dashboard/src/tokens.css)
+     1. GLOBAL DESIGN TOKENS (source of truth: tokens.css, next to this page)
      ============================================================ -->
-<link rel="stylesheet" href="../dashboard/src/tokens.css" />
+<link rel="stylesheet" href="tokens.css" />
 
 <!-- ============================================================
      2. TAILWIND MAPPING (utilities reference the CSS variables)
@@ -30,7 +30,7 @@
           glass: {
             subtle: 'var(--glass-subtle)', panel: 'var(--glass-panel)', card: 'var(--glass-card)',
             elevated: 'var(--glass-elevated)', tint: 'var(--glass-tint)',
-            'border-subtle': 'var(--glass-border-subtle)', border: 'var(--glass-border)', 'border-strong': 'var(--glass-border-strong)', divider: 'var(--glass-divider)',
+            border: 'var(--glass-border)', 'border-strong': 'var(--glass-border-strong)', divider: 'var(--glass-divider)',
           },
         },
         backdropBlur: {
@@ -73,14 +73,14 @@
     .glass-elevated { @apply bg-glass-elevated backdrop-blur-glass-md border border-glass-border-strong shadow-soft-sm; }
 
     /* Type */
-    .t-display  { @apply text-ink-900 font-semibold tracking-tight; font-size: 40px; line-height: 48px; }
-    .t-h1       { @apply text-ink-900 font-semibold tracking-tight; font-size: 28px; line-height: 36px; }
-    .t-h2       { @apply text-ink-900 font-semibold; font-size: 20px; line-height: 28px; }
-    .t-h3       { @apply text-ink-900 font-semibold; font-size: 16px; line-height: 24px; }
-    .t-body     { @apply text-ink-700; font-size: 14px; line-height: 22px; }
-    .t-small    { @apply text-ink-500; font-size: 13px; line-height: 20px; }
-    .t-caption  { @apply text-ink-500; font-size: 12px; line-height: 16px; }
-    .t-overline { @apply text-ink-500 font-semibold uppercase; font-size: 11px; line-height: 16px; letter-spacing: .08em; }
+    .t-display  { @apply text-ink-900; font: var(--type-display); letter-spacing: var(--tracking-tight); }
+    .t-h1       { @apply text-ink-900; font: var(--type-h1); letter-spacing: var(--tracking-tight); }
+    .t-h2       { @apply text-ink-900; font: var(--type-h2); }
+    .t-h3       { @apply text-ink-900; font: var(--type-h3); }
+    .t-body     { @apply text-ink-700; font: var(--type-body); }
+    .t-small    { @apply text-ink-500; font: var(--type-small); }
+    .t-caption  { @apply text-ink-500; font: var(--type-caption); }
+    .t-overline { @apply text-ink-500 uppercase; font: var(--type-overline); letter-spacing: var(--tracking-overline); }
 
     /* Buttons */
     .btn { @apply inline-flex items-center justify-center gap-2 h-9 px-4 rounded-pill text-[13px] font-medium transition-all duration-200 ease-glass select-none
@@ -319,7 +319,6 @@
             <tr><td class="py-2 text-ink-900">--glass-card</td><td>rgba(255,255,255,.64)</td><td class="text-primary-600">bg-glass-card</td><td class="font-sans text-ink-500">Cards, lists</td></tr>
             <tr><td class="py-2 text-ink-900">--glass-elevated</td><td>rgba(255,255,255,.82)</td><td class="text-primary-600">bg-glass-elevated</td><td class="font-sans text-ink-500">Controls, popovers</td></tr>
             <tr><td class="py-2 text-ink-900">--glass-tint</td><td>rgba(227,235,255,.55)</td><td class="text-primary-600">bg-glass-tint</td><td class="font-sans text-ink-500">Selected state</td></tr>
-            <tr><td class="py-2 text-ink-900">--glass-border-subtle</td><td>rgba(255,255,255,.20)</td><td class="text-primary-600">border-glass-border-subtle</td><td class="font-sans text-ink-500">Hairline on tinted chips</td></tr>
             <tr><td class="py-2 text-ink-900">--glass-border</td><td>rgba(255,255,255,.60)</td><td class="text-primary-600">border-glass-border</td><td class="font-sans text-ink-500">1px panel edge</td></tr>
             <tr><td class="py-2 text-ink-900">--glass-divider</td><td>rgba(24,33,59,.07)</td><td class="text-primary-600">divide-glass-divider</td><td class="font-sans text-ink-500">Row separators</td></tr>
           </tbody>
@@ -429,7 +428,6 @@
   --glass-card:     rgba(255, 255, 255, 0.64);
   --glass-elevated: rgba(255, 255, 255, 0.82);
   --glass-tint:     rgba(227, 235, 255, 0.55);
-  --glass-border-subtle: rgba(255, 255, 255, 0.20);
   --glass-border:        rgba(255, 255, 255, 0.60);
   --glass-border-strong: rgba(255, 255, 255, 0.90);
   --glass-divider:       rgba(24, 33, 59, 0.07);
@@ -468,6 +466,15 @@
   --radius-xl: 20px; --radius-2xl: 28px; --radius-pill: 999px;
   --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 20px;
   --space-6: 24px; --space-8: 32px; --space-10: 40px; --space-14: 56px;
+
+  /* Typography: use as font: var(--type-*) */
+  --font-sans: "Inter", "SF Pro Text", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --type-display: 600 40px/48px var(--font-sans);  --type-h1: 600 28px/36px var(--font-sans);
+  --type-h2: 600 20px/28px var(--font-sans);       --type-h3: 600 16px/24px var(--font-sans);
+  --type-body: 400 14px/22px var(--font-sans);     --type-small: 400 13px/20px var(--font-sans);
+  --type-caption: 400 12px/16px var(--font-sans);  --type-overline: 600 11px/16px var(--font-sans);
+  --tracking-tight: -0.025em; --tracking-overline: 0.08em;
   --ease-out: cubic-bezier(.22,1,.36,1); --dur-fast: 150ms; --dur-base: 250ms; --dur-slow: 400ms;
 }</pre>
 <pre id="code-tw" class="code p-6 max-h-[520px] hidden">// tailwind.config.js — utilities resolve to the CSS variables above
@@ -489,7 +496,6 @@ module.exports = {
           card:     'var(--glass-card)',      // bg-glass-card
           elevated: 'var(--glass-elevated)',  // bg-glass-elevated
           tint:     'var(--glass-tint)',      // bg-glass-tint
-          'border-subtle': 'var(--glass-border-subtle)', // border-glass-border-subtle
           border:   'var(--glass-border)',    // border-glass-border
           'border-strong': 'var(--glass-border-strong)',
           divider:  'var(--glass-divider)',   // divide-glass-divider
@@ -941,7 +947,7 @@ module.exports = {
   let activeCode = 'code-css';
   // Over http, show the live token file; file:// keeps the embedded copy.
   if (location.protocol.startsWith('http')) {
-    fetch('../dashboard/src/tokens.css').then(r => r.ok ? r.text() : Promise.reject())
+    fetch('tokens.css').then(r => r.ok ? r.text() : Promise.reject())
       .then(text => { document.getElementById('code-css').textContent = text; }).catch(() => {});
   }
   codeTabs.addEventListener('click', e => {

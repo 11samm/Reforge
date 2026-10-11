@@ -1,5 +1,5 @@
 /* Aurora Glass design tokens - single source of truth.
-   Rendered and documented by design-system/index.html, which loads this file. */
+   Documented by design-system/index.html; consumed by dashboard/src/styles.css. */
 :root {
   /* ---- Ink (text) - all >= 4.5:1 on white glass ---- */
   --ink-900: #18213b;
@@ -37,7 +37,6 @@
   --glass-card:     rgba(255, 255, 255, 0.64);
   --glass-elevated: rgba(255, 255, 255, 0.82);
   --glass-tint:     rgba(227, 235, 255, 0.55);
-  --glass-border-subtle: rgba(255, 255, 255, 0.20);
   --glass-border:        rgba(255, 255, 255, 0.60);
   --glass-border-strong: rgba(255, 255, 255, 0.90);
   --glass-divider:       rgba(24, 33, 59, 0.07);
@@ -87,6 +86,25 @@
   /* ---- Typography ---- */
   --font-sans: "Inter", "SF Pro Text", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --text-display: 40px;  --leading-display: 48px;
+  --text-h1: 28px;       --leading-h1: 36px;
+  --text-h2: 20px;       --leading-h2: 28px;
+  --text-h3: 16px;       --leading-h3: 24px;
+  --text-body: 14px;     --leading-body: 22px;
+  --text-small: 13px;    --leading-small: 20px;
+  --text-caption: 12px;  --leading-caption: 16px;
+  --text-overline: 11px; --leading-overline: 16px;
+  --tracking-tight: -0.025em;
+  --tracking-overline: 0.08em;
+  /* Full styles, used as `font: var(--type-*)`. Sans only: on mono text set size and leading instead. */
+  --type-display:  600 var(--text-display)/var(--leading-display) var(--font-sans);
+  --type-h1:       600 var(--text-h1)/var(--leading-h1) var(--font-sans);
+  --type-h2:       600 var(--text-h2)/var(--leading-h2) var(--font-sans);
+  --type-h3:       600 var(--text-h3)/var(--leading-h3) var(--font-sans);
+  --type-body:     400 var(--text-body)/var(--leading-body) var(--font-sans);
+  --type-small:    400 var(--text-small)/var(--leading-small) var(--font-sans);
+  --type-caption:  400 var(--text-caption)/var(--leading-caption) var(--font-sans);
+  --type-overline: 600 var(--text-overline)/var(--leading-overline) var(--font-sans);
 
   /* ---- Motion ---- */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
