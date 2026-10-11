@@ -86,7 +86,11 @@ class Harness:
         timeout=self.budget.timeout(timeout,cleanup)
         started=time.monotonic()
         with (directory/'worker.log').open('w',encoding='utf-8') as log:
-            proc=subprocess.Popen(args,cwd=ROOT,stdout=log,stderr=subprocess.STDOUT,
+            env=os.environ.copy()
+            # Baseline subprocesses and cleanup/final gates never publish presentation data.
+            if cleanup or 'learning.worker' not in args or 'final' in directory.parts:
+                env['REFORGE_LIVE_ENABLED']='0'
+            proc=subprocess.Popen(args,cwd=ROOT,env=env,stdout=log,stderr=subprocess.STDOUT,
                                   creationflags=subprocess.CREATE_NO_WINDOW if os.name=='nt' else 0,
                                   start_new_session=os.name!='nt')
             try: proc.wait(timeout=timeout)

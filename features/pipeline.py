@@ -102,6 +102,8 @@ def run(request, job_id, emit):
 
 def final_check(spec,app,control,directory,emit,patch=None):
     from learning.run import Harness
+    from .live import hide
+    hide()
     # One final set, after all repair/model calls finish. Never supplied to a model.
     emit('stage',stage='Verify',activity='Once-only fresh final evaluation, with no repair context')
     from learning.brightness import render

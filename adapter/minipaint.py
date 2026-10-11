@@ -60,6 +60,8 @@ class MiniPaintAdapter:
         return self
 
     def __exit__(self, *args):
+        from features import live
+        live.close()
         try:
             if self.browser: self.browser.close()
             if self.pw: self.pw.stop()
@@ -68,6 +70,8 @@ class MiniPaintAdapter:
 
     @contextmanager
     def action(self, name, **details):
+        from features import live
+        live.action(name, **{k:v for k,v in details.items() if k in ('requested','route','percentage')})
         start = time.monotonic()
         record = {"action": name, "started_at": utc_now(), "status": "in_progress", **details}
         self.actions.append(record)
@@ -92,6 +96,8 @@ class MiniPaintAdapter:
             device_scale_factor=1, locale="en-US", timezone_id="America/Los_Angeles",
             accept_downloads=True, service_workers="block")
         self.page = self.context.new_page()
+        from features import live
+        live.attach(self.page,'reference')
         self.page.set_default_timeout(self.timeout_ms)
         self.page.set_default_navigation_timeout(30000)
         # No tracing, HAR, console dumps, response listeners, or JS application state.
