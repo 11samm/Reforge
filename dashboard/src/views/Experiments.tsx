@@ -7,7 +7,7 @@ export function Experiments({ run, t, selected, onSelect, onOpenEvidence }: {
   run: Run; t: number; selected: string | null; onSelect: (id: string) => void; onOpenEvidence: (id: string) => void;
 }) {
   const [query, setQuery] = useState('');
-  const visible = run.experiments.filter((e) => e.revealedAt === null || e.revealedAt <= t);
+  const visible = run.experiments.filter((e) => e.revealedAt === null ? t >= run.duration : e.revealedAt <= t);
   const rows = visible.filter((e) => !query || `${e.id} ${e.question} ${e.inputKind}`.toLowerCase().includes(query.toLowerCase()));
   const exp = visible.find((e) => e.id === selected) ?? visible[0] ?? null;
   const observed = exp ? exp.observedAt !== null && exp.observedAt <= t : false;
@@ -61,7 +61,7 @@ export function Experiments({ run, t, selected, onSelect, onOpenEvidence }: {
                 {!observed ? <Pill tone="neutral">Awaiting reference</Pill>
                   : exp.percentageMatches === true ? <Pill tone="good">Exact match</Pill>
                     : exp.percentageMatches === false ? <Pill tone="bad">Mismatch</Pill> : <Pill tone="neutral">Not recorded</Pill>}
-                <span className="muted">Original import confirmed <Gate value={exp.originalImportConfirmed} /></span>
+                <span className="muted">Original import confirmed <Gate value={observed ? exp.originalImportConfirmed : null} /></span>
               </div>
             </div>
 

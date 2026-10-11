@@ -52,11 +52,14 @@ npm.cmd --prefix "<printed app path>" run preview -- --port 5182
 python -m features.pipeline --pilot --request "Implement Brightness"
 ```
 
-Each pilot creates a new independent workspace; `--prepare-demo` is a separate
-preview/preflight and is not resumed by `--pilot`. Dashboard prepare/learn buttons
-and browser streaming are separate presentation work. The existing dashboard
-request form may still restrict submission to Contrast until that UI is updated.
-The service accepts Brightness under its existing explicit pilot-enable gate.
+CLI pilots create a new independent workspace; CLI `--prepare-demo` remains a
+separate preview/preflight and is not resumed by `--pilot`. The dashboard's
+**Prepare fresh Brightness demo** creates and builds an isolated editor without
+models. **Learn Brightness** submits the selected prepared-demo ID. The service
+checks its starting source hashes and exact file set, uses that same workspace and
+ID for fresh discovery/learning, and rejects changed or previously used demos.
+Learning still requires the existing explicit pilot-enable gate and budgets.
+See [live results integration](live-results-ui.md) for API and replay contracts.
 
 ## Execution and evaluation
 

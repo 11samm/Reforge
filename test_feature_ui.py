@@ -17,24 +17,31 @@ class UI(unittest.TestCase):
             with sync_playwright() as p:
                 b=p.chromium.launch(headless=True); page=b.new_page(viewport={'width':1440,'height':1000})
                 fixture={'pilot_enabled':False,'jobs':[{'id':'a'*32,'request':'Implement Contrast','status':'unresolved','stage':'Discover','activity':'Offline fixture: missing visible control domain','elapsed_seconds':12,'usage':None,'events':[{'sequence':1,'event':'start','elapsed_seconds':0},{'sequence':2,'event':'stop','elapsed_seconds':12,'status':'unresolved'}],'budget':{'seconds':600}}]}
-                page.route('**/api/jobs',lambda r:r.fulfill(status=400 if r.request.method=='POST' else 200,content_type='application/json',body=json.dumps({'error':'Supported request: Implement Contrast'} if r.request.method=='POST' else fixture)))
+                page.route('**/api/jobs**',lambda r:r.fulfill(status=400 if r.request.method=='POST' else 200,content_type='application/json',body=json.dumps({'error':'Synthetic preparation failure'} if r.request.method=='POST' else fixture if r.request.url.endswith('/api/jobs') else {'job_id':'a'*32,'experiments':[],'candidates':[]})))
                 errors=[]; page.on('pageerror',lambda e:errors.append(str(e)))
                 page.goto(f'http://127.0.0.1:{s.server_port}')
                 page.get_by_role('button',name='Implement a feature',exact=True).click()
                 expect(page.get_by_text('Service connected',exact=True)).to_be_visible()
-                expect(page.get_by_role('button',name='Run',exact=True)).to_be_disabled()
+                expect(page.get_by_role('button',name='Learn Brightness',exact=True)).to_be_disabled()
                 expect(page.get_by_text('Offline fixture: missing visible control domain',exact=False)).to_be_visible()
                 expect(page.get_by_role('button',name='Replay run',exact=True)).to_have_count(0)
                 page.screenshot(path=str(ROOT/'.scratch/feature-dashboard.png'))
                 fixture['pilot_enabled']=True
-                expect(page.get_by_role('button',name='Run',exact=True)).to_be_enabled()
-                page.get_by_role('textbox',name='Feature request').fill('Implement Resize')
-                page.get_by_role('button',name='Run',exact=True).click()
-                expect(page.get_by_role('alert')).to_have_text('Supported request: Implement Contrast')
+                expect(page.get_by_role('button',name='Learn Brightness',exact=True)).to_be_disabled()
+                page.get_by_role('button',name='Prepare fresh Brightness demo',exact=True).click()
+                expect(page.get_by_role('alert')).to_have_text('Synthetic preparation failure')
                 page.wait_for_timeout(1200)
-                expect(page.get_by_role('alert')).to_have_text('Supported request: Implement Contrast')
-                page.get_by_role('button',name='Overview',exact=True).click()
+                expect(page.get_by_role('alert')).to_have_text('Synthetic preparation failure')
+                # The integrated entry point chooses a real portable recording.
+                with page.expect_file_chooser() as chooser:
+                    page.get_by_role('button',name='Replay saved run',exact=True).click()
+                chooser.value.set_files(str(ROOT/'dashboard/public/runs/brightness-success.reforge.json'))
                 expect(page.get_by_text('RECORDED PLAYBACK',exact=True)).to_be_visible()
+                expect(page.locator('.identity strong')).to_have_text('82b68e6daf5e41ddb7c03c13a91ba1f9')
+                expect(page.get_by_text('In progress at this point',exact=True)).to_be_visible()
+                expect(page.locator('.live-browsers')).to_have_count(0)
+                expect(page.get_by_role('button',name='Play',exact=True)).to_be_visible()
+                page.get_by_title('Jump to end',exact=True).click()
                 expect(page.get_by_role('button',name='Replay run',exact=True)).to_be_visible()
                 self.assertEqual(errors,[])
                 b.close()
@@ -56,6 +63,7 @@ class IntegrationUI(unittest.TestCase):
                 def job(i,status):
                     return {'id':i,'request':'Implement Contrast','status':status,'stage':'Verify' if status=='accepted' else 'Investigate','activity':'All gates passed' if status=='accepted' else 'Collecting diagnostic evidence','elapsed_seconds':346 if status=='accepted' else 60,'usage':None,'events':[{'sequence':1,'event':'start','elapsed_seconds':0},{'sequence':2,'event':'evidence','elapsed_seconds':30,'artifact':f'/api/jobs/{i}/evidence/spec.json'}],'budget':{'seconds':1200}}
                 state={'pilot_enabled':True,'jobs':[]}; offline=False; posts=[]
+                demo={'id':ident,'request':'Implement Brightness','preview_status':'unavailable','preparation':{'target_absent':True,'model_invoked':False,'memory':{'fixture':'Synthetic starting-state policy'}}}
                 def route(r):
                     nonlocal state
                     path=r.request.url.split('/api/jobs')[1]
@@ -63,20 +71,25 @@ class IntegrationUI(unittest.TestCase):
                     if r.request.method=='POST':
                         posts.append((path,r.request.post_data_json))
                         self.assertEqual(r.request.headers.get('x-reforge-request'),'1')
+                        if path=='/prepare':
+                            state['prepared_demos']=[demo]
+                            return r.fulfill(status=201,content_type='application/json',body=json.dumps(demo))
                         updated=job(ident,'cancelling' if path.endswith('/cancel') else 'queued')
                         state['jobs']=[updated]
                         return r.fulfill(status=200,content_type='application/json',body=json.dumps(updated))
-                    r.fulfill(status=200,content_type='application/json',body=json.dumps(state))
+                    r.fulfill(status=200,content_type='application/json',body=json.dumps(state if path=='' else {'job_id':path.split('/')[1],'experiments':[],'candidates':[]}))
                 page.route('**/api/jobs**',route)
                 page.goto(f'http://127.0.0.1:{s.server_port}')
                 page.get_by_role('button',name='Implement a feature',exact=True).click()
                 expect(page.get_by_text('No feature jobs yet',exact=True)).to_be_visible()
-                page.get_by_role('button',name='Run',exact=True).click()
+                page.get_by_role('button',name='Prepare fresh Brightness demo',exact=True).click()
+                expect(page.get_by_role('button',name='Learn Brightness',exact=True)).to_be_enabled()
+                page.get_by_role('button',name='Learn Brightness',exact=True).click()
                 expect(page.get_by_text('queued',exact=True)).to_be_visible()
-                expect(page.get_by_role('button',name='Run',exact=True)).to_be_disabled()
-                page.get_by_role('button',name='Cancel job',exact=True).click()
+                expect(page.get_by_role('button',name='Learn Brightness',exact=True)).to_be_disabled()
+                page.get_by_role('button',name='Cancel run',exact=True).click()
                 expect(page.get_by_role('button',name='Cancelling…',exact=True)).to_be_disabled()
-                self.assertEqual(posts,[('',{'request':'Implement Contrast'}),(f'/{ident}/cancel',{})])
+                self.assertEqual(posts,[('/prepare',{'request':'Implement Brightness'}),('',{'request':'Implement Brightness','prepared_demo_id':ident}),(f'/{ident}/cancel',{})])
                 state['jobs']=[job(ident,'running'),job(previous,'accepted')]
                 expect(page.get_by_text('running',exact=True)).to_be_visible()
                 shots=ROOT/'dashboard/docs/screenshots/integration'; shots.mkdir(parents=True,exist_ok=True)
@@ -85,13 +98,13 @@ class IntegrationUI(unittest.TestCase):
                 expect(page.get_by_text('accepted',exact=True)).to_be_visible()
                 page.wait_for_timeout(1200)
                 expect(page.get_by_text('accepted',exact=True)).to_be_visible()
-                expect(page.get_by_role('button',name='Run',exact=True)).to_be_disabled()
+                expect(page.get_by_role('button',name='Learn Brightness',exact=True)).to_be_disabled()
                 expect(page.get_by_role('link',name='spec.json')).to_have_attribute('href',f'/api/jobs/{previous}/evidence/spec.json')
                 page.screenshot(path=str(shots/'feature-accepted-desktop.png'))
                 for status in ('unresolved','failed','cancelled'):
                     state['jobs']=[job(previous,status)]
                     expect(page.get_by_text(status,exact=True)).to_be_visible()
-                    expect(page.get_by_role('button',name='Cancel job',exact=True)).to_have_count(0)
+                    expect(page.get_by_role('button',name='Cancel run',exact=True)).to_have_count(0)
                     expect(page.get_by_text('This job did not establish a verified feature.',exact=False)).to_be_visible()
                 state['jobs']=[job(previous,'accepted')]
                 expect(page.get_by_text('accepted',exact=True)).to_be_visible()
@@ -117,7 +130,7 @@ class IntegrationUI(unittest.TestCase):
                 offline=True
                 expect(page.get_by_text('Service offline',exact=True)).to_be_visible()
                 expect(page.get_by_role('alert')).to_have_text('Service unavailable')
-                expect(page.get_by_role('button',name='Run',exact=True)).to_be_disabled()
+                expect(page.get_by_role('button',name='Learn Brightness',exact=True)).to_be_disabled()
                 page.screenshot(path=str(shots/'feature-offline-mobile.png'))
                 browser.close()
         finally: s.shutdown(); s.server_close(); t.join()
