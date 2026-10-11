@@ -19,6 +19,19 @@ class PixelMismatchError(AssertionError):
     pass
 
 
+class DuplicateShellLabelError(AssertionError):
+    def __init__(self, label, count):
+        self.diagnostic = {'label': label, 'count': count, 'scope': 'DOM including hidden dialogs',
+            'required_correction': 'Keep the original shell label unchanged and unique; replace duplicated operation-dialog guidance with distinct text.'}
+        super().__init__('Duplicate shell label ' + repr(label) + ': found ' + str(count) +
+                         ' nodes including hidden dialogs. ' + self.diagnostic['required_correction'])
+
+
+def unique_shell_label(page, label):
+    count = page.get_by_text(label, exact=True).count()
+    if count > 1: raise DuplicateShellLabelError(label, count)
+
+
 class QuietHandler(SimpleHTTPRequestHandler):
     def log_message(self,*args): pass
 
@@ -40,6 +53,7 @@ def main(evidence=None, allow_blur=False, app=None, allow_brightness=False):
             page.on('pageerror',lambda e: errors.append(str(e)))
             page.on('request',lambda r: external.append(r.url) if r.url.startswith(('http://','https://')) and not r.url.startswith('http://127.0.0.1:') else None)
             page.goto(f'http://127.0.0.1:{server.server_port}',wait_until='networkidle',timeout=30000)
+            unique_shell_label(page, 'No image loaded')
             expect(page.get_by_text('No image loaded',exact=True)).to_be_visible()
             if page.evaluate('typeof window.milestoneTestChangePixel') != 'undefined': raise AssertionError('Test mutation hook leaked into production')
             page.screenshot(path=str(evidence/'generated-initial.png'))
@@ -73,6 +87,7 @@ def main(evidence=None, allow_blur=False, app=None, allow_brightness=False):
                 page.get_by_role('menuitem',name='Image',exact=True).click()
                 page.get_by_role('menuitem',name='Color Corrections…',exact=True).click()
                 corrections=page.get_by_role('dialog')
+                unique_shell_label(page, 'No image loaded')
                 brightness=corrections.get_by_role('slider',name=re.compile(r'^Brightness(?::.*)?$'))
                 expect(brightness).to_be_disabled()
                 for attr,value in [('min','-100'),('max','100'),('step','1')]: expect(brightness).to_have_attribute(attr,value)
@@ -191,6 +206,7 @@ def main(evidence=None, allow_blur=False, app=None, allow_brightness=False):
             page.reload(wait_until='networkidle')
             page.locator('input[type=file]').set_input_files({'name':'bad.png','mimeType':'image/png','buffer':b'bad'})
             expect(page.get_by_role('alert')).to_be_visible()
+            unique_shell_label(page, 'No image loaded')
             expect(page.get_by_text('No image loaded',exact=True)).to_be_visible()
             page.get_by_role('menuitem',name='File',exact=True).click()
             expect(page.get_by_role('menuitem',name='Export PNG',exact=True)).to_be_disabled()
@@ -201,6 +217,7 @@ def main(evidence=None, allow_blur=False, app=None, allow_brightness=False):
             browser.close()
     except Exception as error:
         report['classification']='pixel_mismatch' if isinstance(error,PixelMismatchError) else 'infrastructure_error'
+        if isinstance(error, DuplicateShellLabelError): report['diagnostic']=error.diagnostic
         report['error']={'type':type(error).__name__,'message':str(error)[:2000]}
     finally:
         server.shutdown(); server.server_close()

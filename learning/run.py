@@ -71,7 +71,10 @@ class Harness:
                'budget':self.budget.snapshot(),**data}
         self.events.append(event)
         with (self.directory/'events.jsonl').open('a',encoding='utf-8') as f: f.write(json.dumps(event,allow_nan=False)+'\n')
-        print(json.dumps(event,allow_nan=False),flush=True)
+        try: print(json.dumps(event,allow_nan=False),flush=True)
+        except OSError as error:
+            with (self.directory/'transport-failures.jsonl').open('a',encoding='utf-8') as log:
+                log.write(json.dumps({'event_sequence':event['sequence'],'type':type(error).__name__,'message':str(error)})+'\n')
 
     def guard(self):
         changed=[p for p,h in self.protected.items() if not Path(p).is_file() or digest(p)!=h]

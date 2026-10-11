@@ -57,8 +57,8 @@ class AdjustmentHarness(Harness):
     def emit(self,kind,**data):
         super().emit(kind,**data)
         if getattr(self,'presentation_directory',None):
-            from .presentation import publish
-            publish(self.presentation_directory,self.directory,self.events)
+            from .presentation import publish_available
+            publish_available(self.presentation_directory,self.directory,self.events)
         self.notify(kind,**data)
     def baseline(self,label,allow_blur=False,cleanup=False):
         return super().baseline(label,False,cleanup,allow_brightness=(self.app/'src/brightness.ts').is_file())
@@ -189,7 +189,7 @@ class AdjustmentHarness(Harness):
                     self.best=self.accepted=cp; self.first_acceptance={'candidate_id':label,'suite_sha256':self.suite_hash}; self.stop='all_frozen_visible_and_baseline_gates'; break
                 self.emit('rejection',candidate_id=label,reason=reason)
                 if r.get('evaluator_suspect'): self.stop='evaluator_defect'; break
-                previous={'classification':reason,'discrepancies':packets.discrepancy_section(r,self.evidence,self.directory/'evaluations'/label,parameter_key='value')}
+                previous={'classification':reason,'baseline_failure':{k:getattr(self,'last_baseline',{}).get(k) for k in ('classification','shell_error','shell_diagnostic','reason')},'discrepancies':packets.discrepancy_section(r,self.evidence,self.directory/'evaluations'/label,parameter_key='value')}
                 self.checkpoints.restore(self.best); self.stop='candidate_budget_exhausted'
         except Exception as e:
             if self.attempts and self.attempts[-1]['status']=='started':

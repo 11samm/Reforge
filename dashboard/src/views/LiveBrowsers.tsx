@@ -7,6 +7,7 @@ function BrowserView({ title, session }: { title: string; session?: BrowserSessi
   const state = session?.state ?? 'unavailable';
   return <article className="live-browser">
     <div className="live-browser-heading"><strong>{title}</strong><Pill tone={state === 'ready' ? 'good' : 'warn'}>{state}</Pill></div>
+    {session?.presentation?.state === 'degraded' && <p role="status">Presentation degraded: {session.presentation.failure?.message ?? 'Stream publishing failed'}. The last displayed frame may be stale; its capture time is shown below.</p>}
     <div className="live-browser-viewport">
       {state === 'ready' && session?.frame ? <img alt={`${title} — live harness viewport`} src={`data:image/jpeg;base64,${session.frame}`} /> :
         <p>{state === 'building' ? 'Building and checking candidate…' : state === 'launching' ? 'Launching owned browser…' : state === 'hidden' ? 'Held-out evaluation is hidden' : state === 'disconnected' ? 'Session closed or disconnected' : 'No browser session available'}</p>}

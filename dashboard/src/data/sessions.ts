@@ -1,5 +1,6 @@
 export interface BrowserSession {
   state: 'unavailable' | 'building' | 'launching' | 'ready' | 'disconnected' | 'hidden';
+  presentation?: { state: string; failure?: { type?: string; message?: string } };
   session_id?: string; frame: string | null; action?: string; purpose?: string;
   parameters?: Record<string, unknown>; action_started?: number; action_elapsed_seconds?: number; captured_at?: number;
 }

@@ -3,7 +3,7 @@ import { CandidatePreview } from './CandidatePreview.tsx';
 
 type Artifact = { label: string; status: string; url?: string; reason?: string };
 type Row = { case_id?: string; status?: string; classification?: string; reasons?: string[]; metrics?: unknown; artifacts?: Artifact[] };
-type Results = { job_id: string; experiments: { id: string; plan: unknown; artifacts: Artifact[] }[]; candidates: { id: string; result: Record<string, unknown>; cases: Row[]; logs: Record<string, string>; baseline?: unknown; brightness_regression?: unknown }[]; report?: unknown; final?: unknown; events?: unknown[] };
+type Results = { job_id: string; snapshot_at?: number; presentation?: { state: string; last_complete_at?: number; failure?: { type: string; message: string } };  experiments: { id: string; plan: unknown; artifacts: Artifact[] }[]; candidates: { id: string; result: Record<string, unknown>; cases: Row[]; logs: Record<string, string>; baseline?: unknown; brightness_regression?: unknown }[]; report?: unknown; final?: unknown; events?: unknown[] };
 const recorded = (value: unknown) => JSON.stringify(value, null, 2) ?? 'Not recorded';
 function EvidenceImage({ url, label }: { url: string; label: string }) {
   const [failed, setFailed] = useState(false);
@@ -20,7 +20,8 @@ export function LiveEvidence({ id, status, connected }: { id: string; status: st
   const [data, setData] = useState<Results | null>(null), [error, setError] = useState('');
   const [preview, setPreview] = useState<{ url?: string; reason?: string } | null>(null);
   useEffect(() => {
-    setData(null); setPreview(null); setError('');
+    setPreview(null); setError('');
+    setData(previous => previous?.job_id === id ? previous : null);
     if (!connected) return;
     const controller = new AbortController(); let pending = false;
     const refresh = async () => {
@@ -31,7 +32,7 @@ export function LiveEvidence({ id, status, connected }: { id: string; status: st
         const next = await response.json() as Results;
         if (next.job_id !== id || !Array.isArray(next.experiments) || !Array.isArray(next.candidates)) throw new Error('Incorrect evidence job');
         if (!controller.signal.aborted) { setData(next); setError(''); }
-      } catch (e) { if (!controller.signal.aborted) { setData(null); setError((e as Error).message); } }
+      } catch (e) { if (!controller.signal.aborted) { setError((e as Error).message); } }
       finally { pending = false; }
     };
     void refresh(); const timer = setInterval(() => void refresh(), 1000);
@@ -46,7 +47,8 @@ export function LiveEvidence({ id, status, connected }: { id: string; status: st
     } catch (e) { setPreview({ reason: (e as Error).message }); }
   };
   return <section className="feature-evidence"><h3>Experiment and candidate results</h3><p className="small muted">Recorded backend evidence. Image differences are amplified ×16 for display; scoring uses raw RGBA.</p>
-    {error && <p role="alert">{error}</p>}
+    {(error || (!connected && data !== null) || data?.presentation?.state === 'degraded') && <p role="alert">Presentation degraded: {error || data?.presentation?.failure?.message || 'Evidence feed disconnected'}. Last complete snapshot: {(data?.snapshot_at ?? data?.presentation?.last_complete_at) ? new Date((data?.snapshot_at ?? data?.presentation?.last_complete_at)! * 1000).toISOString() : 'none recorded'}. Displayed evidence may be stale; learning evidence is recorded independently.</p>}
+    {data?.snapshot_at && <p className="small muted">Snapshot recorded at {new Date(data.snapshot_at * 1000).toISOString()}</p>}
     {!data?.experiments.length && <p>Experiment inputs and reference outputs: not yet produced or not recorded.</p>}
     {data?.experiments.map(e => <details key={e.id} open><summary>Experiment {e.id}</summary><pre>{recorded(e.plan)}</pre><Artifacts id={id} items={e.artifacts} />{!data.candidates.length ? <p>Candidate output, difference images and metrics: not yet produced.</p> : <ul>{data.candidates.map(c => <li key={c.id}>{c.cases.some(row => row.case_id === e.id) ? <a href={`#live-case-${id}-${c.id}-${e.id}`}>{c.id}: candidate output, differences and recorded metrics</a> : <span>{c.id}: candidate output, differences and metrics not produced or not recorded for this experiment</span>}</li>)}</ul>}</details>)}
     {!data?.candidates.length && <p>Build, UI/batch, regression and acceptance results: not yet produced or not recorded.</p>}

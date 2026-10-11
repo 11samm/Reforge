@@ -110,7 +110,7 @@ def publish(job_root, archive, events=()):
             shutil.copyfile(source, target)
             allowed[key] = digest(target)
             return {'id': key, 'label': label, 'status': 'available', 'url': f'/api/jobs/{ident}/artifacts/{key}'}
-        except (ValueError, OSError): return missing
+        except ValueError: return missing
     experiments = []
     for p in sorted((archive / 'experiments').glob('*/preregistered.json')):
         case = p.parent.name
@@ -136,19 +136,67 @@ def publish(job_root, archive, events=()):
         baseline = read(archive, f'{label}-gates/baseline/results.json')
         candidates.append({'id': label, 'result': clean({k: v for k, v in result.items() if k != 'cases'}), 'cases': cases, 'logs': logs, 'baseline': clean(baseline), 'brightness_regression': clean(read(archive, f'brightness-regression/{label}/result.json'))})
     atomic(output / 'manifest.json', {'job_id': ident, 'assets': allowed})
-    atomic(output / 'results.json', {'schema_version': 1, 'job_id': ident, 'experiments': experiments, 'candidates': candidates, 'events': clean(list(events)), 'report': clean(read(archive, 'report.json'))})
+    completed_at = time.time()
+    atomic(output / 'results.json', {'schema_version': 1, 'job_id': ident, 'snapshot_at': completed_at, 'assets': allowed, 'experiments': experiments, 'candidates': candidates, 'events': clean(list(events)), 'report': clean(read(archive, 'report.json'))})
+
+    return completed_at
+
+def latest_status(path):
+    """Append-only diagnostics: ignore only an in-progress final line."""
+    path = Path(path)
+    if not path.is_file(): return None
+    lines = path.read_text(encoding="utf-8").splitlines(keepends=True)
+    complete = [line for line in lines if line.endswith("\n")]
+    return json.loads(complete[-1]) if complete else None
+
+def append_status(path, value):
+    with Path(path).open("a", encoding="utf-8") as log:
+        log.write(json.dumps(value, allow_nan=False) + "\n")
+
+def publish_available(job_root, archive, events=()):
+    """Evidence is already committed by the harness; only OS/transport errors degrade display.
+
+    Diagnostics live outside the presentation tree. Failure to persist these
+    authoritative diagnostics still raises; integrity/serialization errors raise.
+    """
+    job_root, archive = Path(job_root), Path(archive)
+    status_path = job_root / 'presentation-status.jsonl'
+    previous = latest_status(status_path) or {}
+    status = {**previous, 'attempted_at': time.time()}
+    try:
+        completed_at = publish(job_root, archive, events)
+    except OSError as error:
+        failure = {'at': time.time(), 'type': type(error).__name__, 'message': str(error),
+                   'errno': error.errno, 'winerror': getattr(error, 'winerror', None)}
+        # Append-only authoritative history; never replace a failed temporary snapshot.
+        archive.mkdir(parents=True, exist_ok=True)
+        with (archive / 'presentation-failures.jsonl').open('a', encoding='utf-8') as log:
+            log.write(json.dumps(failure, allow_nan=False) + '\n')
+        status.update(state='degraded', failure=failure)
+    else:
+        status.update(state='available', last_complete_at=completed_at, failure=None)
+    append_status(status_path, status)
+    save(archive / 'presentation-status.json', status)
+    return status
 
 
 def results(job_root, ident):
     value = read(Path(job_root) / 'presentation', 'results.json')
     if value and value.get('job_id') != ident: raise ValueError('Cross-job evidence')
-    return value or {'schema_version': 1, 'job_id': ident, 'experiments': [], 'candidates': [], 'report': None, 'events': []}
+    status = latest_status(Path(job_root) / 'presentation-status.jsonl')
+    transport = Path(job_root) / 'transport-failures.jsonl'
+    if transport.is_file():
+        failures = transport.read_text(encoding='utf-8').splitlines()
+        if failures: status = {**(status or {}), 'state': 'degraded', 'failure': json.loads(failures[-1])}
+    if value: value['presentation'] = status or {'state': 'available', 'last_complete_at': value.get('snapshot_at')}
+    return value or {'presentation': status or {'state': 'unavailable', 'last_complete_at': None}, 'schema_version': 1, 'job_id': ident, 'experiments': [], 'candidates': [], 'report': None, 'events': []}
 
 
 def asset(job_root, ident, name):
     if not re.fullmatch('[a-f0-9]{64}\\.png', name): raise ValueError('Unknown artifact')
     root = Path(job_root) / 'presentation'
-    manifest = read(root, 'manifest.json') or {}
+    snapshot = read(root, 'results.json') or {}
+    manifest = snapshot if 'assets' in snapshot else (read(root, 'manifest.json') or {})
     if manifest.get('job_id') != ident or name not in manifest.get('assets', {}): raise ValueError('Artifact not in this job')
     path = safe_file(root / 'assets', name)
     if digest(path) != manifest['assets'][name]: raise ValueError('Artifact changed')

@@ -109,8 +109,8 @@ def run(request, job_id, emit, prepared=None):
     h.harness_patch=patch
     # Save presentation records under the job root; only explicitly copied artifacts are served.
     h.run(); save(directory/'visible-report.json',h.report); emit('evidence',artifact='visible-report.json',activity='Frozen visible gate outcome recorded')
-    from .presentation import publish
-    publish(directory,h.directory,h.events)
+    from .presentation import publish_available
+    publish_available(directory,h.directory,h.events)
     if h.report['status']!='accepted': return {'status':'unresolved','classification':h.report['stop_reason']}
     return final_check(spec,app,h,directory,emit,patch)
 

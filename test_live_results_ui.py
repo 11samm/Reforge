@@ -15,7 +15,7 @@ from learning.core import save
 from features.jobs import JobStore, BrowserLock
 from features.service import server
 from features.demos import Demos
-from features.presentation import publish
+from features.presentation import publish, publish_available
 from verify_shell import QuietHandler
 
 SOURCE=Path(os.environ.get('REFORGE_SAVED_BRIGHTNESS_ROOT', str(ROOT.parent/'contrast-brightness-worktree')))
@@ -33,7 +33,9 @@ class RealSavedUI(unittest.TestCase):
             save(store.directory/IDENT/'job.json',original)
             job_root=root/'evidence/learning'/('feature-'+IDENT); job_root.mkdir(parents=True)
             events=[json.loads(line) for line in (ARCHIVE/'events.jsonl').read_text().splitlines()]
-            publish(job_root,ARCHIVE,events)
+            publish_available(job_root,ARCHIVE,events)
+            with patch('features.presentation.publish',side_effect=PermissionError('Permanent presentation test denial')):
+                publish_available(job_root,ARCHIVE,events)
             save(job_root/'final-summary.json',json.loads((SOURCE/'evidence/learning'/('feature-'+IDENT)/'final-summary.json').read_text()))
             Demos.snapshot(store.directory/IDENT,SOURCE/'dev-workspaces'/('feature-'+IDENT),IDENT)
             with patch('features.service.ROOT',root):
@@ -57,6 +59,8 @@ class RealSavedUI(unittest.TestCase):
                         expect(page.get_by_text('Service connected',exact=True)).to_be_visible()
                         expect(page.get_by_text('Candidate candidate-1',exact=True)).to_be_visible()
                         expect(page.get_by_text('Candidate candidate-2',exact=True)).to_be_visible()
+                        expect(page.get_by_text('Presentation degraded:',exact=False)).to_be_visible()
+                        expect(page.get_by_text('Presentation degraded:',exact=False)).to_contain_text('Last complete snapshot:')
                         page.get_by_role('button',name='Prepare fresh Brightness demo',exact=True).click()
                         prepared=page.frame_locator('iframe[title="Prepared editor — target operation absent"]')
                         expect(prepared.get_by_text('No image loaded',exact=True)).to_be_visible(timeout=30000)

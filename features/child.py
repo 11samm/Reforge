@@ -1,10 +1,26 @@
 """Owned child. Only the job ID crosses the command boundary."""
 import json
 import sys
+from pathlib import Path
 from adapter.png import ROOT
 from learning.core import save
 from .pipeline import run, continue_job
 from .jobs import JobStore
+
+def event_emitter(directory, transport):
+    """Commit stage/usage/outcome events before optional presentation transport."""
+    import time
+    directory = Path(directory)
+    def emit(kind, **data):
+        event = {'feature_event': True, 'event': kind, 'data': data, 'recorded_at': time.time()}
+        with (directory / 'pipeline-events.jsonl').open('a', encoding='utf-8') as log:
+            log.write(json.dumps(event, allow_nan=False) + '\n')
+        try: transport(event)
+        except OSError as error:
+            with (directory / 'transport-failures.jsonl').open('a', encoding='utf-8') as log:
+                log.write(json.dumps({'at': time.time(), 'type': type(error).__name__, 'message': str(error)}) + '\n')
+    return emit
+
 
 def main():
     if sys.stdin.readline().strip()!='owned': raise RuntimeError('Job owner handshake missing')
@@ -16,7 +32,7 @@ def main():
     import os
     os.environ['REFORGE_LIVE_JOB']=ident
     os.environ['REFORGE_LIVE_ENABLED']='1'
-    def emit(kind,**data): print(json.dumps({'feature_event':True,'event':kind,'data':data}),flush=True)
+    emit=event_emitter(ROOT/'evidence/learning'/('feature-'+ident), lambda event: print(json.dumps(event),flush=True))
     try: result=continue_job(job['resume_job'],ident,emit,request=job['request']) if job.get('resume_job') else run(job['request'],ident,emit,prepared=job.get('prepared_demo'))
     except Exception as e: result={'status':'failed','classification':type(e).__name__+': '+str(e)[:1000]}
     finally:

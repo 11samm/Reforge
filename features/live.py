@@ -23,6 +23,17 @@ def write(role, value):
     p=d/(role+'.json'); temp=p.with_suffix('.'+uuid.uuid4().hex+'.tmp')
     temp.write_text(json.dumps(value, allow_nan=False), encoding='utf-8'); os.replace(temp,p)
 
+def presentation_failure(role, error):
+    from learning.core import save
+    root=ROOT/'evidence/learning'/('feature-'+os.environ['REFORGE_LIVE_JOB'])
+    failure={'at':time.time(),'role':role,'type':type(error).__name__,'message':str(error)[:2000]}
+    root.mkdir(parents=True,exist_ok=True)
+    with (root/'live-presentation-failures.jsonl').open('a',encoding='utf-8') as log:
+        log.write(json.dumps(failure)+'\n')
+    from .presentation import append_status
+    append_status(root/(role+'-presentation-status.jsonl'),{'state':'degraded','failure':failure})
+
+
 class Session:
     def __init__(self, role, state='launching', purpose='', parameters=None):
         self.role=role; self.cdp=None
@@ -34,7 +45,7 @@ class Session:
     def publish(self):
         if enabled():
             try: write(self.role, self.value)
-            except OSError: pass # Presentation must not change gate behavior.
+            except OSError as error: presentation_failure(self.role,error)
     def action(self, action, parameters=None):
         self.value.update(action=action[:200], action_started=time.time())
         if parameters is not None: self.value['parameters']={**self.value['parameters'],**parameters}
@@ -143,6 +154,10 @@ def snapshot(job):
             value={**value,'state':'building','frame':None,'action':job.get('activity','Reconstructing candidate')}
         if value.get('action_started'):
             value['action_elapsed_seconds']=round(max(0,time.time()-value['action_started']),3)
+        diagnostic=ROOT/'evidence/learning'/('feature-'+job['id'])/(role+'-presentation-status.jsonl')
+        from .presentation import latest_status
+        try: value['presentation']=latest_status(diagnostic)
+        except OSError: value['presentation']={'state':'degraded','failure':{'message':'Presentation diagnostics unavailable'}}
         value.pop('pid',None)
         result['sessions'][role]=value
     return result

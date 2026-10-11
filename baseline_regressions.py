@@ -34,6 +34,7 @@ def main():
             summary['cases'].append(evaluate(case_id, expected, candidate, run/case_id, load_policy()))
         summary['shell_status'] = shell['status']
         summary['shell_error'] = shell.get('error')
+        summary['shell_diagnostic'] = shell.get('diagnostic')
         if code or shell['status'] != 'passed':
             summary['classification'] = shell.get('classification', 'infrastructure_error')
             summary['reason'] = 'Shell verification stopped; missing downstream exports do not establish pixel behavior. See shell_error and per-case evidence.'
