@@ -48,9 +48,18 @@ class FeatureAdapter(MiniPaintAdapter):
             values = {}
             for c in spec['controls']:
                 field = resolve(dialog, c['locator'])
+                for key in ('min','max','step'):
+                    got = field.get_attribute(key)
+                    if got is None or float(got) != c[key]: raise ValueError('Observed domain changed: '+c['label'])
                 if float(field.input_value()) != c['default']: raise ValueError('Fresh dialog default changed')
                 want = value if c['label'] == spec['parameter'] else c['default']
-                values[c['label']] = {'requested':want, 'accepted':set_numeric(dialog,c,want)}
+                # Frozen controls already equal their observed defaults. Avoid
+                # hundreds of unnecessary keyboard actions on unrelated sliders.
+                accepted = set_numeric(dialog,c,want) if want != c['default'] else float(field.input_value())
+                values[c['label']] = {'requested':want, 'accepted':accepted}
+            for c in spec['controls']:
+                want = value if c['label'] == spec['parameter'] else c['default']
+                if float(resolve(dialog,c['locator']).input_value()) != want: raise ValueError('Control changed while applying requested adjustment: '+c['label'])
             record['values'] = values
             self.capture_screenshot(self.artifact_dir/'accepted-values.png')
             resolve(dialog,spec['apply']).click(); expect(dialog).not_to_be_visible()
@@ -135,6 +144,8 @@ class DiscoveryBroker:
         return content
 
     def _call(self, tool, args):
+        from . import live
+        live.action(tool, **{k:v for k,v in args.items() if k in ('locator','dialog','value','scope','page')})
         self.check(); self.calls+=1
         if self.calls>self.limits['tool_calls']: raise ValueError('Discovery tool budget exhausted')
         from learning.core import exact

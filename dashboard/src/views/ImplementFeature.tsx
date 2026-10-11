@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { normalizeJob, STAGES, type Job } from '../data/jobs.ts';
 import { Icon, Pill } from '../ui.tsx';
 import { clock } from '../format.ts';
+import { LiveBrowsers } from './LiveBrowsers.tsx';
 
 async function api(path = '', body?: unknown, signal?: AbortSignal) {
   const r = await fetch('/api/jobs' + path, body === undefined ? { signal } : {
@@ -59,6 +60,8 @@ export function ImplementFeature() {
       <div className="feature-hero-copy"><span className="feature-overline">From observation to implementation</span><h2>Discover. Rebuild. Verify.</h2><p>Ask Reforge to investigate a feature in miniPaint and build an independently tested implementation.</p></div>
       <span className="feature-orb" aria-hidden="true"><Icon name="experiments" size={42} /></span>
     </section>
+    {job?.presentation_label && <p className="glass card small muted">{job.presentation_label}</p>}
+    <LiveBrowsers key={job?.id ?? 'empty'} jobId={job?.id} status={job?.status} connected={connected} />
     <section className="glass card feature-compose">
       <div className="card-head"><h3>Start a feature job</h3><Pill tone={connected ? 'good' : 'warn'}>{connected ? 'Service connected' : 'Service offline'}</Pill></div>
       <p className="small muted">Supported now: Contrast in miniPaint, on one imported 8-bit raster layer.</p>

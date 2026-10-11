@@ -14,7 +14,7 @@ from .spec import request_id
 
 TERMINAL={'accepted','unresolved','failed','cancelled'}
 STAGES=['Discover','Validate procedure','Investigate','Reconstruct','Verify']
-ARTIFACTS={'spec.json','discovery-summary.json','validation.json','visible-report.json','final-summary.json','repair-summary.json'}
+ARTIFACTS={'spec.json','discovery-summary.json','validation.json','visible-report.json','final-summary.json','repair-summary.json','preparation.json'}
 
 def scrub(value):
     s=str(value)[:1500]
@@ -58,6 +58,9 @@ class JobStore:
             if 'activity' not in data:
                 activities={'experiment':'Running diagnostic experiment','evaluation':'Evaluating independent candidate execution','baseline':'Checking original editor baselines','claim_update':'Updating evidence-backed behavior contract','packet_measured':'Checking model packet budget','failure':'Recording failure: '+str(data.get('classification','unclassified')),'rejection':'Candidate rejected: '+str(data.get('reason','unclassified')),'restore':'Restoring isolated checkpoint'}
                 if kind in activities: data['activity']=activities[kind]
+            if kind=='experiment' and isinstance(data.get('plan'),dict):
+                plan=data['plan']
+                job['experiment']={k:plan[k] for k in ('question','usefulness','input','value') if k in plan}
             if 'activity' in data: job['activity']=event['activity']=scrub(data['activity'])
             if kind=='usage' and isinstance(data.get('usage'),dict):
                 job['usage']=(job['usage'] or [])+[data['usage']]

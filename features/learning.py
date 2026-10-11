@@ -30,6 +30,7 @@ class AdjustmentHarness(Harness):
     operation='contrast'; source_scope=SCOPE|{'src/brightness.ts','src/contrast.ts'}
     def __init__(self, config, app, spec, validated, notify=lambda *a,**k:None):
         self.spec=validate(spec,ready=True); self.domain=parameter(spec); self.notify=notify
+        self.operation=self.spec['feature_id']
         if validated.get('status')!='validated' or validated.get('spec_sha256')!=__import__('hashlib').sha256(json.dumps(spec,sort_keys=True).encode()).hexdigest(): raise ValueError('Procedure validation required')
         if validated.get('default_setup',{}).get('status')!='verified_on_diagnostic' or validated['default_setup'].get('identity_rgba_equal') is not True: raise ValueError('Diagnostic default identity gate required')
         super().__init__(config,app=app,mode='development_resume',provenance={'feature_spec':spec,'procedure_validation':validated,'isolated':True,'promoted':False})
@@ -38,10 +39,11 @@ class AdjustmentHarness(Harness):
         for path in (ROOT/'features').glob('*'):
             if path.is_file(): self.protected[str(path)]=digest(path)
         for base in (APP, self.app):
-            for name in ('src/brightness.ts','src/current-image.ts'):
+            for name in ('src/brightness.ts','src/contrast.ts','src/current-image.ts'):
+                if base == self.app and name == 'src/'+self.operation+'.ts': continue
                 if (base/name).is_file(): self.protected[str(base/name)]=digest(base/name)
         save(self.directory/'protected-manifest.json',self.protected)
-        self.op=operation_spec('contrast',spec)
+        self.op=operation_spec(self.operation,spec)
     def worker(self,kind,request,directory,timeout,*args,**kwargs):
         patch=getattr(self,'harness_patch',None)
         if patch and kind=='feature-reference': request={**request,'harness_patch':str(patch)}
@@ -56,7 +58,7 @@ class AdjustmentHarness(Harness):
         super().emit(kind,**data)
         self.notify(kind,**data)
     def baseline(self,label,allow_blur=False,cleanup=False):
-        return super().baseline(label,False,cleanup,allow_brightness=True)
+        return super().baseline(label,False,cleanup,allow_brightness=(self.app/'src/brightness.ts').is_file())
     def compact(self):
         return [{'id':e['id'],'value':e['value'],'input_spec':e['input_spec'],'input':packets.compact_summary(e['input_samples']),'export':packets.compact_summary(e['export_samples'])} for e in self.evidence]
     def experiment(self,p):
@@ -75,11 +77,14 @@ class AdjustmentHarness(Harness):
         e={'id':ident,'value':p['value'],'input_spec':p['input'],'input':str(path),'expected':r['output_path'],'input_sha256':digest(path),'expected_sha256':digest(r['output_path']),'input_samples':describe(path),'export_samples':describe(r['output_path'])}
         self.evidence.append(e); save(self.directory/'evidence'/(ident+'.json'),e); self.emit('evidence',id=ident,status='OBSERVED')
     def freeze(self):
-        self.suite={'id':'visible-contrast-v1','cases':[{**{k:e[k] for k in ('id','input','expected','input_sha256','expected_sha256','value')},'regions':{'full':[0,0,e['input_samples']['png']['width'],e['input_samples']['png']['height']]}} for e in self.evidence],'policy':load_policy(),'operation':self.op}
+        self.suite={'id':'visible-'+self.operation+'-v1','cases':[{**{k:e[k] for k in ('id','input','expected','input_sha256','expected_sha256','value')},'regions':{'full':[0,0,e['input_samples']['png']['width'],e['input_samples']['png']['height']]}} for e in self.evidence],'policy':load_policy(),'operation':self.op}
         save(self.directory/'suite.json',self.suite); self.suite_hash=digest(self.directory/'suite.json'); self.emit('suite_frozen',id=self.suite['id'],sha256=self.suite_hash)
     def evaluate(self,label,cleanup=False):
-        r=self.worker('candidate',{'operation':'contrast','spec':self.spec,'app':str(self.app),'suite':self.suite,'suite_sha256':self.suite_hash},self.directory/'evaluations'/label,self.config['command_seconds'],cleanup)
+        r=self.worker('candidate',{'operation':self.operation,'spec':self.spec,'app':str(self.app),'suite':self.suite,'suite_sha256':self.suite_hash},self.directory/'evaluations'/label,self.config['command_seconds'],cleanup)
         r['baseline_pass']=self.baseline(label+'-gates',cleanup=cleanup)
+        if self.operation=='brightness':
+            save(self.directory/'evaluations'/label/'evaluation.json',r)
+            self.emit('evaluation',label=label,result=r); return r
         # Existing brightness behavior is a regression gate, outside all builder/repair evidence.
         from adapter.png import ROOT
         regression=[]
@@ -94,7 +99,9 @@ class AdjustmentHarness(Harness):
         self.emit('evaluation',label=label,result=r); return r
     def builder(self,index,previous):
         sources={n:(self.app/n).read_text(encoding='utf-8') for n in ('src/main.tsx','src/current-image.ts')}
-        prompt='Implement Contrast independently from only supplied evidence and contract. No brightness formula or neutral assumption. Write src/contrast.ts exporting applyContrast(raster: Raster, value: number): Raster. Preserve input immutability, dimensions, codec, brightness and every existing baseline. Wire Image -> Contrast... with accessible Contrast slider and Apply/Close; disable with no image. Source/config/dependency restrictions apply. No reference internals, execution or other tools. Only src/main.tsx, src/contrast.ts and README.md writable. '+json.dumps({'observed_domain':self.domain,'claims':self.claims,'evidence':self.compact(),'previous':previous,'policy':self.suite['policy']},separators=(',',':'))
+        name=self.operation.title()
+        prompt='Implement '+name+' independently from only supplied evidence and contract. Do not assume a formula or neutral behavior. Write '+self.op['source']+' exporting '+self.op['export']+'(raster: Raster, value: number): Raster. Preserve input immutability, dimensions, codec and every existing baseline. Wire Image -> '+self.op['ui_item']+' with accessible '+name+' slider and Apply/Close; disable with no image and unsupported depth16. Source/config/dependency restrictions apply. No reference internals, execution or other tools. Only src/main.tsx, '+self.op['source']+' and README.md writable. '+json.dumps({'observed_domain':self.domain,'claims':self.claims,'evidence':self.compact(),'previous':previous,'policy':self.suite['policy']},separators=(',',':'))
+        prompt += ' Make minimal changes to the supplied shell. Preserve all existing accessible names exactly, including Original image preview: <filename>, Original image thumbnail: <filename>, and No image loaded. The operation menu must open on an empty document; disable its slider and Apply, not its menu item. The target module is absent in this starting/restored workspace: do not read a missing file. Write the complete module. A denied tool request invalidates the invocation. Preserve original PNG/JPEG import/export and all unavailable tools.'
         reader=packets.EvidenceReader({e['id']:{'input':e['input'],'export':e['expected']} for e in self.evidence},self.config['evidence_reads'])
         self.ask(prompt,'builder-'+str(index),None,True,role='repair' if previous else 'builder',supplied=sources,reader=reader)
     def finish(self,final,final_baseline):
@@ -153,7 +160,7 @@ class AdjustmentHarness(Harness):
 
     def run(self):
         try:
-            if (self.app/'src/contrast.ts').exists() or 'applyContrast' in (self.app/'src/main.tsx').read_text(): raise ValueError('Contrast must be absent')
+            if (self.app/self.op.get('source','src/'+self.operation+'.ts')).exists() or self.op.get('export','apply'+self.operation.title()) in (self.app/'src/main.tsx').read_text(): raise ValueError(self.operation.title()+' must be absent')
             if self.worker('build',{'app':str(self.app)},self.directory/'initial-build',self.config['command_seconds'])['status']!='passed' or not self.baseline('initial'): raise ValueError('Initial baseline failed')
             if self.worker('selfcheck',{},self.directory/'selfcheck',self.config['command_seconds'])['status']!='passed': raise ValueError('Evaluator suspect')
             self.notify('stage',stage='Investigate')
@@ -161,7 +168,7 @@ class AdjustmentHarness(Harness):
                 self.reuse_evidence(self.resume_source)
             else:
                 # Supplied generators are probes, not Contrast evidence.
-                answer=self.ask('Plan 2..4 bounded experiments distinguishing competing Contrast hypotheses. Choose values from the observed domain; at least two distinct values. '+json.dumps({'spec':self.spec,'generators':DEFINITIONS,'budget':self.budget.snapshot()}),'planner',model.obj({'plans':model.arr(PLAN)}),role='planner')
+                answer=self.ask('Plan 2..4 bounded experiments distinguishing competing '+self.operation.title()+' hypotheses. Choose values from the observed domain; at least two distinct values. '+json.dumps({'spec':self.spec,'generators':DEFINITIONS,'budget':self.budget.snapshot()}),'planner',model.obj({'plans':model.arr(PLAN)}),role='planner')
                 plans=answer['plans']
                 if not 2<=len(plans)<=self.config['fresh_experiments'] or len({p['value'] for p in plans})<2: raise ValueError('Require distinguishing bounded experiments')
                 for p in plans: self.experiment(p)

@@ -7,9 +7,10 @@ SCOPE = 'single-imported-8bit-raster-layer'
 ROLES = {'menuitem', 'button', 'slider', 'spinbutton', 'textbox', 'heading'}
 
 def request_id(request):
-    if not isinstance(request, str) or request.strip().casefold() != 'implement contrast':
-        raise ValueError('Supported request: Implement Contrast. Scope: one imported 8-bit raster layer and numeric image adjustments; other operations are unresolved.')
-    return 'contrast'
+    supported = {'implement contrast': 'contrast', 'implement brightness': 'brightness'}
+    if not isinstance(request, str) or request.strip().casefold() not in supported:
+        raise ValueError('Supported requests: Implement Contrast or Implement Brightness. Scope: one imported 8-bit raster layer and numeric image adjustments; other operations are unresolved.')
+    return supported[request.strip().casefold()]
 
 def number(value):
     if type(value) not in (int, float) or not math.isfinite(value) or abs(value) > 10000:
@@ -59,7 +60,7 @@ def validate(spec, observations=None, ready=False):
                 if c[k] is not None: value_in_domain(c, c[k])
         if ready and any(c[k] is None for k in ('min','max','step','default')): raise ValueError('Missing observed control domain/default')
         if ready and c['label'] != spec['parameter'] and c['neutral'] is not None and c['neutral'] != c['default']: raise ValueError('Only observed defaults can freeze other controls')
-    if len(set(names)) != len(names) or spec['parameter'] not in names or spec['parameter'].rstrip().removesuffix(':').rstrip().casefold() != 'contrast': raise ValueError('Ambiguous/missing requested control')
+    if len(set(names)) != len(names) or spec['parameter'] not in names or spec['parameter'].rstrip().removesuffix(':').rstrip().casefold() != spec['feature_id']: raise ValueError('Ambiguous/missing requested control')
     if spec['status'] not in ('discovered','unresolved','unsupported'): raise ValueError('Unknown discovery status')
     if ready and (spec['status'] != 'discovered' or spec['unresolved']): raise ValueError('Discovery remains unresolved')
     return spec

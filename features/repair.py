@@ -15,7 +15,7 @@ from adapter.png import ROOT, within
 FUNCTIONS={'output_schema':('features.discovery', {'copy.deepcopy'}),
            'resolve':('features.browser', {'locator','re.compile','re.escape','root.get_by_role','root.get_by_label','found.count','found.nth','is_visible','get_by_role'})}
 SAFE={'len','range','str','float','int','list','dict','set','enumerate','ValueError'}
-METHODS={'get_by_role','get_by_label','count','nth','is_visible','rstrip','removesuffix','deepcopy','compile','escape'}
+METHODS={'get_by_role','get_by_label','count','nth','is_visible','rstrip','strip','casefold','removesuffix','deepcopy','compile','escape'}
 SCHEMA=model.obj({'diagnosis':model.S,'functions':model.arr(model.obj({'name':model.S,'source':model.S}))})
 
 def check_patch(value):
@@ -135,7 +135,7 @@ def host_hashes():
 def remember(path,case):
     path=within(path,ROOT/'evidence/learning')
     save(ROOT/'evidence/feature-memory/validated-host-patch.json',
-         {'schema':1,'host_hashes':host_hashes(),'patch':path.relative_to(ROOT).as_posix(),
+         {'schema':1,'host_hashes':host_hashes(),'patch':path.relative_to(ROOT.resolve()).as_posix(),
           'patch_sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'case':case,
           'scope':'offline gates and subsequent live discovery; not behavior acceptance'})
 

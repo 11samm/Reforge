@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './style.css';
 import { applyBrightness } from './brightness';
+import { applyContrast } from './contrast';
 import { currentImage, decodePngRaster, serializeCurrentImage, type Raster } from './current-image';
 
 type Document = { file: File; url: string; width: number; height: number; raster: Raster };
@@ -78,6 +79,8 @@ function App() {
   const imageMenu = useRef<HTMLButtonElement>(null);
   const corrections = useRef<HTMLDialogElement>(null);
   const [brightness,setBrightness] = useState(0);
+  const contrastDialog = useRef<HTMLDialogElement>(null);
+  const [contrast,setContrast] = useState(0);
   const sequence = useRef(0);
   const urls = useRef(new Set<string>());
   const current = useRef<Document | null>(null);
@@ -160,6 +163,29 @@ function App() {
       setError(e instanceof Error ? e.message : 'Could not apply brightness.');
     }
   }
+  function applyContrastAdjustment() {
+    if (!current.current || busy) return;
+    try {
+      const selected = current.current;
+      const raster = applyContrast(selected.raster, contrast);
+      // Preview conversion never replaces the exact export samples.
+      const canvas = document.createElement('canvas');
+      canvas.width = raster.width; canvas.height = raster.height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) throw new Error('Image preview is unavailable in this browser.');
+      ctx.putImageData(new ImageData(new Uint8ClampedArray(raster.data), raster.width, raster.height), 0, 0);
+      const preview = canvas.toDataURL('image/png');
+      const next = { ...selected, raster, url: preview };
+      currentImage.raster = raster; current.current = next; setDoc(next);
+      if (urls.current.has(selected.url)) {
+        URL.revokeObjectURL(selected.url); urls.current.delete(selected.url);
+      }
+      setError('');
+      contrastDialog.current?.close();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Could not apply contrast.');
+    }
+  }
   const w = doc?.width ?? 1024, h = doc?.height ?? 768;
   const tools = ['Pointer','Rectangle selection','Brush','Pencil','Eyedropper','Eraser','Magic wand','Paint bucket','Shapes','Picture','Text','Gradient','Stamp','Crop','Droplet','Diamond','Sponge','Inward arrows','Play'];
   const glyphs = ['➤','▧','🖌','✎','⚗','▰','⚒','♢','♧','▣','T','▥','♟','⌑','♧','◇','▨','⤢','⊙'];
@@ -169,7 +195,7 @@ function App() {
         name === 'File' || name === 'Image' || name === 'Effects' ? <button key={name} role="menuitem" ref={name === 'Effects' ? effects : name === 'Image' ? imageMenu : undefined} aria-haspopup="menu" aria-expanded={menu === name} onClick={() => setMenu(menu === name ? null : name)}>{name}</button> : <button role="menuitem" key={name} disabled title="Unavailable">{name}</button>)}</div>
       {menu && <div className={'dropdown ' + (menu === 'Effects' ? 'effects-menu' : '')} role="menu" aria-label={menu}>
         {menu === 'File' ? <><button role="menuitem" onClick={() => { input.current?.click(); setMenu(null); }}>Open image…</button><button role="menuitem" disabled={!doc} onClick={exportPNG}>Export PNG</button></> :
-        menu === 'Image' ? <button role="menuitem" onClick={() => { setMenu(null); setBrightness(0); corrections.current?.showModal(); }}>Color Corrections…</button> :
+        menu === 'Image' ? <><button role="menuitem" onClick={() => { setMenu(null); setBrightness(0); corrections.current?.showModal(); }}>Color Corrections…</button><button role="menuitem" disabled={!doc || busy} onClick={() => { setMenu(null); setContrast(0); contrastDialog.current?.showModal(); }}>Contrast…</button></> :
         <button role="menuitem" onClick={() => { setMenu(null); dialog.current?.showModal(); }}>Gaussian Blur…</button>}
       </div>}
     </nav>
@@ -204,6 +230,15 @@ function App() {
         <input id={'frozen-correction-'+i} type="range" min="-100" max="100" step="1" value="0" disabled title="Frozen at 0" />
       </div>)}
       <div className="dialog-actions"><button disabled={!doc || busy || doc.raster.depth === 16} onClick={applyCorrections}>Apply</button><button autoFocus onClick={() => corrections.current?.close()}>Close</button></div>
+    </dialog>
+    <dialog ref={contrastDialog} aria-labelledby="contrast-title" aria-describedby="contrast-description" onClose={() => imageMenu.current?.focus()}>
+      <h2 id="contrast-title">Contrast</h2>
+      <p id="contrast-description">Adjust contrast, then Apply to the current image. Close discards the unapplied setting.</p>
+      {doc?.raster.depth === 16 && <p role="note">Contrast does not support depth16. Upload and original PNG export remain available.</p>}
+      <div><label htmlFor="contrast">Contrast:</label><output htmlFor="contrast"> {contrast}</output>
+        <input id="contrast" type="range" min="-100" max="100" step="1" value={contrast} disabled={!doc || busy || doc.raster.depth === 16} onChange={e => setContrast(Number(e.target.value))} />
+      </div>
+      <div className="dialog-actions"><button disabled={!doc || busy || doc.raster.depth === 16} onClick={applyContrastAdjustment}>Apply</button><button autoFocus onClick={() => contrastDialog.current?.close()}>Close</button></div>
     </dialog>
     <dialog ref={dialog} aria-labelledby="blur-title" aria-describedby="blur-description" onClose={() => effects.current?.focus()}><h2 id="blur-title">Gaussian Blur</h2><p id="blur-description">Unavailable until the learning loop implements it. No image changes are performed.</p><label htmlFor="percentage">Percentage: 0</label><input id="percentage" type="range" min="0" max="50" step="1" value="0" disabled title="Unavailable" /><div className="dialog-actions"><Disabled>Apply</Disabled><button autoFocus onClick={() => dialog.current?.close()}>Close</button></div></dialog>
   </>;

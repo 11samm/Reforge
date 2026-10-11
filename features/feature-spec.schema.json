@@ -12,7 +12,7 @@
     },
     "feature_id": {
       "type": "string",
-      "const": "contrast"
+      "enum": ["contrast", "brightness"]
     },
     "target": {
       "type": "object",

@@ -458,3 +458,19 @@ figcaption { font: var(--type-caption); font-weight: 600; color: var(--ink-2); m
   .replay { display: flex; flex-wrap: wrap; gap: var(--space-3); }
   .scrub { flex-basis: 100%; }
 }
+
+/* Actual harness sessions; fixed viewport scaled for display only. */
+.live-browser-pair { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+.live-browser { min-width:0; border:1px solid var(--line); border-radius:16px; overflow:hidden; background:var(--glass); }
+.live-browser-heading { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:12px; }
+.live-browser-viewport { aspect-ratio:1440/1000; background:#131923; display:grid; place-items:center; overflow:hidden; }
+.live-browser-viewport img { width:100%; height:100%; object-fit:contain; }
+.live-browser-viewport p { padding:16px; color:#aeb8c9; text-align:center; }
+.live-browser-action { padding:12px; display:grid; gap:6px; font-size:12px; }
+.live-browser-action span,.live-browser-action small { color:var(--muted); }
+.live-browser-action code,.live-activity code { overflow-wrap:anywhere; white-space:pre-wrap; }
+.live-activity { margin-top:16px; display:flex; flex-wrap:wrap; gap:16px; font-size:12px; }
+.live-activity > div { display:grid; gap:4px; min-width:100px; }
+.live-activity span { color:var(--muted); }
+.live-experiment { flex-basis:100%; }
+@media (max-width:760px) { .live-browser-pair { grid-template-columns:1fr; } }

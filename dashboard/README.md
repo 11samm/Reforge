@@ -113,3 +113,7 @@ Branch: `codex/dashboard-feature-integration`, worktree `D:/Samuel/Downloads/Cod
 Preview: `http://127.0.0.1:5181/` (`npm run preview`). The review service has pilot execution disabled, so no paid learning run starts from the preview. Screenshots under `docs/screenshots/integration/` use explicit local test fixtures; their accepted/running job states are synthetic browser-test data, not additional Reforge results. The inspector screenshot shows the existing recorded Blur run.
 
 Verification: 11 dashboard tests, TypeScript check and production build; 128 Python tests; expanded browser checks for submission, cancellation, queued/running/cancelling/accepted/unresolved/failed/cancelled states, history surviving refresh, evidence links, service outage, navigation at 980/390px, and side-by-side/difference inspector controls. The final visual refinement was verified by rerunning both browser tests. No model runs, candidate promotion, or merge into main were performed for this integration.
+
+## Actual browser sessions
+
+The implementation screen now presents the worker-owned reference and candidate pages through read-only live frames. See [live harness startup, validation and limitations](../docs/live-harness-dashboard.md). `python -m features.live_demo` provides explicitly labeled deterministic job metadata with real saved-input browser execution and zero model calls; ordinary pilot execution remains disabled by default.

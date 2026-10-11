@@ -57,7 +57,7 @@ class InteractionMap:
         if spec['target']!=self.target: raise ValueError('Cached route target differs from map')
         self.data['routes'][spec['feature_id']]={'spec':spec,'observed_at':time.time(),'status':'cached-needs-revalidation'}; self.persist()
     def route(self,feature):
-        if not isinstance(feature,str) or feature not in {'contrast'}: raise ValueError('Unsupported cached route')
+        if not isinstance(feature,str) or feature not in {'contrast','brightness'}: raise ValueError('Unsupported cached route')
         row=self.data['routes'].get(feature)
         if not row: return None
         spec=row['spec']
