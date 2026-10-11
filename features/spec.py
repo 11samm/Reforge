@@ -58,8 +58,7 @@ def validate(spec, observations=None, ready=False):
             for k in ('default', 'neutral'):
                 if c[k] is not None: value_in_domain(c, c[k])
         if ready and any(c[k] is None for k in ('min','max','step','default')): raise ValueError('Missing observed control domain/default')
-        if ready and c['label'] != spec['parameter'] and c['neutral'] is None: raise ValueError('Other control neutrality unresolved')
-        if ready and c['label'] != spec['parameter'] and c['neutral'] != c['default']: raise ValueError('Only observed defaults can freeze other controls')
+        if ready and c['label'] != spec['parameter'] and c['neutral'] is not None and c['neutral'] != c['default']: raise ValueError('Only observed defaults can freeze other controls')
     if len(set(names)) != len(names) or spec['parameter'] not in names or spec['parameter'].rstrip().removesuffix(':').rstrip().casefold() != 'contrast': raise ValueError('Ambiguous/missing requested control')
     if spec['status'] not in ('discovered','unresolved','unsupported'): raise ValueError('Unknown discovery status')
     if ready and (spec['status'] != 'discovered' or spec['unresolved']): raise ValueError('Discovery remains unresolved')
@@ -74,3 +73,9 @@ def value_in_domain(c, value):
     n = (value-c['min'])/c['step']
     if not c['min'] <= value <= c['max'] or abs(n-round(n)) > 1e-7: raise ValueError('Value outside observed domain/step')
     return value
+
+def default_setup(spec):
+    """Observed settings to test, not a claim of neutral behavior."""
+    validate(spec,ready=True)
+    return {'status':'pending_diagnostic_identity','settings':{c['label']:c['default'] for c in spec['controls']},
+            'scope':'combined observed defaults on the diagnostic image; no global neutrality claim'}

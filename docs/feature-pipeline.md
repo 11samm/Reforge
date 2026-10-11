@@ -165,3 +165,14 @@ Every original attempt, patch, diagnostic, gate and usage record is retained. Ac
 feature results indicate whether infrastructure was repaired. Matching-host validated
 patches can be recalled after rerunning offline gates, while current reference discovery
 and verification remain mandatory. Procedural memory is not target algorithm evidence.
+
+## Observed default setup versus neutrality
+
+Null neutral fields no longer block discovery when all controls' defaults/domains are
+observed and grounded. Trusted orchestration records default_setup as pending_diagnostic_identity
+and keeps every unrelated control at its observed default. It does not convert null to
+an asserted neutral value. A fresh default-settings export must exactly equal the input
+before either nondefault procedure replay or learning. Successful procedure validation
+records verified_on_diagnostic, hashes and the original default record; the learning
+harness requires this gate. Nonidentity stops with behavior_mismatch. This is a claim
+about the combined default setup on that diagnostic, not global neutrality.

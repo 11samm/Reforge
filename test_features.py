@@ -51,7 +51,11 @@ class SpecTests(unittest.TestCase):
             with self.assertRaises(ValueError): value_in_domain(c,v)
     def test_neutrality_not_invented(self):
         s=specification(); c=copy.deepcopy(s['controls'][0]); c.update(label='Other',locator=strategy('slider','Other','row'),neutral=None); s['controls'].append(c)
-        with self.assertRaises(ValueError): validate(s,ready=True)
+        validate(s,ready=True)
+        from features.spec import default_setup
+        setup=default_setup(s)
+        self.assertEqual(setup['status'],'pending_diagnostic_identity')
+        self.assertIsNone(c['neutral'])
         c['neutral']=1
         with self.assertRaises(ValueError): validate(s,ready=True)
 
@@ -101,6 +105,32 @@ class RecoveryTests(unittest.TestCase):
             with self.assertRaises(ValueError): Memory(p).guidance()
 
 class ProcedureTests(unittest.TestCase):
+    def test_pending_other_defaults_verified_before_nondefault_replays(self):
+        from features.spec import default_setup
+        with tempfile.TemporaryDirectory() as temp:
+            d=Path(temp); path=d/'inputs/a.png'; diagnostic(path)
+            spec=specification(); other=copy.deepcopy(spec['controls'][0]); other.update(label='Other',locator=strategy('slider','Other','row'),neutral=None)
+            spec['controls'].append(other); calls=[]
+            def worker(kind,request,out,timeout):
+                calls.append(request['value']); out.mkdir(parents=True,exist_ok=True)
+                target=out/'output.png'; target.write_bytes(path.read_bytes())
+                return {'status':'observed','accepted':request['value'],'original_confirmation':{'rgba_equal':True},'output_path':str(target)}
+            result=validate_procedure(spec,path,d,worker)
+            self.assertEqual(result['status'],'validated')
+            self.assertEqual(result['default_setup']['status'],'verified_on_diagnostic')
+            self.assertTrue(result['default_setup']['identity_rgba_equal'])
+            self.assertEqual(calls[0],0); self.assertEqual(len(calls),3)
+            self.assertIsNone(other['neutral'])
+    def test_changed_default_output_blocks_replays(self):
+        with tempfile.TemporaryDirectory() as temp:
+            d=Path(temp); path=d/'inputs/a.png'; diagnostic(path); calls=[]
+            def worker(kind,request,out,timeout):
+                calls.append(request); out.mkdir(parents=True,exist_ok=True)
+                target=out/'output.png'; image=Image.open(path).convert('RGBA'); image.putpixel((0,0),(1,1,1,255)); image.save(target)
+                return {'status':'observed','accepted':request['value'],'original_confirmation':{'rgba_equal':True},'output_path':str(target)}
+            result=validate_procedure(specification(),path,d,worker)
+            self.assertEqual(result['status'],'behavior_mismatch'); self.assertEqual(len(calls),1)
+
     def test_exact_import_readback_and_replay_gates(self):
         with tempfile.TemporaryDirectory() as temp:
             d=Path(temp); path=d/'inputs/a.png'; diagnostic(path); calls=[]

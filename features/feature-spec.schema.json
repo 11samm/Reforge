@@ -152,7 +152,8 @@
             "type": [
               "number",
               "null"
-            ]
+            ],
+            "description": "Optional neutral hypothesis. Null is permitted with observed defaults; trusted orchestration verifies the combined default setup on a diagnostic export before learning."
           },
           "observation_ids": {
             "type": "array",

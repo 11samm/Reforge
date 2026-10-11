@@ -10,7 +10,7 @@ from pathlib import Path
 from PIL import Image
 from adapter.png import ROOT, compare_pngs
 from learning.core import DEFAULTS, save, digest, decide
-from .spec import request_id, parameter, value_in_domain
+from .spec import request_id, parameter, value_in_domain, default_setup
 from .learning import AdjustmentHarness
 
 BUDGET={'seconds':1200,'harness_repairs':5,'repair_seconds':300,'same_failure_limit':2,'discovery_seconds':90,'discovery_invocations':2,'action_corrections':2,'discovery_actions':20,'observations':24,'validation_replays':2,'default_check':1,'experiments':4,'candidates':2,'reference_retries':0,'builder_tool_calls':12,'evidence_reads':6,'final_cases':2}
@@ -20,6 +20,7 @@ def diagnostic(path):
     path.parent.mkdir(parents=True,exist_ok=True); im.save(path)
 
 def validate_procedure(spec, path, directory, worker):
+    setup=default_setup(spec)
     p=parameter(spec); value=p['min']+p['step']*max(1,round((p['max']-p['min'])/p['step']/3))
     value_in_domain(p,value)
     default=worker('feature-reference',{'spec':spec,'input_path':str(path),'input_sha256':digest(path),'value':p['default']},directory/'validation'/'defaults',60)
@@ -34,7 +35,7 @@ def validate_procedure(spec, path, directory, worker):
         records.append(r)
     if not compare_pngs(records[0]['output_path'],records[1]['output_path'])['rgba_equal']:
         return {'status':'behavior_mismatch','reason':'Fresh-document replay outputs differ','records':records}
-    result={'status':'validated','spec_sha256':hashlib.sha256(json.dumps(spec,sort_keys=True).encode()).hexdigest(),'records':records,'requested':value}
+    result={'status':'validated','spec_sha256':hashlib.sha256(json.dumps(spec,sort_keys=True).encode()).hexdigest(),'records':records,'requested':value,'default_setup':{**setup,'status':'verified_on_diagnostic','input_sha256':digest(path),'output_sha256':digest(default['output_path']),'identity_rgba_equal':True},'default_record':default}
     save(directory/'validation.json',result); return result
 
 def run(request, job_id, emit):

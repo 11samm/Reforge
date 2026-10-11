@@ -49,7 +49,7 @@ class FeatureAdapter(MiniPaintAdapter):
             for c in spec['controls']:
                 field = resolve(dialog, c['locator'])
                 if float(field.input_value()) != c['default']: raise ValueError('Fresh dialog default changed')
-                want = value if c['label'] == spec['parameter'] else c['neutral']
+                want = value if c['label'] == spec['parameter'] else c['default']
                 values[c['label']] = {'requested':want, 'accepted':set_numeric(dialog,c,want)}
             record['values'] = values
             self.capture_screenshot(self.artifact_dir/'accepted-values.png')

@@ -19,6 +19,7 @@ class AdjustmentHarness(Harness):
     def __init__(self, config, app, spec, validated, notify=lambda *a,**k:None):
         self.spec=validate(spec,ready=True); self.domain=parameter(spec); self.notify=notify
         if validated.get('status')!='validated' or validated.get('spec_sha256')!=__import__('hashlib').sha256(json.dumps(spec,sort_keys=True).encode()).hexdigest(): raise ValueError('Procedure validation required')
+        if validated.get('default_setup',{}).get('status')!='verified_on_diagnostic' or validated['default_setup'].get('identity_rgba_equal') is not True: raise ValueError('Diagnostic default identity gate required')
         super().__init__(config,app=app,mode='development_resume',provenance={'feature_spec':spec,'procedure_validation':validated,'isolated':True,'promoted':False})
         from build_shell import APP
         from adapter.png import ROOT
@@ -81,7 +82,7 @@ class AdjustmentHarness(Harness):
         self.emit('evaluation',label=label,result=r); return r
     def builder(self,index,previous):
         sources={n:(self.app/n).read_text(encoding='utf-8') for n in ('src/main.tsx','src/current-image.ts')}
-        prompt='Implement Contrast independently from only supplied evidence and contract. No brightness formula or neutral assumption. Write src/contrast.ts exporting applyContrast(raster: Raster, value: number): Raster. Preserve input immutability, dimensions, codec, brightness and every existing baseline. Wire Image -> Contrastâ€¦ with accessible Contrast slider and Apply/Close; disable with no image. Source/config/dependency restrictions apply. No reference internals, execution or other tools. Only src/main.tsx, src/contrast.ts and README.md writable. '+json.dumps({'observed_domain':self.domain,'claims':self.claims,'evidence':self.compact(),'previous':previous,'policy':self.suite['policy']},separators=(',',':'))
+        prompt='Implement Contrast independently from only supplied evidence and contract. No brightness formula or neutral assumption. Write src/contrast.ts exporting applyContrast(raster: Raster, value: number): Raster. Preserve input immutability, dimensions, codec, brightness and every existing baseline. Wire Image -> ContrastÃ¢â‚¬Â¦ with accessible Contrast slider and Apply/Close; disable with no image. Source/config/dependency restrictions apply. No reference internals, execution or other tools. Only src/main.tsx, src/contrast.ts and README.md writable. '+json.dumps({'observed_domain':self.domain,'claims':self.claims,'evidence':self.compact(),'previous':previous,'policy':self.suite['policy']},separators=(',',':'))
         reader=packets.EvidenceReader({e['id']:{'input':e['input'],'export':e['expected']} for e in self.evidence},self.config['evidence_reads'])
         self.ask(prompt,'builder-'+str(index),None,True,role='repair' if previous else 'builder',supplied=sources,reader=reader)
     def finish(self,final,final_baseline):
