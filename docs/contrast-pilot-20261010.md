@@ -111,3 +111,25 @@ cached; 2,876 output including 283 reasoning tokens. Cached/reasoning values are
 in their parent totals. The correction loop was exercised but did not complete discovery.
 Original failed decisions and diagnostics remain preserved. No further pilot, editor
 promotion, merge or push occurred.
+
+## Pending default-setup pilot - October 11, 2026
+
+Implementation 5dd1d95; job 191c3c8ad682433c845c4b19198952d5.
+125 offline tests passed before this pilot. Discovery succeeded on its first
+specification. All observed defaults exported identically to the diagnostic input;
+default_setup is verified_on_diagnostic, not globally neutral. Both fresh Contrast
+-33 replays agreed exactly and confirmed original import. The new gate unblocked
+investigation without invented neutral values.
+
+Four runtime-selected experiments completed and the visible suite was frozen. At
+contract validation the model used invalid verification_cases entries, causing
+ValueError "Claim cites unknown case". This is a structured contract failure, not
+a Contrast pixel mismatch. The run restored the isolated experimental base and
+passed final build and original baseline checks. No candidate was built, no final
+suite was evaluated, and no feature acceptance occurred. No harness repair was
+proposed for this stage. Full original evidence remains untracked and preserved.
+
+Stopped unresolved after 247.234 seconds. Three model invocations reported 188,281
+total tokens: 184,899 input including 135,808 cached, and 3,382 output including 501
+reasoning tokens. Original decisions and failures remain preserved. No second pilot,
+editor promotion, merge or push occurred.
