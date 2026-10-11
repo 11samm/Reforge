@@ -100,6 +100,21 @@ class DiscoveryBroker:
     def check(self):
         if self.clock()-self.start >= self.limits['seconds']: raise TimeoutError('Discovery time budget exhausted')
     def call(self, tool, args):
+        try:
+            return self._call(tool, args)
+        except Exception as error:
+            # Retain bounded structured action diagnostics, never arbitrary tool payloads.
+            entry = {'tool': str(tool)[:80], 'status': 'failed',
+                     'error': {'type': type(error).__name__, 'message': str(error)[:1000]}}
+            if tool in ('visible_click', 'visible_set') and isinstance(args, dict):
+                entry['arguments'] = {key: args[key] for key in ('locator', 'dialog', 'value') if key in args}
+                if len(json.dumps(entry, default=str)) > 4000:
+                    entry.pop('arguments', None)
+            self.audit.append(entry)
+            save(self.directory/'failed-actions.json', [row for row in self.audit if row.get('status') == 'failed'])
+            raise
+
+    def _call(self, tool, args):
         self.check()
         if tool not in ('visible_inspect','visible_screenshot','visible_click','visible_set'): raise ValueError('Discovery tool denied')
         if len(self.observations) >= self.limits['observations']: raise ValueError('Observation budget exhausted')

@@ -151,4 +151,3 @@ def execute(store,ident):
     finally:
         if proc is not None: kill(proc)
         if tree is not None: tree.close()
-

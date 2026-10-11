@@ -166,6 +166,19 @@ class BrowserTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'large'): b.call('visible_inspect',{})
             b=DiscoveryBroker(self.page,Path(d),LIMITS,clock=lambda:999); b.start=0
             with self.assertRaises(TimeoutError): b.call('visible_inspect',{})
+    def test_failed_discovery_action_preserves_bounded_diagnostics(self):
+        with tempfile.TemporaryDirectory() as d:
+            broker = DiscoveryBroker(self.page, Path(d), LIMITS)
+            args = {'locator': strategy('slider', 'Missing'), 'dialog': 'Adjust', 'value': 3}
+            with self.assertRaisesRegex(ValueError, 'missing'):
+                broker.call('visible_set', args)
+            record = json.loads((Path(d)/'failed-actions.json').read_text())[0]
+            self.assertEqual(record['arguments'], args)
+            self.assertEqual(record['error']['type'], 'ValueError')
+            with self.assertRaises(ValueError):
+                broker.call('evaluate', {'code': 'private payload'})
+            self.assertNotIn('arguments', broker.audit[-1])
+
     def test_existing_fresh_export_download(self):
         # Local mock of the existing export dialog; use the unchanged MiniPaint fresh-download code.
         import base64
