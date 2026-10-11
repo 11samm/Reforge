@@ -39,9 +39,9 @@ jobs:
       - name: Install browser for offline feature tests
         run: python -m playwright install --with-deps chromium
       - name: Check syntax
-        run: python -m compileall -q smoke.py build_shell.py verify_shell.py test_smoke.py test_adapter.py test_shell_boundary.py test_evaluator.py baseline_regressions.py test_learning.py test_brightness.py verify_adjustments.py evaluator adapter learning features
+        run: python -m compileall -q smoke.py build_shell.py verify_shell.py test_smoke.py test_adapter.py test_shell_boundary.py test_evaluator.py baseline_regressions.py test_learning.py test_brightness.py test_live_results.py test_portable_ui.py verify_portable_source.py verify_adjustments.py evaluator adapter learning features
       - name: Run offline tests
-        run: python -m unittest -v test_smoke test_adapter test_shell_boundary test_evaluator test_learning test_brightness test_features test_interaction_map test_harness_repair test_fresh_brightness test_live_sessions
+        run: python -m unittest -v test_smoke test_adapter test_shell_boundary test_evaluator test_learning test_brightness test_features test_interaction_map test_harness_repair test_fresh_brightness test_live_sessions test_live_results
       - name: Verify relocatable CI fixtures
         run: python -m learning.ci_fixtures --check
       - name: Check command help
@@ -81,3 +81,15 @@ jobs:
         run: npm test
       - name: Type check and build dashboard
         run: npm run build
+
+      - name: Set up Python for offline dashboard browser tests
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - name: Install dashboard browser test dependencies
+        run: |
+          python -m pip install -r ../requirements-adapter.txt
+          python -m playwright install --with-deps chromium
+      - name: Verify integrated replay entry point and offline recordings
+        working-directory: .
+        run: python -m unittest -v test_feature_ui test_live_ui test_portable_ui

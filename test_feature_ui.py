@@ -32,8 +32,16 @@ class UI(unittest.TestCase):
                 expect(page.get_by_role('alert')).to_have_text('Synthetic preparation failure')
                 page.wait_for_timeout(1200)
                 expect(page.get_by_role('alert')).to_have_text('Synthetic preparation failure')
-                page.get_by_role('button',name='Replay saved run',exact=True).click()
+                # The integrated entry point chooses a real portable recording.
+                with page.expect_file_chooser() as chooser:
+                    page.get_by_role('button',name='Replay saved run',exact=True).click()
+                chooser.value.set_files(str(ROOT/'dashboard/public/runs/brightness-success.reforge.json'))
                 expect(page.get_by_text('RECORDED PLAYBACK',exact=True)).to_be_visible()
+                expect(page.locator('.identity strong')).to_have_text('82b68e6daf5e41ddb7c03c13a91ba1f9')
+                expect(page.get_by_text('In progress at this point',exact=True)).to_be_visible()
+                expect(page.locator('.live-browsers')).to_have_count(0)
+                expect(page.get_by_role('button',name='Play',exact=True)).to_be_visible()
+                page.get_by_title('Jump to end',exact=True).click()
                 expect(page.get_by_role('button',name='Replay run',exact=True)).to_be_visible()
                 self.assertEqual(errors,[])
                 b.close()
