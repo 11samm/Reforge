@@ -95,6 +95,33 @@ class PresentationIsolation(unittest.TestCase):
             self.assertEqual(presentation.results(h.presentation_directory,'a'*32)['presentation']['failure']['message'],'Permanent filesystem failure')
             h.notify.assert_called_with('evidence',id='original')
 
+    def test_interrupted_new_asset_copy_keeps_last_snapshot_assets_immutable(self):
+        from PIL import Image
+        with tempfile.TemporaryDirectory() as tmp:
+            h=self.harness(Path(tmp)); (h.directory/'inputs').mkdir()
+            Image.new('RGBA',(3,3),(1,2,3,255)).save(h.directory/'inputs/first.png')
+            save(h.directory/'experiments/first/preregistered.json',{'input':{'kind':'patches'}})
+            h.emit('experiment',id='first')
+            previous=presentation.results(h.presentation_directory,'a'*32)
+            key=previous['experiments'][0]['artifacts'][0]['id']
+            path=presentation.asset(h.presentation_directory,'a'*32,key); before=path.read_bytes()
+            with patch('features.presentation.shutil.copyfile') as copy:
+                h.emit('evidence',id='first')
+                copy.assert_not_called()
+            Image.new('RGBA',(3,3),(4,5,6,255)).save(h.directory/'inputs/second.png')
+            save(h.directory/'experiments/second/preregistered.json',{'input':{'kind':'patches'}})
+            def interrupted(source,target):
+                Path(target).write_bytes(b'partial'); raise PermissionError('Permanent interrupted copy')
+            with patch('features.presentation.shutil.copyfile',side_effect=interrupted):
+                h.emit('experiment',id='second')
+            stale=presentation.results(h.presentation_directory,'a'*32)
+            self.assertEqual([e['id'] for e in stale['experiments']],['first'])
+            self.assertEqual(stale['presentation']['state'],'degraded')
+            self.assertEqual(presentation.asset(h.presentation_directory,'a'*32,key).read_bytes(),before)
+            self.assertEqual(len(list(path.parent.glob('*.tmp'))),1)
+            path.write_bytes(b'corrupted existing asset')
+            with self.assertRaises(presentation.ArtifactIntegrityError):h.emit('evaluation')
+
     def test_integrity_and_authoritative_write_failure_still_raise(self):
         with tempfile.TemporaryDirectory() as tmp:
             h=self.harness(Path(tmp))

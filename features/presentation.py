@@ -12,6 +12,10 @@ from adapter.png import ROOT
 from learning.core import save, digest
 
 
+class ArtifactIntegrityError(ValueError):
+    pass
+
+
 def safe_file(root, name):
     root = Path(root)
     if not isinstance(name, str) or '\\' in name or ':' in name:
@@ -105,11 +109,19 @@ def publish(job_root, archive, events=()):
             relative = path.relative_to(archive).as_posix()
             source = safe_file(archive, relative)
             if not source.is_file() or source.suffix != '.png' or source.stat().st_size > 20 * 1024 * 1024: return missing
-            key = hashlib.sha256((ident + '\0' + relative).encode()).hexdigest() + '.png'
+            source_hash = digest(source)
+            key = hashlib.sha256((ident + '\0' + relative + '\0' + source_hash).encode()).hexdigest() + '.png'
             target = safe_file(assets, key)
-            shutil.copyfile(source, target)
-            allowed[key] = digest(target)
+            if target.exists():
+                if digest(target) != source_hash: raise ArtifactIntegrityError('Immutable presentation artifact changed')
+            else:
+                temp = target.with_suffix('.' + uuid.uuid4().hex + '.tmp')
+                shutil.copyfile(source, temp)
+                if digest(temp) != source_hash: raise ArtifactIntegrityError('Presentation copy does not match authoritative source')
+                os.replace(temp, target)
+            allowed[key] = source_hash
             return {'id': key, 'label': label, 'status': 'available', 'url': f'/api/jobs/{ident}/artifacts/{key}'}
+        except ArtifactIntegrityError: raise
         except ValueError: return missing
     experiments = []
     for p in sorted((archive / 'experiments').glob('*/preregistered.json')):
