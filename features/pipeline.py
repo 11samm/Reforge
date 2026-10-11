@@ -38,12 +38,16 @@ def validate_procedure(spec, path, directory, worker):
     result={'status':'validated','spec_sha256':hashlib.sha256(json.dumps(spec,sort_keys=True).encode()).hexdigest(),'records':records,'requested':value,'default_setup':{**setup,'status':'verified_on_diagnostic','input_sha256':digest(path),'output_sha256':digest(default['output_path']),'identity_rgba_equal':True},'default_record':default}
     save(directory/'validation.json',result); return result
 
-def run(request, job_id, emit):
+def run(request, job_id, emit, prepared=None):
     feature=request_id(request)
     start=time.monotonic(); directory=ROOT/'evidence/learning'/('feature-'+job_id)
     directory.mkdir(parents=True,exist_ok=False)
     from .preparation import prepare
-    app, preparation=prepare(request,job_id)
+    if prepared:
+        from .demos import validate
+        if prepared['id']!=job_id: raise ValueError('Cross-job prepared demo')
+        preparation=prepared['preparation']; app=validate(request,job_id,preparation)
+    else: app, preparation=prepare(request,job_id)
     from .sessions import start_pool
     start_pool(app)
     save(directory/'preparation.json',preparation)
@@ -97,6 +101,7 @@ def run(request, job_id, emit):
     # Never copy old evidence/final outputs or mutate the accepted editor.
     config=copy.deepcopy(DEFAULTS); config.update(fresh_experiments=4,candidates=2,retries=0,run_seconds=max(120,min(600,int(1200-(time.monotonic()-start)))),reserve_seconds=100,command_seconds=90)
     h=AdjustmentHarness(config,app,spec,validation,notify=emit)
+    h.presentation_directory=directory
     h.provenance.update(preparation=preparation,feature_absent_at_start=True,
                         clean_start_autonomous_demonstration=True,
                         learning_origin='fresh_discovery_and_experiments')
@@ -104,6 +109,8 @@ def run(request, job_id, emit):
     h.harness_patch=patch
     # Save presentation records under the job root; only explicitly copied artifacts are served.
     h.run(); save(directory/'visible-report.json',h.report); emit('evidence',artifact='visible-report.json',activity='Frozen visible gate outcome recorded')
+    from .presentation import publish
+    publish(directory,h.directory,h.events)
     if h.report['status']!='accepted': return {'status':'unresolved','classification':h.report['stop_reason']}
     return final_check(spec,app,h,directory,emit,patch)
 
@@ -121,13 +128,18 @@ def final_check(spec,app,control,directory,emit,patch=None):
         render({'kind':kind,'width':43+i*4,'height':13+i*4}).save(final_input)
         value=p['min']+p['step']*round((p['max']-p['min'])/p['step']*(0.2 if i==0 else 0.8))
         r=Harness.worker(control,'feature-reference',{'spec':spec,'input_path':str(final_input),'input_sha256':digest(final_input),'value':value,**({'harness_patch':str(patch)} if patch else {})},directory/'final/experiments'/ident,60,cleanup=True)
-        if r.get('status')!='observed': return {'status':'failed','classification':'final_procedure_failure'}
+        if r.get('status')!='observed':
+            from .presentation import clean
+            save(directory/'final-summary.json',{'status':'failed','classification':'final_procedure_failure','reference_failure':clean(r),'promoted':False})
+            emit('evidence',artifact='final-summary.json',activity='Final reference procedure failed')
+            return {'status':'failed','classification':'final_procedure_failure'}
         rows.append({'id':ident,'value':value,'input':str(final_input),'expected':r['output_path'],'input_sha256':digest(final_input),'expected_sha256':digest(r['output_path']),'regions':{'full':[0,0,43+i*4,13+i*4]}})
     feature=spec['feature_id']
     suite={'id':'final-'+feature+'-v1','policy':load_policy(),'cases':rows}; save(directory/'final/suite.json',suite)
     result=Harness.worker(control,'candidate',{'operation':feature,'spec':spec,'app':str(app),'suite':suite,'suite_sha256':digest(directory/'final/suite.json')},directory/'final/evaluation',90,cleanup=True)
     result['baseline_pass']=control.report['final_baseline_pass']; accepted,reason=decide(result)
-    save(directory/'final-summary.json',{'status':'accepted' if accepted else 'unresolved','classification':reason,'cases':[{k:c.get(k) for k in ('case_id','status','classification','metrics')} for c in result.get('cases',[])],'promoted':False})
+    from .presentation import clean
+    save(directory/'final-summary.json',{'status':'accepted' if accepted else 'unresolved','classification':reason,'cases':[{k:c.get(k) for k in ('case_id','status','classification','metrics','reasons')} for c in result.get('cases',[])],'evaluation':clean(result),'promoted':False})
     emit('evidence',artifact='final-summary.json',activity='Independent final evaluation complete')
     return {'status':'accepted' if accepted else 'unresolved','classification':reason,'promoted':False,'harness_repaired':bool(patch),'scope':'frozen visible and two once-only fresh cases; isolated workspace'}
 
@@ -163,6 +175,7 @@ def continue_job(source_job,job_id,emit,request=None):
     save(directory/'continuation.json',{'source_job':source_job,'mode':'development_resume_saved_evidence','new_reference_experiments':0})
     config=copy.deepcopy(DEFAULTS); config.update(fresh_experiments=4,candidates=2,retries=0,run_seconds=600,reserve_seconds=100,command_seconds=90)
     h=AdjustmentHarness(config,app,spec,validation,notify=emit); h.resume_source=source
+    h.presentation_directory=directory
     h.provenance.update(source_job=source_job,resume_source=source.name,clean_start_autonomous_demonstration=False)
     save(h.directory/'provenance.json',h.provenance)
     emit('stage',stage='Investigate',activity='Resuming saved visible experiments; no new reference investigation')

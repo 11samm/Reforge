@@ -56,6 +56,9 @@ class AdjustmentHarness(Harness):
                 if path.is_file(): self.notify('usage',usage=json.loads(path.read_text()).get('usage'))
     def emit(self,kind,**data):
         super().emit(kind,**data)
+        if getattr(self,'presentation_directory',None):
+            from .presentation import publish
+            publish(self.presentation_directory,self.directory,self.events)
         self.notify(kind,**data)
     def baseline(self,label,allow_blur=False,cleanup=False):
         return super().baseline(label,False,cleanup,allow_brightness=(self.app/'src/brightness.ts').is_file())

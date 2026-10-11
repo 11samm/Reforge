@@ -187,7 +187,7 @@ export function App() {
           )}
 
           <div className="content" ref={contentRef}>
-            {view === 'implement' && <ImplementFeature />}
+            {view === 'implement' && <ImplementFeature onReplaySavedRun={() => setView('overview')} />}
             {view !== 'implement' && error && <div className="load-error glass"><Icon name="alert" /> Could not load run data: {error}</div>}
             {view !== 'implement' && !run && !error && <div className="loading">Loading run bundle…</div>}
             {run && snap && view === 'overview' && <Overview run={run} snap={snap} t={t} onOpenCandidate={(id) => { setSel((s) => ({ ...s, candidate: id, caseId: null })); setView('candidates'); }} onOpenEvidence={openEvidence} />}

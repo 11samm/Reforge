@@ -58,7 +58,7 @@ class SyntheticLiveUI(unittest.TestCase):
                     if width==390:
                         columns=page.locator('.live-browser-pair').evaluate('e=>getComputedStyle(e).gridTemplateColumns')
                         self.assertEqual(len(columns.split()),1)
-                page.get_by_role('button',name='Cancel job',exact=True).click()
+                page.get_by_role('button',name='Cancel run',exact=True).click()
                 expect(pane.locator('img')).to_have_count(0)
                 browser.close()
         finally: static.shutdown(); static.server_close()
