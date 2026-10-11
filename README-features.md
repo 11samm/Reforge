@@ -115,3 +115,8 @@ Interaction map and bounded inspection: see docs/interaction-map.md. No live pil
 The Contrast contract schema enumerates the existing evidence/case IDs. Future test descriptions belong in unresolved questions, not verification_cases. One rejected contract may be corrected using the same frozen evidence and remaining time budget; another rejection stops the run.
 
 For a saved job that stopped before any candidate, use `python -m features.pipeline --pilot --request "Implement Contrast" --resume-job JOB_ID`. This creates a new isolated job, verifies the restored source checkpoint, original suite hash, current evaluator policy, feature specification and every visible PNG hash, and copies the saved visible experiments. It skips discovery, planning and new reference experiments. Candidate gates remain unchanged; fresh final cases run only after visible acceptance. Original evidence and failed invocations remain intact. This is a development continuation, not a clean-start autonomous demonstration.
+
+
+### Confirmed autonomous Contrast pilot
+
+Job `9df7c33da7a5425db3934e2cd928c5ee` passed fresh discovery, validation, four fresh visible experiments, first-candidate UI/regression gates and two once-only fresh final cases in 346.775 seconds, with no human intervention or saved-evidence resume. See [pilot history](docs/contrast-pilot-20261010.md). Acceptance remains scoped to tested cases and the isolated editor workspace; the implementation has not been promoted or merged.

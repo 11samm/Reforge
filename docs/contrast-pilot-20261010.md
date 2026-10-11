@@ -146,3 +146,16 @@ The evaluator contradicted the builder instruction to disable Contrast without a
 The preserved candidate-1 checkpoint was copied, hash-verified, into `dev-workspaces/contrast-ui-diagnostic-60226a10`. Local re-evaluation passed all four visible pixel cases and the loaded-image UI/export gate. Two once-only fresh final reference cases then passed exact RGBA comparison: 559 and 799 pixels, zero changed pixels or channel error. No additional model call was made, and final outputs were never supplied to a model. Final evidence: `evidence/learning/20261011T081839Z-1b33db71-dev-resume/ui-diagnostic/final-summary.json`. Original failed jobs were not rewritten. This is accepted within six tested cases via developer evaluator correction, not a clean-start autonomous pass, exhaustive Contrast-domain proof, promotion, merge or push.
 
 Validation: 127 Python tests passed after the evaluator fix, including dynamic citation isolation and bounded correction exhaustion; git diff --check passed. The isolated accepted candidate remains available for review.
+
+
+## Autonomous end-to-end confirmation (2026-10-11)
+
+User-authorized CLI: `python -m features.pipeline --pilot --request "Implement Contrast"`, with no resume argument. Code under test: `206df58`, branch `codex/feature-discovery`. Existing unrelated untracked evidence and diagnostic workspace were preserved.
+
+Job `9df7c33da7a5425db3934e2cd928c5ee` finished accepted (`all_gates_pass`) in 346.775 seconds. Discovery succeeded in its first invocation with zero harness repairs. Diagnostic default identity and two procedure replays passed. The planner collected four fresh experiments; no saved Contrast experiment suite, contract or candidate was supplied. Contract passed without correction. Candidate 1 passed the frozen visible suite, independent execution, loaded-image UI/export, original editor baselines and brightness regression gates. All four visible cases had zero differing pixels. Both once-only fresh final cases also matched exactly (559 and 799 pixels; zero RGB/alpha error). No human changes, additional attempts or interventions occurred during the run.
+
+This confirms autonomous Contrast feature discovery through final verification within the tested scope, using the existing editor baseline and configured persistent discovery memory. It is not an exhaustive domain proof or a memory-disabled experiment. The underlying learning harness calls its isolated workspace mode development_resume because it starts from the editor scaffold with established Brightness; this run did not use the saved-evidence continuation path.
+
+Full job artifacts: `evidence/learning/feature-9df7c33da7a5425db3934e2cd928c5ee`. Fresh learning records: `evidence/learning/20261011T083511Z-2d1ccba6-dev-resume`. Accepted editor: `dev-workspaces/feature-9df7c33da7a5425db3934e2cd928c5ee`. All outputs remain isolated; no promotion, merge or push. Final outputs were not fed back into model repair.
+
+Four model invocations; recorded cumulative usage: {"cachedInputTokens": 167552, "inputTokens": 244951, "outputTokens": 6025, "reasoningOutputTokens": 1085, "totalTokens": 250976}. Existing 127-test regression suite passed on this code in the previous fix verification; this confirmation did not change implementation code or rerun those tests. `git diff --check` passed for this report.
