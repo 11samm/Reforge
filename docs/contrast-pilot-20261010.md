@@ -55,3 +55,14 @@ No provider usage was reported (not a claim of zero billed usage).
 The original adapter discarded the server error message, so the exact cause cannot
 be recovered from this archived record. Runtime notifications and failed-turn errors
 now retain bounded redacted messages alongside codes. No further pilot was run.
+
+## Fifth authorized pilot - October 11, 2026
+
+Job 7caaaadaceb640c8b523800b8a1b873a, implementation a3b3ca5.
+Failed after 8.753 seconds, before dynamic tool requests; no provider usage reported.
+The captured server error was HTTP 400 invalid_json_schema: request's constant
+Implement Contrast conflicted with parameter's enum Contrast / Contrast:.
+Deepcopy preserves aliases to shared model.S dictionaries, so mutating the parameter
+schema also mutated request and other string fields. The constrained fields now use
+independent dictionaries, verified by an offline regression test. No additional live
+pilot was launched after this fix; no candidate was constructed or promoted.

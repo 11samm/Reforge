@@ -56,6 +56,19 @@ class SpecTests(unittest.TestCase):
         with self.assertRaises(ValueError): validate(s,ready=True)
 
 class RecoveryTests(unittest.TestCase):
+    def test_discovery_schema_constraints_do_not_alias_string_fields(self):
+        from features.discovery import output_schema, SCHEMA
+        schema=output_schema('Implement Contrast')
+        props=schema['properties']
+        self.assertEqual(props['request'], {'type':'string','const':'Implement Contrast'})
+        self.assertEqual(props['parameter'], {'type':'string','enum':['Contrast','Contrast:']})
+        for name in ('dialog','scope','completion','import_procedure','export_procedure'):
+            self.assertEqual(props[name], {'type':'string'})
+        self.assertEqual(props['controls']['items']['properties']['label'], {'type':'string'})
+        self.assertEqual(SCHEMA['properties']['request'], {'type':'string'})
+        props['request']['const']='Changed'
+        self.assertEqual(output_schema('Implement Contrast')['properties']['request']['const'],'Implement Contrast')
+
     def test_invalid_specification_corrected_and_reused_next_run(self):
         from features.recovery import Memory, validated_decision
         with tempfile.TemporaryDirectory() as d:
