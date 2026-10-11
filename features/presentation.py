@@ -4,7 +4,11 @@ import json
 import os
 import re
 import shutil
+import time
+import uuid
+from contextlib import contextmanager
 from pathlib import Path, PurePosixPath
+from adapter.png import ROOT
 from learning.core import save, digest
 
 
@@ -26,14 +30,55 @@ def safe_file(root, name):
     return target
 
 
+@contextmanager
+def snapshot_access(path):
+    if os.name != 'nt':
+        yield
+        return
+    import msvcrt
+    # Reader and publisher are different processes. Locks stay in scratch,
+    # outside raw archives and immutable preview inventories.
+    directory = ROOT / '.scratch/presentation-locks'
+    directory.mkdir(parents=True, exist_ok=True)
+    key = hashlib.sha256(str(path.resolve()).casefold().encode()).hexdigest()
+    with (directory / (key + '.lock')).open('a+b') as lock:
+        if os.fstat(lock.fileno()).st_size == 0:
+            lock.write(b'0'); lock.flush()
+        deadline = time.monotonic() + 2
+        while True:
+            lock.seek(0)
+            try:
+                msvcrt.locking(lock.fileno(), msvcrt.LK_NBLCK, 1)
+                break
+            except OSError:
+                if time.monotonic() >= deadline: raise TimeoutError('Presentation snapshot busy')
+                time.sleep(.005)
+        try: yield
+        finally:
+            lock.seek(0); msvcrt.locking(lock.fileno(), msvcrt.LK_UNLCK, 1)
+
+
 def atomic(path, value):
-    temp = path.with_suffix('.tmp')
-    save(temp, value); os.replace(temp, path)
+    # Windows readers can briefly hold a file without delete sharing. Keep the
+    # previous complete snapshot readable and retry only the atomic replacement.
+    # Separate writers must never share a temporary file. Failed writes retain
+    # their temporary snapshot as evidence, rather than overwriting the old one.
+    temp = path.with_suffix('.' + uuid.uuid4().hex + '.tmp')
+    save(temp, value)
+    with snapshot_access(path):
+        for delay in (0, .01, .02, .04, .08, .16):
+            if delay: time.sleep(delay)
+            try:
+                os.replace(temp, path)
+                return
+            except PermissionError:
+                if delay == .16: raise
 
 
 def read(root, name):
     p = safe_file(root, name)
-    return json.loads(p.read_text(encoding='utf-8')) if p.is_file() else None
+    with snapshot_access(p):
+        return json.loads(p.read_text(encoding='utf-8')) if p.is_file() else None
 
 
 def clean(value):

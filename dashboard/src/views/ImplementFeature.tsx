@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { normalizeJob, STAGES, type Job } from '../data/jobs.ts';
 import { Icon, Pill } from '../ui.tsx';
 import { clock } from '../format.ts';
@@ -28,6 +28,7 @@ export function ImplementFeature({ onReplaySavedRun }: { onReplaySavedRun?: () =
   const [error, setError] = useState('');
   const [connectionError, setConnectionError] = useState('');
   const [busy, setBusy] = useState(false);
+  const livePanel = useRef<HTMLDivElement>(null);
   useEffect(() => {
     let closed = false, refreshing = false;
     const controller = new AbortController();
@@ -64,6 +65,7 @@ export function ImplementFeature({ onReplaySavedRun }: { onReplaySavedRun?: () =
     try {
       const next = normalizeJob(await api(cancel ? `/${job!.id}/cancel` : '', cancel ? {} : { request, prepared_demo_id: demoId }));
       setJobs(old => [next, ...old.filter(j => j.id !== next.id)]); setSelected(next.id);
+      if (!cancel) livePanel.current?.scrollIntoView({ block: 'start', behavior: 'auto' });
     } catch (e) { setError((e as Error).message); }
     finally { setBusy(false); }
   };
@@ -76,7 +78,7 @@ export function ImplementFeature({ onReplaySavedRun }: { onReplaySavedRun?: () =
       <span className="feature-orb" aria-hidden="true"><Icon name="experiments" size={42} /></span>
     </section>
     {job?.presentation_label && <p className="glass card small muted">{job.presentation_label}</p>}
-    <LiveBrowsers key={job?.id ?? 'empty'} jobId={job?.id} status={job?.status} connected={connected} />
+    <div ref={livePanel}><LiveBrowsers key={job?.id ?? 'empty'} jobId={job?.id} status={job?.status} connected={connected} /></div>
     <section className="glass card feature-compose">
       <div className="card-head"><h3>Prepare and learn</h3><Pill tone={connected ? 'good' : 'warn'}>{connected ? 'Service connected' : 'Service offline'}</Pill></div>
       <p className="small muted">Supported: Brightness and Contrast in miniPaint, on one imported 8-bit raster layer.</p>
