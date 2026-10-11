@@ -154,6 +154,8 @@ export function App() {
             </span>
           </header>
 
+          <nav className="mobile-nav" aria-label="Dashboard sections">{NAV.map(item => <button key={item.id} type="button" aria-current={view === item.id ? 'page' : undefined} onClick={() => setView(item.id)}>{item.label}</button>)}</nav>
+
           {view !== 'implement' && run && <ProvenanceBanner run={run} />}
 
           {view !== 'implement' && run && snap && (
