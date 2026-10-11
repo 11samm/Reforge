@@ -1,6 +1,6 @@
 import type {
   BundleBaseline, BundleCandidate, BundleCase, BundleClaim, BundleEvent, BundleExperiment, BundleMetrics,
-  BundleTelemetry, RunBundleV1,
+  BundleTelemetry, BundleRecording, RunBundleV1,
 } from './bundle.ts';
 
 export const PHASES = ['observe', 'experiment', 'contract', 'implement', 'evaluate', 'decide'] as const;
@@ -175,6 +175,7 @@ export interface SuiteCase {
 }
 
 export interface Run {
+  recording?: BundleRecording & { finalRun?: Run };
   bundleId: string;
   provenance: ProvenanceKind;
   provenanceSource: string | null;
@@ -397,7 +398,7 @@ function telemetryFrom(t: BundleTelemetry): Invocation {
       output: num(u.output_tokens), reasoningOutput: num(u.reasoning_output_tokens),
     } : null,
     conciseOutput: str(t.concise_output),
-    revealedAt: null,
+    revealedAt: num(t.available_at),
   };
 }
 
@@ -410,7 +411,7 @@ export function normalizeRun(input: unknown, baseUrl: string, bundleId = 'run'):
   const schemaVersion = num(raw.schema_version);
   if (raw.schema !== undefined && raw.schema !== 'reforge.run-bundle') warnings.push(`Unrecognized schema "${String(raw.schema)}"; reading known fields only.`);
   if (schemaVersion === null) warnings.push('No schema_version; treated as legacy events-only bundle.');
-  else if (schemaVersion > 1) warnings.push(`schema_version ${schemaVersion} is newer than this dashboard (1); unknown fields ignored.`);
+  else if (schemaVersion > 2) warnings.push(`schema_version ${schemaVersion} is newer than this dashboard (2); unknown fields ignored.`);
 
   const kindRaw = str(raw.provenance?.kind);
   const provenance: ProvenanceKind = kindRaw === 'recorded' || kindRaw === 'synthetic' || kindRaw === 'live' ? kindRaw : 'unknown';
@@ -516,6 +517,7 @@ export function normalizeRun(input: unknown, baseUrl: string, bundleId = 'run'):
   const telemetry: Invocation[] = (raw.telemetry ?? []).map(telemetryFrom);
   const routingEvents = events.filter((e) => e.event === 'failure_routing');
   for (const t of telemetry) {
+    if (t.revealedAt !== null) continue;
     const n = Number(/(\d+)$/.exec(t.invocation)?.[1] ?? NaN);
     if (t.role === 'planner') t.revealedAt = firstAt((e) => e.event === 'experiment');
     else if (t.role === 'contract') t.revealedAt = claimAt;
@@ -567,9 +569,9 @@ export function normalizeRun(input: unknown, baseUrl: string, bundleId = 'run'):
       builder = { ...telemetryFrom({ invocation: builderName, record_present: false }) };
       telemetry.push(builder);
     }
-    const decidedAt = (acceptEv ?? rejectEv ?? failEv)?.elapsed_seconds
+    const decidedAt = num(bc.decided_seconds) ?? (acceptEv ?? rejectEv ?? failEv)?.elapsed_seconds
       ?? (decision !== 'pending' ? evalEv?.elapsed_seconds ?? lastEventAt : null);
-    if (builder) builder.revealedAt = decidedAt ?? evalEv?.elapsed_seconds ?? null;
+    if (builder && builder.revealedAt === null) builder.revealedAt = decidedAt ?? evalEv?.elapsed_seconds ?? null;
     const evaluated = cases.filter((c) => c.outcome !== 'not_evaluated');
     const routeSuggestion = obj(routeEv?.suggestion);
     return {

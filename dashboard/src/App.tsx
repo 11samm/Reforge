@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { type ComponentType, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { RunIndexEntry } from './data/bundle.ts';
 import { normalizeRun, snapshotAt, type Run } from './data/normalize.ts';
 import { clock } from './format.ts';
@@ -9,6 +9,8 @@ import { Contract } from './views/Contract.tsx';
 import { Candidates } from './views/Candidates.tsx';
 import { Telemetry } from './views/Telemetry.tsx';
 import { EventLog } from './views/EventLog.tsx';
+import { importPortable } from './data/portable.ts';
+import { RecordedEvidence } from './views/RecordedEvidence.tsx';
 import { ImplementFeature } from './views/ImplementFeature.tsx';
 
 export type View = 'overview' | 'experiments' | 'contract' | 'candidates' | 'telemetry' | 'events' | 'implement';
@@ -37,7 +39,15 @@ const SPEEDS = [1, 5, 20, 60];
 
 export interface Selection { experiment: string | null; candidate: string | null; caseId: string | null }
 
+const ReplayImplementFeature = ImplementFeature as ComponentType<{onReplaySavedRun?:()=>void}>;
+
 export function App() {
+  const importInput=useRef<HTMLInputElement>(null);
+  const builtInDispose=useRef<(()=>void)|null>(null);
+  const importDispose=useRef<(()=>void)|null>(null);
+  const loadGeneration=useRef(0);
+  useEffect(()=>()=>{++loadGeneration.current;importDispose.current?.();builtInDispose.current?.();},[]);
+  const [imported, setImported]=useState<Run|null>(null);
   const [index, setIndex] = useState<RunIndexEntry[] | null>(null);
   const [runId, setRunId] = useState<string | null>(null);
   const [run, setRun] = useState<Run | null>(null);
@@ -61,19 +71,26 @@ export function App() {
   useEffect(() => {
     const entry = index?.find((e) => e.id === runId);
     if (!entry) return;
+    const generation=++loadGeneration.current;
+    if(runId==='imported' && imported){builtInDispose.current?.();builtInDispose.current=null;setError(null);setRun(imported);setT(0);setSel({experiment:null,candidate:null,caseId:null});setPlaying(false);return;}
+    builtInDispose.current?.(); builtInDispose.current=null;
     setRun(null); setError(null); setPlaying(false);
     const base = entry.manifest.replace(/[^/]*$/, '');
     fetch(entry.manifest).then((r) => (r.ok ? r.json() : Promise.reject(new Error(`${entry.manifest}: HTTP ${r.status}`))))
-      .then((raw: unknown) => {
-        const n = normalizeRun(raw, base, entry.id);
+      .then(async(raw: unknown) => {
+        if(generation!==loadGeneration.current)return;
+        const portable = (raw as {schema?:string})?.schema === "reforge.portable-recording" ? await importPortable(raw) : null;
+        if(generation!==loadGeneration.current){portable?.dispose();return;}
+        if(portable)builtInDispose.current=portable.dispose;
+        const n = portable?.run ?? normalizeRun(raw, base, entry.id);
         if (entry.kind === 'synthetic' && n.provenance !== 'synthetic') n.provenance = 'synthetic';
         setRun(n);
-        setT(n.duration);
+        setT(portable ? 0 : n.duration);
         const lastEvaluated = [...n.candidates].reverse().find((c) => c.evaluatedCount > 0) ?? n.candidates[0];
         setSel({ experiment: n.experiments[0]?.id ?? null, candidate: lastEvaluated?.id ?? null, caseId: null });
       })
-      .catch((e: Error) => setError(e.message));
-  }, [index, runId]);
+      .catch((e: Error) => {if(generation===loadGeneration.current)setError(e.message);});
+  }, [index, runId, imported]);
 
   useEffect(() => {
     if (!playing || !run) return;
@@ -111,11 +128,20 @@ export function App() {
     setPlaying((p) => !p);
   };
 
+  const openSavedRun=()=>importInput.current?.click();
+  const importFile=async(file:File)=>{
+    const generation=++loadGeneration.current;setPlaying(false);setRun(null);setError(null);setView('overview');
+    try{if(file.size>210_000_000)throw Error('Recording too large');const result=await importPortable(JSON.parse(await file.text()));
+      if(generation!==loadGeneration.current){result.dispose();return;}
+      builtInDispose.current?.();builtInDispose.current=null;importDispose.current?.();importDispose.current=result.dispose;setImported(result.run);setIndex(x=>[...(x??[]).filter(e=>e.id!=='imported'),{id:'imported',title:`Recorded ${result.run.operation} · ${result.run.id}`,kind:'recorded',manifest:''}]);setRunId('imported');setRun(result.run);setT(0);setSel({experiment:null,candidate:null,caseId:null});
+    }catch(e){if(generation===loadGeneration.current)setError(e instanceof Error?e.message:String(e));}
+  };
   const kind = view === 'implement' ? 'job' : run?.provenance ?? 'unknown';
   const atEnd = run ? t >= run.duration : true;
 
   return (
     <div className="backdrop">
+      <input ref={importInput} type="file" accept=".json,.reforge" hidden onChange={e=>{const file=e.target.files?.[0];if(file)void importFile(file);e.target.value="";}}/>
       <div className="orb orb-a" /><div className="orb orb-b" /><div className="orb orb-c" />
       <div className="window glass-strong">
         <aside className="sidebar">
@@ -132,6 +158,7 @@ export function App() {
           </nav>
           {view !== 'implement' && <label className="run-picker">
             <span>Run bundle</span>
+            <button type="button" onClick={openSavedRun}>Replay saved run</button>
             <select value={runId ?? ''} onChange={(e) => setRunId(e.target.value)}>
               {index?.map((e) => <option key={e.id} value={e.id}>{e.kind === 'synthetic' ? '⚠ ' : ''}{e.title}</option>)}
             </select>
@@ -175,7 +202,7 @@ export function App() {
                   onChange={(e) => { setT(Number(e.target.value)); setPlaying(false); }} />
                 <div className="ticks" aria-hidden="true">
                   {run.timeline.map((e) => (
-                    <span key={e.seq} className={`tick tick-${e.tone}`} style={{ left: `${(e.t / Math.max(run.duration, 1)) * 100}%` }} />
+                    <span key={e.seq} className={`tick tick-${e.t <= t ? e.tone : 'neutral'}`} style={{ left: `${(e.t / Math.max(run.duration, 1)) * 100}%` }} />
                   ))}
                 </div>
               </div>
@@ -187,14 +214,15 @@ export function App() {
           )}
 
           <div className="content" ref={contentRef}>
-            {view === 'implement' && <ImplementFeature />}
+            {view === 'implement' && <ReplayImplementFeature onReplaySavedRun={openSavedRun} />}
             {view !== 'implement' && error && <div className="load-error glass"><Icon name="alert" /> Could not load run data: {error}</div>}
             {view !== 'implement' && !run && !error && <div className="loading">Loading run bundle…</div>}
             {run && snap && view === 'overview' && <Overview run={run} snap={snap} t={t} onOpenCandidate={(id) => { setSel((s) => ({ ...s, candidate: id, caseId: null })); setView('candidates'); }} onOpenEvidence={openEvidence} />}
-            {run && view === 'experiments' && <Experiments run={run} t={t} selected={sel.experiment} onSelect={(id) => setSel((s) => ({ ...s, experiment: id }))} onOpenEvidence={openEvidence} />}
+            {run && view === 'experiments' && <Experiments key={run.id} run={run} t={t} selected={sel.experiment} onSelect={(id) => setSel((s) => ({ ...s, experiment: id }))} onOpenEvidence={openEvidence} />}
             {run && view === 'contract' && <Contract run={run} t={t} onOpenEvidence={openEvidence} />}
-            {run && view === 'candidates' && <Candidates run={run} t={t} sel={sel} setSel={setSel} onOpenEvidence={openEvidence} />}
+            {run && view === 'candidates' && <Candidates key={run.id} run={run} t={t} sel={sel} setSel={setSel} onOpenEvidence={openEvidence} />}
             {run && view === 'telemetry' && <Telemetry run={run} t={t} />}
+            {run && view === 'candidates' && <RecordedEvidence key={`${run.id}-recording`} run={run} t={t}/>}
             {run && view === 'events' && <EventLog run={run} t={t} onSeek={(x) => { setT(x); setPlaying(false); }} />}
           </div>
         </main>

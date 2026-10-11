@@ -1,0 +1,24 @@
+[
+  {
+    "feature": "brightness",
+    "job": "82b68e6daf5e41ddb7c03c13a91ba1f9",
+    "bundle_bytes": 7164565,
+    "bundle_sha256": "e24dc3804d2948afc4eb4969bf2f919baf4a9deacae0c01c06edab9efed9c277",
+    "events": 47,
+    "assets": 312,
+    "original_metrics_and_checks": "exact equality",
+    "original_job_sequence_and_timing": "exact equality",
+    "invocation_total_tokens": 409928
+  },
+  {
+    "feature": "contrast",
+    "job": "9df7c33da7a5425db3934e2cd928c5ee",
+    "bundle_bytes": 7137393,
+    "bundle_sha256": "e9f8a9dc3f4b146f94154c1d5413d100a5ea79b0c92ab7c4d2657af81c836558",
+    "events": 39,
+    "assets": 321,
+    "original_metrics_and_checks": "exact equality",
+    "original_job_sequence_and_timing": "exact equality",
+    "invocation_total_tokens": 250976
+  }
+]

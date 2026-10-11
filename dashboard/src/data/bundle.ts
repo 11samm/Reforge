@@ -63,6 +63,7 @@ export interface BundleCandidate {
   accepted?: boolean | null;
   reason?: string | null;
   started_seconds?: number | null;
+  decided_seconds?: number | null;
   error?: { type?: string | null; message?: string | null } | null;
   build_valid?: boolean | null;
   independent?: boolean | null;
@@ -128,6 +129,7 @@ export interface BundleSuiteCase {
 }
 
 export interface BundleTelemetry {
+  available_at?: number;
   invocation?: string;
   record_present?: boolean;
   model?: string | null;
@@ -146,7 +148,15 @@ export interface BundleTelemetry {
   concise_output?: string | null;
 }
 
+export interface BundleRecording {
+  final: { available_at: number; summary?: Json; suite: BundleSuiteCase[]; cases: BundleCase[] };
+  evidence: { label: string; available_at: number; path: string }[];
+  missing_evidence: string[];
+}
+
+// Historical name retained for callers; v2 adds recording-only evidence.
 export interface RunBundleV1 {
+  recording?: BundleRecording;
   schema?: string;
   schema_version?: number;
   provenance?: BundleProvenance;

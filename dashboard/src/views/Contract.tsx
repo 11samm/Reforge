@@ -8,7 +8,7 @@ const ORDER: ClaimStatus[] = ['VERIFIED_WITHIN_SCOPE', 'OBSERVED', 'HYPOTHESIS',
 export function Contract({ run, t, onOpenEvidence }: { run: Run; t: number; onOpenEvidence: (id: string) => void }) {
   const [filter, setFilter] = useState<ClaimStatus | 'ALL'>('ALL');
   const [selected, setSelected] = useState<string | null>(null);
-  const visible = run.claims.filter((c) => c.revealedAt === null || c.revealedAt <= t);
+  const visible = run.claims.filter((c) => c.revealedAt === null ? t >= run.duration : c.revealedAt <= t);
   const rows = visible.filter((c) => filter === 'ALL' || c.status === filter);
   const claim = rows.find((c) => c.id === selected) ?? rows[0] ?? null;
   const counts = new Map(ORDER.map((s) => [s, visible.filter((c) => c.status === s).length]));
