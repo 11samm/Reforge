@@ -124,7 +124,7 @@ def validate_plan(p, c):
     integer(p['percentage'], c['percentage_min'], c['percentage_max'])
     return p
 
-def validate_claims(claims, evidence_ids, case_ids, accepted=()):
+def validate_claims(claims, evidence_ids, case_ids, accepted=(), domain=(0,50)):
     if not isinstance(claims, list) or not 1 <= len(claims) <= 16: raise ValueError('Invalid claims')
     ids=[]
     for claim in claims:
@@ -134,7 +134,7 @@ def validate_claims(claims, evidence_ids, case_ids, accepted=()):
         ids.append(claim['id'])
         if claim['status'] not in STATUSES: raise ValueError('Unknown claim status')
         exact(claim['parameter_domain'],['min','max'])
-        integer(claim['parameter_domain']['min'],0,50); integer(claim['parameter_domain']['max'],0,50)
+        integer(claim['parameter_domain']['min'],*domain); integer(claim['parameter_domain']['max'],*domain)
         if claim['parameter_domain']['min'] > claim['parameter_domain']['max']: raise ValueError('Invalid claim domain')
         for k in ['supporting_evidence','contradicting_evidence','alternatives','unresolved','verification_cases']:
             strings(claim[k])

@@ -199,7 +199,7 @@ def scoring_section(suite):
             'objective': suite['objective'], 'tie_policy': suite['tie_policy']}
 
 
-def discrepancy_section(result, evidence, evaluation_dir, top_pixels=8):
+def discrepancy_section(result, evidence, evaluation_dir, top_pixels=8, parameter_key="percentage"):
     """Failure metrics and informative samples for failed cases; passing cases only as a summary line."""
     from .diagnostics import describe
     by_id = {e['id']: e for e in evidence}
@@ -210,7 +210,7 @@ def discrepancy_section(result, evidence, evaluation_dir, top_pixels=8):
             passed.append({'id': case['case_id'], 'worst_region_loss': float(f'{case_loss(case):.{METRIC_DIGITS}g}')})
             continue
         e = by_id[case['case_id']]
-        row = {'id': case['case_id'], 'percentage': e['percentage'], 'reasons': case['reasons'],
+        row = {'id': case['case_id'], parameter_key: e[parameter_key], 'reasons': case['reasons'],
                'full_image': round_metrics(case['metrics']),
                'failing_regions': {n: {'box': r['box'], 'metrics': round_metrics(r['metrics'])}
                                    for n, r in case['regions'].items() if not r['passed']},

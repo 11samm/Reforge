@@ -1,0 +1,158 @@
+{
+  "claims": [
+    {
+      "id": "brightness-neutral",
+      "statement": "Brightness 0 exports exactly the input in the supplied neutral case.",
+      "status": "OBSERVED",
+      "target_version": "miniPaint visible About 4.14.3; hosted build unknown/unpinned",
+      "setup": "All other Color Corrections controls frozen zero.",
+      "parameter_domain": {
+        "min": 0,
+        "max": 0
+      },
+      "scope": "Supplied 33\u00d79 opaque raster; specified fresh-document and PNG export setup.",
+      "supporting_evidence": [
+        "scope-neutral-1"
+      ],
+      "contradicting_evidence": [],
+      "alternatives": [],
+      "unresolved": [
+        "Identity on other rasters is not established."
+      ],
+      "verification_cases": [
+        "scope-neutral-1"
+      ]
+    },
+    {
+      "id": "brightness-opaque-samples",
+      "statement": "Reported opaque RGB samples match clamp(floor(c \u00d7 (1 + brightness/100)), 0, 255). This describes observed values, not an internal mechanism.",
+      "status": "OBSERVED",
+      "target_version": "miniPaint visible About 4.14.3; hosted build unknown/unpinned",
+      "setup": "All other Color Corrections controls frozen zero; specified import/export setup.",
+      "parameter_domain": {
+        "min": -50,
+        "max": 50
+      },
+      "scope": "Only supplied opaque samples at brightness -50, -37, 0, 1, 17 and 50; not every integer in this interval.",
+      "supporting_evidence": [
+        "scope-neutral-1",
+        "scope-nonneutral-1",
+        "brightness-fresh-01",
+        "brightness-fresh-02",
+        "brightness-fresh-03",
+        "brightness-fresh-04"
+      ],
+      "contradicting_evidence": [],
+      "alternatives": [
+        "Other mappings may agree on these samples."
+      ],
+      "unresolved": [
+        "Unsampled parameters and rasters; trusted acceptance."
+      ],
+      "verification_cases": [
+        "scope-neutral-1",
+        "scope-nonneutral-1",
+        "brightness-fresh-01",
+        "brightness-fresh-02",
+        "brightness-fresh-03",
+        "brightness-fresh-04"
+      ]
+    },
+    {
+      "id": "brightness-alpha-observations",
+      "statement": "Reported alpha values and raster dimensions remain unchanged. At brightness -50, an active input channel of 255 exports as 127 at alpha 255, 128 at alpha 128, and 120 at alpha 17.",
+      "status": "OBSERVED",
+      "target_version": "miniPaint visible About 4.14.3; hosted build unknown/unpinned",
+      "setup": "All other Color Corrections controls frozen zero; specified import/export setup.",
+      "parameter_domain": {
+        "min": -50,
+        "max": 50
+      },
+      "scope": "Alpha/dimension summaries in supplied cases; RGB comparison limited to brightness-fresh-04.",
+      "supporting_evidence": [
+        "scope-neutral-1",
+        "scope-nonneutral-1",
+        "brightness-fresh-01",
+        "brightness-fresh-02",
+        "brightness-fresh-03",
+        "brightness-fresh-04"
+      ],
+      "contradicting_evidence": [],
+      "alternatives": [],
+      "unresolved": [
+        "Fully transparent pixels and other partial-alpha colors; cause of RGB differences."
+      ],
+      "verification_cases": [
+        "brightness-fresh-04"
+      ]
+    },
+    {
+      "id": "brightness-universal-rgb-rule",
+      "statement": "The opaque-sample formula applies to exported RGB regardless of alpha.",
+      "status": "CONTRADICTED",
+      "target_version": "miniPaint visible About 4.14.3; hosted build unknown/unpinned",
+      "setup": "All other Color Corrections controls frozen zero; specified import/export setup.",
+      "parameter_domain": {
+        "min": -50,
+        "max": -50
+      },
+      "scope": "Partial-alpha samples in the supplied 6\u00d73 raster.",
+      "supporting_evidence": [],
+      "contradicting_evidence": [
+        "brightness-fresh-04"
+      ],
+      "alternatives": [
+        "Treat partial-alpha export behavior as unresolved."
+      ],
+      "unresolved": [
+        "No hidden processing or export mechanism established."
+      ],
+      "verification_cases": [
+        "brightness-fresh-04"
+      ]
+    },
+    {
+      "id": "brightness-opaque-generalization",
+      "statement": "The observed opaque-sample formula may generalize to opaque rasters across integer brightness values from -100 to 100.",
+      "status": "HYPOTHESIS",
+      "target_version": "miniPaint visible About 4.14.3; hosted build unknown/unpinned",
+      "setup": "All other Color Corrections controls frozen zero; specified import/export setup.",
+      "parameter_domain": {
+        "min": -100,
+        "max": 100
+      },
+      "scope": "Opaque pixels only.",
+      "supporting_evidence": [
+        "scope-neutral-1",
+        "scope-nonneutral-1",
+        "brightness-fresh-01",
+        "brightness-fresh-02",
+        "brightness-fresh-03",
+        "brightness-fresh-04"
+      ],
+      "contradicting_evidence": [],
+      "alternatives": [
+        "Parameter-specific mappings consistent with existing samples."
+      ],
+      "unresolved": [
+        "Endpoint and unsampled-parameter coverage; trusted acceptance."
+      ],
+      "verification_cases": []
+    }
+  ],
+  "raw_contract_sha256": "8401e465576f202528aaaefc2ee14b32df831284bf07e9f2f7047184fb71f71b",
+  "metadata_correction": "Model packet omitted target metadata and returned brightness:1. Actual visible target supplied by every admitted reference-record.json. Statements/statuses retained; no behavior repaired.",
+  "verified_parity": {
+    "status": "VERIFIED_WITHIN_SCOPE",
+    "suite_sha256": "26cd2055382e032ca25fd3bb2f4a6ecfc357d4c6efc5fe9e9d60bdf4e99a5819",
+    "candidate_manifest_sha256": "f56976dd01ea0e803f43e8837f4d070a023c631051a17edca9ed5f2d5e3e9e6f",
+    "cases": [
+      "scope-neutral-1",
+      "scope-nonneutral-1",
+      "brightness-fresh-01",
+      "brightness-fresh-02",
+      "brightness-fresh-03",
+      "brightness-fresh-04"
+    ]
+  }
+}

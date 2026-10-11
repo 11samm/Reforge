@@ -23,7 +23,7 @@ class QuietHandler(SimpleHTTPRequestHandler):
     def log_message(self,*args): pass
 
 
-def main(evidence=None, allow_blur=False, app=None):
+def main(evidence=None, allow_blur=False, app=None, allow_brightness=False):
     main_app=app is None
     app=ROOT/'generated-app' if main_app else Path(app)
     evidence=Path(evidence) if evidence is not None else ROOT/'evidence/shell-verification'/(time.strftime('%Y%m%d-%H%M%S')+'-'+uuid.uuid4().hex[:8])
@@ -50,6 +50,7 @@ def main(evidence=None, allow_blur=False, app=None):
             page.keyboard.press('Escape')
             report['checks']['empty_export_disabled']=True
             for name in ('Edit','View','Image','Layer','Tools','Help'):
+                if name=='Image' and allow_brightness: continue
                 expect(page.get_by_role('menuitem',name=name,exact=True)).to_be_disabled()
             for b in page.locator('.tool-strip button, .sidebar button, .sidebar input, .options input, .options button').all():
                 expect(b).to_be_disabled()
@@ -68,6 +69,17 @@ def main(evidence=None, allow_blur=False, app=None):
             dialog.get_by_role('button',name='Close',exact=True).click()
             expect(dialog).not_to_be_visible()
             report['checks']['blur_empty_document_disabled' if allow_blur else 'blur_unavailable']=True
+            if allow_brightness:
+                page.get_by_role('menuitem',name='Image',exact=True).click()
+                page.get_by_role('menuitem',name='Color Corrections…',exact=True).click()
+                corrections=page.get_by_role('dialog')
+                brightness=corrections.get_by_role('slider',name=re.compile(r'^Brightness(?::.*)?$'))
+                expect(brightness).to_be_disabled()
+                for attr,value in [('min','-100'),('max','100'),('step','1')]: expect(brightness).to_have_attribute(attr,value)
+                expect(corrections.get_by_role('button',name='Apply',exact=True)).to_be_disabled()
+                corrections.get_by_role('button',name='Close',exact=True).click()
+                expect(corrections).not_to_be_visible()
+                report['checks']['brightness_empty_document_disabled']=True
 
             def export_to(path):
                 page.get_by_role('menuitem',name='File',exact=True).click()

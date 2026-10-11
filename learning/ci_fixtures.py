@@ -17,7 +17,7 @@ from adapter.png import ROOT
 LIST = ROOT / 'fixtures/learning-ci-files.txt'
 HEADER = ('# Saved evidence files read by test_learning (attempt-2 run subset + pre-change prompts). Commit exactly these;\n'
           '# the rest of each run archive stays local. Regenerate the list with: python -m learning.ci_fixtures\n')
-TESTS = ['test_smoke', 'test_adapter', 'test_shell_boundary', 'test_evaluator', 'test_learning']
+TESTS = ['test_smoke', 'test_adapter', 'test_shell_boundary', 'test_evaluator', 'test_learning', 'test_brightness']
 LOCAL_ONLY = ('evidence/learning/', 'evidence/packet-sizes/', 'evidence/milestone5/', 'dev-workspaces/')
 
 

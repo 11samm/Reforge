@@ -1,0 +1,99 @@
+{
+  "id": "fresh-brightness-v1",
+  "cases": [
+    {
+      "id": "fresh-rgb-negative",
+      "input": "evidence/brightness/fresh/fresh-rgb-negative-input.png",
+      "expected": "evidence/brightness/fresh/fresh-rgb-negative-expected.png",
+      "input_sha256": "595fedd3c7a967d20eb9accc57475279ac37396675ec7a0cece9063439d52887",
+      "expected_sha256": "c2f12cc7cbbb6bf2069c03c300b59d30f5352692db9d29d9d01108a036819817",
+      "brightness": -23,
+      "regions": {
+        "full": [
+          0,
+          0,
+          19,
+          7
+        ]
+      }
+    },
+    {
+      "id": "fresh-alpha-positive",
+      "input": "evidence/brightness/fresh/fresh-alpha-positive-input.png",
+      "expected": "evidence/brightness/fresh/fresh-alpha-positive-expected.png",
+      "input_sha256": "7e77af109c9bd57a3cbe0dd00e413b1207bf98f3d4e3232279b088dfc93a2f44",
+      "expected_sha256": "76c4dc2accfd24395e6a03702800dd17d6d1b161188673798f0da57ff560e16f",
+      "brightness": 33,
+      "regions": {
+        "full": [
+          0,
+          0,
+          7,
+          5
+        ]
+      }
+    },
+    {
+      "id": "fresh-minimum",
+      "input": "evidence/brightness/fresh/fresh-minimum-input.png",
+      "expected": "evidence/brightness/fresh/fresh-minimum-expected.png",
+      "input_sha256": "02e6b7c7dc38b20c7a5013a0c9c80d3991ea48100068d33172fa3ab51d1cb18f",
+      "expected_sha256": "01b6c2984ad9d7ee2572a821b61ec8c0583d9cece11a4952b0914efae070c129",
+      "brightness": -100,
+      "regions": {
+        "full": [
+          0,
+          0,
+          11,
+          3
+        ]
+      }
+    },
+    {
+      "id": "fresh-neutral",
+      "input": "evidence/brightness/fresh/fresh-neutral-input.png",
+      "expected": "evidence/brightness/fresh/fresh-neutral-expected.png",
+      "input_sha256": "f942342bfc85cdf233e8274a7e06ac9dd00af6f03c0e30fcef6b99cc81d7ddaa",
+      "expected_sha256": "8c1691a219f9f2d413a12034d2220b1fcc9608a8666692faea6ece5b27fd3da1",
+      "brightness": 0,
+      "regions": {
+        "full": [
+          0,
+          0,
+          5,
+          7
+        ]
+      }
+    },
+    {
+      "id": "fresh-maximum",
+      "input": "evidence/brightness/fresh/fresh-maximum-input.png",
+      "expected": "evidence/brightness/fresh/fresh-maximum-expected.png",
+      "input_sha256": "898eddaf424c42d8bd74215df7d6f96d59d27e267b9d133b28b59188b6becb5e",
+      "expected_sha256": "cebfaa546cb762aa7f805ed3f43427f075fac07cc7d5e1b5b733c6c50e4876de",
+      "brightness": 100,
+      "regions": {
+        "full": [
+          0,
+          0,
+          17,
+          5
+        ]
+      }
+    }
+  ],
+  "policy": {
+    "id": "exact-rgba-v1",
+    "version": 1,
+    "mode": "exact",
+    "rgb_mean_max": 0,
+    "rgb_pixel_tolerance": 0,
+    "rgb_fraction_min": 1,
+    "alpha_mean_max": 0,
+    "alpha_max": 0,
+    "alpha_pixel_tolerance": 0,
+    "alpha_fraction_min": 1,
+    "description": "Exact decoded 8-bit RGBA equality for baseline regressions."
+  },
+  "purpose": "Frozen post-acceptance evaluation; never supplied to a model; no repair loop"
+}

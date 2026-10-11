@@ -138,3 +138,7 @@ The latest pointer is evidence/latest-learning.json. No final holdout or push.
 
 Actual results: [milestone 5 report](evidence/milestone5-results.md). The bounded
 integrated attempt completed, but blur compatibility did not pass; baseline preserved.
+
+## Brightness second-feature milestone
+
+See [README-brightness.md](README-brightness.md) for the explicitly scoped Color Corrections brightness procedure, bounded harness specialization, exact policy and actual-run artifacts. Blur remains experimental and isolated; brightness status is reported separately.

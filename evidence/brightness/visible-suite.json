@@ -1,0 +1,158 @@
+{
+  "id": "visible-brightness-v2-host-correction",
+  "cases": [
+    {
+      "id": "scope-neutral-1",
+      "input": "evidence/brightness/visible/scope-neutral-1-input.png",
+      "expected": "evidence/brightness/visible/scope-neutral-1-expected.png",
+      "input_sha256": "3fb2b99913e724d267f5abdd3c1f5214181a09fb27e8947886cc4f5174f68272",
+      "expected_sha256": "2f2ebe3d0b67c32a6c3f7c7e577d4ae0ec2311e6197f9b73eea606ed0837be9f",
+      "brightness": 0,
+      "regions": {
+        "full": [
+          0,
+          0,
+          33,
+          9
+        ]
+      }
+    },
+    {
+      "id": "scope-nonneutral-1",
+      "input": "evidence/brightness/visible/scope-nonneutral-1-input.png",
+      "expected": "evidence/brightness/visible/scope-nonneutral-1-expected.png",
+      "input_sha256": "3fb2b99913e724d267f5abdd3c1f5214181a09fb27e8947886cc4f5174f68272",
+      "expected_sha256": "69469a59a340b104d7e62a0c0f43535bc282bebb3a0af88683919b0d82d02b0f",
+      "brightness": 17,
+      "regions": {
+        "full": [
+          0,
+          0,
+          33,
+          9
+        ]
+      }
+    },
+    {
+      "id": "brightness-fresh-01",
+      "input": "evidence/brightness/visible/brightness-fresh-01-input.png",
+      "expected": "evidence/brightness/visible/brightness-fresh-01-expected.png",
+      "input_sha256": "5af812680e0636d510561041580b2bdbe1e777a7589aaaf653d5ee997e49f39b",
+      "expected_sha256": "f5ab260b38c3d5f4b818cbc737d85b2d57680ae151d2589bf01255cf47c2dac3",
+      "brightness": -37,
+      "regions": {
+        "full": [
+          0,
+          0,
+          17,
+          3
+        ]
+      }
+    },
+    {
+      "id": "brightness-fresh-02",
+      "input": "evidence/brightness/visible/brightness-fresh-02-input.png",
+      "expected": "evidence/brightness/visible/brightness-fresh-02-expected.png",
+      "input_sha256": "6dfb78298d520e6c446fd57179daf77e8d10a9b1c3c711206df2951a8c2338c4",
+      "expected_sha256": "2a1e4ae1d071435a705108842bbcd56f5232bd2be55f8c8c24ed4e77bcc1deb2",
+      "brightness": 50,
+      "regions": {
+        "full": [
+          0,
+          0,
+          256,
+          9
+        ]
+      }
+    },
+    {
+      "id": "brightness-fresh-03",
+      "input": "evidence/brightness/visible/brightness-fresh-03-input.png",
+      "expected": "evidence/brightness/visible/brightness-fresh-03-expected.png",
+      "input_sha256": "5af812680e0636d510561041580b2bdbe1e777a7589aaaf653d5ee997e49f39b",
+      "expected_sha256": "3a5bf3f0fc7d3c3e733414e945d09877eb244f5ab3b9c4a26b6b0d1da22ecc07",
+      "brightness": 1,
+      "regions": {
+        "full": [
+          0,
+          0,
+          17,
+          3
+        ]
+      }
+    },
+    {
+      "id": "brightness-fresh-04",
+      "input": "evidence/brightness/visible/brightness-fresh-04-input.png",
+      "expected": "evidence/brightness/visible/brightness-fresh-04-expected.png",
+      "input_sha256": "95ac3071af4a4026cd6bbd5a31adfe1755e3cffce2de3f17bd64b8d42302c042",
+      "expected_sha256": "1b91822e9f87b36d8d983f8cb76632aaf2c9334b33a07c21d2b07c7cf96ebeef",
+      "brightness": -50,
+      "regions": {
+        "full": [
+          0,
+          0,
+          6,
+          3
+        ]
+      }
+    }
+  ],
+  "policy": {
+    "id": "exact-rgba-v1",
+    "version": 1,
+    "mode": "exact",
+    "rgb_mean_max": 0,
+    "rgb_pixel_tolerance": 0,
+    "rgb_fraction_min": 1,
+    "alpha_mean_max": 0,
+    "alpha_max": 0,
+    "alpha_pixel_tolerance": 0,
+    "alpha_fraction_min": 1,
+    "description": "Exact decoded 8-bit RGBA equality for baseline regressions."
+  },
+  "operation": {
+    "id": "brightness",
+    "version": 1,
+    "name": "Brightness (Color Corrections)",
+    "menu": [
+      "Image",
+      "Color Corrections ..."
+    ],
+    "dialog": "Color Corrections",
+    "parameter": {
+      "name": "Brightness",
+      "key": "brightness",
+      "min": -100,
+      "max": 100,
+      "default": 0,
+      "step": 1
+    },
+    "frozen_controls": {
+      "Contrast": 0,
+      "Saturation": 0,
+      "Hue": 0,
+      "Luminance": 0,
+      "Red channel": 0,
+      "Green channel": 0,
+      "Blue channel": 0
+    },
+    "scope": "Fresh transparent document; one imported raster layer, offset 0, rotation 0, opacity 100; no other layers; PNG All layers at resolution 72, no resize.",
+    "source": "src/brightness.ts",
+    "export": "applyBrightness",
+    "interface": "applyBrightness(raster: Raster, brightness: number): Raster",
+    "ui_menu": "Image",
+    "ui_item": "Color Corrections\u2026",
+    "ui_parameter": "Brightness",
+    "policy": "exact-rgba-v1",
+    "provenance": "evidence/learning/brightness-preparation/imported-scope-2/parameters.json"
+  },
+  "neutral_identity_required": true,
+  "rgb_and_alpha_scored_separately": true,
+  "tie_policy": "retain incumbent",
+  "correction": {
+    "source_suite_sha256": "685c721bb284442a20587feca3dae58a8657a4c4dbabe17f82c6d0088e1ec428",
+    "reason": "Empty mapping was invalid. Full-image named region duplicates the original full-image gate; expected bytes, parameters, RGB/alpha thresholds unchanged.",
+    "before_revalidation": true
+  }
+}

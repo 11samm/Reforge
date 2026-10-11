@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './style.css';
+import { applyBrightness } from './brightness';
 import { currentImage, decodePngRaster, serializeCurrentImage, type Raster } from './current-image';
 
 type Document = { file: File; url: string; width: number; height: number; raster: Raster };
@@ -70,10 +71,13 @@ function App() {
   const [doc,setDoc] = useState<Document | null>(null);
   const [error,setError] = useState('');
   const [busy,setBusy] = useState(false);
-  const [menu,setMenu] = useState<'File' | 'Effects' | null>(null);
+  const [menu,setMenu] = useState<'File' | 'Image' | 'Effects' | null>(null);
   const input = useRef<HTMLInputElement>(null);
   const dialog = useRef<HTMLDialogElement>(null);
   const effects = useRef<HTMLButtonElement>(null);
+  const imageMenu = useRef<HTMLButtonElement>(null);
+  const corrections = useRef<HTMLDialogElement>(null);
+  const [brightness,setBrightness] = useState(0);
   const sequence = useRef(0);
   const urls = useRef(new Set<string>());
   const current = useRef<Document | null>(null);
@@ -133,15 +137,39 @@ function App() {
       setMenu(null);
     } catch { if (mounted.current) setError('Could not export PNG. Please try again.'); }
   }
+  function applyCorrections() {
+    if (!current.current || busy) return;
+    try {
+      const selected = current.current;
+      const raster = applyBrightness(selected.raster, brightness);
+      // Build the preview before committing, so failures leave upload/export intact.
+      const canvas = document.createElement('canvas');
+      canvas.width = raster.width; canvas.height = raster.height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) throw new Error('Image preview is unavailable in this browser.');
+      ctx.putImageData(new ImageData(new Uint8ClampedArray(raster.data), raster.width, raster.height), 0, 0);
+      const preview = canvas.toDataURL('image/png');
+      const next = { ...selected, raster, url: preview };
+      currentImage.raster = raster; current.current = next; setDoc(next);
+      if (urls.current.has(selected.url)) {
+        URL.revokeObjectURL(selected.url); urls.current.delete(selected.url);
+      }
+      setError('');
+      corrections.current?.close();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Could not apply brightness.');
+    }
+  }
   const w = doc?.width ?? 1024, h = doc?.height ?? 768;
   const tools = ['Pointer','Rectangle selection','Brush','Pencil','Eyedropper','Eraser','Magic wand','Paint bucket','Shapes','Picture','Text','Gradient','Stamp','Crop','Droplet','Diamond','Sponge','Inward arrows','Play'];
   const glyphs = ['➤','▧','🖌','✎','⚗','▰','⚒','♢','♧','▣','T','▥','♟','⌑','♧','◇','▨','⤢','⊙'];
   return <>
     <nav aria-label="Main Menu" ref={menuRoot} className="menu-row" onKeyDown={e => { if(e.key === 'Escape') setMenu(null); }}>
       <div role="menubar">{['File','Edit','View','Image','Layer','Effects','Tools','Help'].map(name =>
-        name === 'File' || name === 'Effects' ? <button key={name} role="menuitem" ref={name === 'Effects' ? effects : undefined} aria-haspopup="menu" aria-expanded={menu === name} onClick={() => setMenu(menu === name ? null : name)}>{name}</button> : <button role="menuitem" key={name} disabled title="Unavailable">{name}</button>)}</div>
+        name === 'File' || name === 'Image' || name === 'Effects' ? <button key={name} role="menuitem" ref={name === 'Effects' ? effects : name === 'Image' ? imageMenu : undefined} aria-haspopup="menu" aria-expanded={menu === name} onClick={() => setMenu(menu === name ? null : name)}>{name}</button> : <button role="menuitem" key={name} disabled title="Unavailable">{name}</button>)}</div>
       {menu && <div className={'dropdown ' + (menu === 'Effects' ? 'effects-menu' : '')} role="menu" aria-label={menu}>
         {menu === 'File' ? <><button role="menuitem" onClick={() => { input.current?.click(); setMenu(null); }}>Open image…</button><button role="menuitem" disabled={!doc} onClick={exportPNG}>Export PNG</button></> :
+        menu === 'Image' ? <button role="menuitem" onClick={() => { setMenu(null); setBrightness(0); corrections.current?.showModal(); }}>Color Corrections…</button> :
         <button role="menuitem" onClick={() => { setMenu(null); dialog.current?.showModal(); }}>Gaussian Blur…</button>}
       </div>}
     </nav>
@@ -165,6 +193,18 @@ function App() {
         <Panel title="Layers" className="layers"><div className="layer-actions">{['+','D','R','↑','↓'].map((g,i) => <Disabled key={g} name={['Insert new layer','Duplicate layer','Convert layer to raster','Move layer up','Move layer down'][i]}>{g}</Disabled>)}</div><div className="layer-row">{doc ? <><Disabled name="Hide layer">◉</Disabled><Disabled className="layer-name" name={doc.file.name}>{doc.file.name}</Disabled><Disabled name="Delete layer" className="delete">×</Disabled></> : <span className="no-layer">No uploaded layer</span>}</div></Panel>
       </aside>
     </main>
+    <dialog ref={corrections} aria-labelledby="corrections-title" aria-describedby="corrections-description" onClose={() => imageMenu.current?.focus()}>
+      <h2 id="corrections-title">Color Corrections</h2>
+      <p id="corrections-description">Only Brightness is available. All other controls are frozen at 0.</p>
+      {doc?.raster.depth === 16 && <p role="note">Brightness does not support depth16. Upload and original PNG export remain available.</p>}
+      <label htmlFor="brightness">Brightness: {brightness}</label>
+      <input id="brightness" type="range" min="-100" max="100" step="1" value={brightness} disabled={!doc || busy} onChange={e => setBrightness(Number(e.target.value))} />
+      {['Contrast','Saturation','Hue','Luminance','Red channel','Green channel','Blue channel'].map((name,i) => <div key={name}>
+        <label htmlFor={'frozen-correction-'+i}>{name}: 0 (frozen)</label>
+        <input id={'frozen-correction-'+i} type="range" min="-100" max="100" step="1" value="0" disabled title="Frozen at 0" />
+      </div>)}
+      <div className="dialog-actions"><button disabled={!doc || busy || doc.raster.depth === 16} onClick={applyCorrections}>Apply</button><button autoFocus onClick={() => corrections.current?.close()}>Close</button></div>
+    </dialog>
     <dialog ref={dialog} aria-labelledby="blur-title" aria-describedby="blur-description" onClose={() => effects.current?.focus()}><h2 id="blur-title">Gaussian Blur</h2><p id="blur-description">Unavailable until the learning loop implements it. No image changes are performed.</p><label htmlFor="percentage">Percentage: 0</label><input id="percentage" type="range" min="0" max="50" step="1" value="0" disabled title="Unavailable" /><div className="dialog-actions"><Disabled>Apply</Disabled><button autoFocus onClick={() => dialog.current?.close()}>Close</button></div></dialog>
   </>;
 }

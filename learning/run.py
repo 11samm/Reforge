@@ -39,7 +39,7 @@ class Harness:
         suffix='-dev-resume' if mode==RESUME else ''
         self.directory=ROOT/'evidence/learning'/(datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')+'-'+uuid.uuid4().hex[:8]+suffix)
         self.directory.mkdir(parents=True); self.owns_directory=True
-        self.checkpoints=Checkpoints(self.app,self.directory/'checkpoints',SCOPE)
+        self.checkpoints=Checkpoints(self.app,self.directory/'checkpoints',getattr(self,'source_scope',SCOPE))
         self.best=self.checkpoints.snapshot('no-blur-start' if mode==CLEAN else 'experimental-base-start')
         self.accepted=None; self.base_result=None; self.base_label=None; self.packet_sizes=[]
         self.events=[]; self.evidence=[]; self.claims=[]; self.attempts=[]; self.suite=None; self.incumbent=None
@@ -104,10 +104,11 @@ class Harness:
         self.process([sys.executable,'-m','learning.worker',kind,str(directory/'request.json'),str(directory)],directory,timeout,cleanup)
         return json.loads((directory/'result.json').read_text())
 
-    def baseline(self,label,allow_blur,cleanup=False):
+    def baseline(self,label,allow_blur,cleanup=False,allow_brightness=False):
         d=self.directory/label
         args=[sys.executable,str(ROOT/'baseline_regressions.py'),'--output',str(d/'baseline')]
         if allow_blur: args.append('--allow-blur')
+        if allow_brightness: args.append('--allow-brightness')
         if self.dev_app: args+=['--app',str(self.app)]
         self.process(args,d,self.config['command_seconds'],cleanup)
         result=json.loads((d/'baseline/results.json').read_text())
@@ -128,7 +129,7 @@ class Harness:
         if dry: return None
         timeout=self.budget.timeout(self.config['builder_seconds' if builder else 'model_seconds'])
         try: return model.invoke(prompt,self.directory/'model'/label,timeout,schema,builder,app=self.app,reader=reader,
-                                 max_tool_calls=self.config['builder_tool_calls'] if builder else 24,
+                                 max_tool_calls=self.config['builder_tool_calls'] if builder else 24,operation=getattr(self,'operation','gaussian-blur'),
                                  **({'allowed_writes':['src/gaussian-blur.ts']} if builder and getattr(self,'repair_focus',None) else {}))
         finally: self.guard()
 

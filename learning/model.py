@@ -54,14 +54,18 @@ class NoTools:
     audit=[]
     def call(self,*args): raise ValueError('No tools provided for decision roles')
 
-def invoke(prompt, directory, timeout, schema=None, builder=False, app=APP, reader=None, max_tool_calls=24, allowed_writes=None):
+def invoke(prompt, directory, timeout, schema=None, builder=False, app=APP, reader=None, max_tool_calls=24, allowed_writes=None, operation="gaussian-blur"):
     directory.mkdir(parents=True,exist_ok=False)
     save(directory/'request.json', {'prompt':prompt,'output_schema':schema,'role':'builder' if builder else 'decision',
                                     'app':str(app),'max_tool_calls':max_tool_calls,'allowed_writes':allowed_writes,'deadline_seconds':timeout})
     config=json.loads((ROOT/'smoke.config.json').read_text(encoding='utf-8-sig'))
     if (config['model'],config['reasoning_effort']) != ('gpt-6.1-sol','medium'):
         raise ValueError('Milestone requires verified gpt-6.1-sol / medium runtime')
-    broker=BlurBroker(directory/'written-sources',app,reader,allowed_writes) if builder else NoTools()
+    if operation not in ['gaussian-blur','brightness']: raise ValueError('Unknown operation')
+    if builder and operation=='brightness':
+        from .brightness import BrightnessBroker
+        broker=BrightnessBroker(directory/'written-sources',app,reader,allowed_writes)
+    else: broker=BlurBroker(directory/'written-sources',app,reader,allowed_writes) if builder else NoTools()
     runtime=None; tid=None; started=time.monotonic(); deadline=started+timeout
     report={'status':'failed','model':config['model'],'effort':config['reasoning_effort'],
             'boundary':'environment-disabled; allowlisted broker; trusted host is not OS sandboxed'}
@@ -84,13 +88,13 @@ def invoke(prompt, directory, timeout, schema=None, builder=False, app=APP, read
         params={'model':config['model'],'modelProvider':'openai','allowProviderModelFallback':False,
                 'cwd':str(app),'runtimeWorkspaceRoots':[str(app)],'approvalPolicy':'never','sandbox':'read-only',
                 'ephemeral':True,'environments':[],'selectedCapabilityRoots':[],
-                'baseInstructions':'Make bounded evidence-based decisions for miniPaint Gaussian Blur. Do not delegate.',
+                'baseInstructions':'Make bounded evidence-based decisions for miniPaint '+('Gaussian Blur' if operation=='gaussian-blur' else 'Brightness with all other Color Corrections controls zero')+'. Do not delegate.',
                 'developerInstructions':'No environment, shell, execution, browser, web, plugins, skills or other files. '
                 'Use concise decisions and evidence; do not reveal chain-of-thought. Only supplied dynamic tools if present.'}
         if builder:
             params['dynamicTools']=[{'type':'function','name':'shell_read_file','description':'Read declared app source file only.',
                                     'inputSchema':obj({'path':S})},
-                                   {'type':'function','name':'shell_write_file','description':'Write declared blur app source file only; no execution.',
+                                   {'type':'function','name':'shell_write_file','description':'Write declared '+('blur' if operation=='gaussian-blur' else operation)+' app source file only; no execution.',
                                     'inputSchema':obj({'path':S,'text':S})}]
             if reader is not None:
                 from .packets import EVIDENCE_TOOL

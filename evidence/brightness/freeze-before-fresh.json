@@ -1,0 +1,34 @@
+{
+  "source_manifest": {
+    "files": {
+      "README.md": "0674ee81d9926f7dcda69c6d8acc15d712490dbb637eda21951d2221cd6347c1",
+      "index.html": "386a23c1c3ff31abbdbc8b4fcafb2b76f3546ef31a22631ac2b9467138ed9ef8",
+      "package-lock.json": "0f0c6aa01564130d672f647bc293bba4a8e3893d36bfd3bf16ab39e6b0e0ef69",
+      "package.json": "882b343488c410bcc612b82c7dc14978384525cff43b4de5418a4a36e52277f9",
+      "src/brightness.ts": "440c9b26c4ca03b2d8c33ea8e790fc3f30128d283527a5c098822d46e7d49fd1",
+      "src/current-image.ts": "deb0c575a3fb79e3151eccde7a58232f2b724a666b90f07e071dfb7f527ed84f",
+      "src/main.tsx": "d14400591393ef4d84154fb0f39dd0beb394a723a5551c17718851eecf01a91a",
+      "src/style.css": "d21d0ef9945645793b02594bda53b1b66329a5d2819517c74a46342850da70d6",
+      "tsconfig.json": "6d839ab5d73095297ef9128243838c093c616d55f454f73416cf0c9ac8c05da4",
+      "vite.config.ts": "19f18fa380d4e9fa01cb38a62a130e40f88e7c4d33e1dcae00ad218e55463d27"
+    },
+    "scope": [
+      "README.md",
+      "index.html",
+      "package-lock.json",
+      "package.json",
+      "src/brightness.ts",
+      "src/current-image.ts",
+      "src/gaussian-blur.ts",
+      "src/main.tsx",
+      "src/style.css",
+      "tsconfig.json",
+      "vite.config.ts"
+    ]
+  },
+  "canonical_contract_sha256": "fc80e9dded98b6733e6533e2177e120f3fb515073f656488c5e12cb839644221",
+  "policy_sha256": "b9bb9c844e0164ab07df9e47a3954cad4b4f19c3d998816fcf3a2479adfe454a",
+  "suite_sha256": "26cd2055382e032ca25fd3bb2f4a6ecfc357d4c6efc5fe9e9d60bdf4e99a5819",
+  "repair_loop": "closed; no additional model calls or implementation repairs",
+  "frozen_before_fresh_inputs": true
+}

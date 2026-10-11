@@ -1,0 +1,41 @@
+{
+  "fresh_experiments": 4,
+  "candidates": 2,
+  "run_seconds": 600,
+  "reserve_seconds": 100,
+  "model_seconds": 120,
+  "builder_seconds": 160,
+  "reference_seconds": 60,
+  "command_seconds": 90,
+  "retries": 0,
+  "percentage_min": 0,
+  "percentage_max": 10,
+  "window_position": [
+    1600,
+    0
+  ],
+  "builder_tool_calls": 12,
+  "evidence_reads": 6,
+  "packet_limits": {
+    "planner": {
+      "bytes": 8000,
+      "tokens": 11000
+    },
+    "contract": {
+      "bytes": 40000,
+      "tokens": 26000
+    },
+    "route": {
+      "bytes": 32000,
+      "tokens": 22000
+    },
+    "builder": {
+      "bytes": 60000,
+      "tokens": 30000
+    },
+    "repair": {
+      "bytes": 60000,
+      "tokens": 30000
+    }
+  }
+}

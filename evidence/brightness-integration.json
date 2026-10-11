@@ -1,0 +1,70 @@
+{
+  "schema": "reforge-feature-integration/1",
+  "feature": "brightness",
+  "status": "usable",
+  "verification_scope": "Exact decoded 8-bit RGBA on six visible cases plus five fresh cases; headed miniPaint About4.14.3, hosted build unpinned; single imported raster; other Color Corrections controls zero. Not whole-editor or all-input compatibility.",
+  "autonomous_run_status": "unresolved due host integration defects; original records preserved",
+  "accepted_after": "Trusted revalidation of unchanged runtime candidate; zero additional model calls",
+  "main_app": "generated-app",
+  "candidate_manifest": "local-only:evidence/learning/20261011T010106Z-25785e7a/checkpoints/candidate-1/manifest.json",
+  "operation_spec": "learning/operations.py:BRIGHTNESS",
+  "reference_scope": "Image / Color Corrections... / Brightness -100..100 integer, step1 neutral0; other seven controls frozen0",
+  "visible": {
+    "passed": 6,
+    "total": 6,
+    "suite_sha256": "26cd2055382e032ca25fd3bb2f4a6ecfc357d4c6efc5fe9e9d60bdf4e99a5819",
+    "rgb_mae": 0,
+    "alpha_mae": 0,
+    "report": "evidence/brightness/visible-report.json"
+  },
+  "fresh": {
+    "passed": 5,
+    "total": 5,
+    "suite_sha256": "296a34201e31b17f62049c95e49d8678f971577f96d6464545c86a65cd4d3901",
+    "rgb_mae": 0,
+    "alpha_mae": 0,
+    "report": "evidence/brightness/fresh-report.json",
+    "repairs": 0
+  },
+  "gates": {
+    "build": true,
+    "independent_execution": true,
+    "ui_batch_agreement": true,
+    "baseline_passed": 4,
+    "baseline_total": 4
+  },
+  "timing_seconds": {
+    "autonomous_attempt": 180.309,
+    "host_revalidation": 11.692,
+    "fresh_evaluation": 25.802
+  },
+  "usage": {
+    "totalTokens": 134571,
+    "inputTokens": 128842,
+    "outputTokens": 5729,
+    "cachedInputTokens": 72960,
+    "reasoningOutputTokens": 1267
+  },
+  "model": "gpt-6.1-sol",
+  "reasoning_effort": "medium",
+  "model_calls": 4,
+  "runtime_selected_experiments": 4,
+  "preparation_reference_operations": 4,
+  "preparation_import_only_probes": 1,
+  "fresh_evaluation_operations": 5,
+  "implementation_candidates": 1,
+  "blur": {
+    "status": "experimental",
+    "accepted": false,
+    "original_suite_passed": 5,
+    "original_suite_total": 10,
+    "expanded_suite_passed": 7,
+    "expanded_suite_total": 14,
+    "source_hashes_preserved": true,
+    "checkpoint": "local-only:evidence/learning/brightness-preparation/checkpoints/experimental-blur/manifest.json"
+  },
+  "report": "evidence/brightness-results.md",
+  "raw_run_report": "evidence/brightness/original-run-report.json",
+  "canonical_contract": "evidence/brightness/canonical-contract.json",
+  "repair_loop": "closed"
+}

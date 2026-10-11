@@ -1,0 +1,13 @@
+{
+  "model_calls": 0,
+  "new_candidates": 0,
+  "reference_operations": 0,
+  "source_run": "local-only:evidence/learning/20261011T010106Z-25785e7a",
+  "unchanged_candidate_manifest_sha256": "f56976dd01ea0e803f43e8837f4d070a023c631051a17edca9ed5f2d5e3e9e6f",
+  "host_changes": [
+    "Unicode-safe registered UI selector",
+    "valid named full-image region",
+    "explicit allow-brightness baseline menu exception with empty-document gate"
+  ],
+  "scope": "Host validation after failed sole learning run; not successful autonomous acceptance or a second learning run"
+}

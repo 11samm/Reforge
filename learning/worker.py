@@ -71,6 +71,13 @@ def build(directory, app=None):
 
 def candidate(request,directory):
     app=resolve_app(request.get('app') or ROOT/'generated-app'); suite=request['suite']
+    op=None
+    if request.get('operation'):
+        from .operations import operation_spec
+        op=operation_spec(request['operation'])
+    source=op['source'] if op else 'src/gaussian-blur.ts'
+    function=op['export'] if op else 'applyGaussianBlur'
+    key=op['parameter']['key'] if op else 'percentage'
     result={'build_valid':False,'independent':False,'app':str(app),
             'cases':[],'suite_sha256':request['suite_sha256'],'evaluator_suspect':False,'ui_valid':False}
     try:
@@ -79,17 +86,17 @@ def candidate(request,directory):
         entry=directory/'batch-entry.ts'
         entry.write_text('import {readFileSync,writeFileSync} from "node:fs";\n'
             +'import {decodePngRaster} from '+json.dumps((app/'src/current-image.ts').as_posix())+';\n'
-            +'import {applyGaussianBlur} from '+json.dumps((app/'src/gaussian-blur.ts').as_posix())+';\n'
+            +'import {'+function+'} from '+json.dumps((app/source).as_posix())+';\n'
             +'import {encode} from '+json.dumps((app/'node_modules/fast-png/lib/index.js').as_posix())+';\n'
             +'const cases=JSON.parse(readFileSync(process.argv[2],"utf8"));\n'
             +'for(const c of cases){const r=decodePngRaster(new Uint8Array(readFileSync(c.input)));'
-            +'const out=applyGaussianBlur(r,c.percentage);if(!out||out.width!==r.width||out.height!==r.height||out.depth!==8||out.data.length!==r.width*r.height*4)throw Error("Invalid raster");'
+            +'const out='+function+'(r,c.'+key+');if(!out||out.width!==r.width||out.height!==r.height||out.depth!==8||out.data.length!==r.width*r.height*4)throw Error("Invalid raster");'
             +'writeFileSync(c.output,encode({...out,channels:4}));}\n',encoding='utf-8')
         command(['node',str(app/'node_modules/esbuild/bin/esbuild'),str(entry),'--bundle','--platform=node',
                  '--format=esm','--outfile='+str(directory/'batch.mjs')],directory/'batch-build.log')
         exports=[]
         for row in suite['cases']:
-            exports.append({'input':row['input'],'percentage':row['percentage'],'output':str(directory/(row['id']+'.png'))})
+            exports.append({'input':row['input'],key:row[key],'output':str(directory/(row['id']+'.png'))})
         save(directory/'batch-inputs.json',exports)
         # Node v24 permissions constrain files/child processes/native addons, but not network.
         # Trusted preloader denies standard network APIs; neither guard is an OS sandbox.
@@ -120,7 +127,7 @@ def candidate(request,directory):
         result['evaluator_suspect']=any(r['classification'] in ['infrastructure_error','invalid_region'] or
                                       r.get('reference_path') is None for r in result['cases'])
         # Check the shell applies to current image state and matches the same batch operation.
-        first=suite['cases'][0]
+        first=next((c for c in suite['cases'] if c[key]!=0),suite['cases'][0]) if op else suite['cases'][0]
         server=ThreadingHTTPServer(('127.0.0.1',0),partial(QuietHandler,directory=str(app/'dist')))
         threading.Thread(target=server.serve_forever,daemon=True).start()
         try:
@@ -133,15 +140,22 @@ def candidate(request,directory):
                     else: external.append(r.request.url); r.abort()
                 page.route('**/*',route); page.on('pageerror',lambda e:errors.append(str(e)))
                 page.goto(f'http://127.0.0.1:{server.server_port}',wait_until='networkidle')
+                if op:
+                    page.get_by_role('menuitem',name=op['ui_menu'],exact=True).click()
+                    page.get_by_role('menuitem',name=op['ui_item'],exact=True).click()
+                    empty=page.get_by_role('dialog')
+                    expect(empty.get_by_role('slider',name='Brightness',exact=False)).to_be_disabled()
+                    expect(empty.get_by_role('button',name='Apply',exact=True)).to_be_disabled()
+                    empty.get_by_role('button',name='Close',exact=True).click()
                 page.locator('input[type=file]').set_input_files(first['input'])
                 expect(page.get_by_role('img',name='Original image preview: '+Path(first['input']).name,exact=True)).to_be_visible()
-                page.get_by_role('menuitem',name='Effects',exact=True).click()
-                page.get_by_role('menuitem',name='Gaussian Blur…',exact=True).click()
+                page.get_by_role('menuitem',name=op['ui_menu'] if op else 'Effects',exact=True).click()
+                page.get_by_role('menuitem',name=op['ui_item'] if op else 'Gaussian Blur…',exact=True).click()
                 import re
-                dialog=page.get_by_role('dialog'); slider=dialog.get_by_role('slider',name=re.compile(r'^Percentage(?::.*)?$'))
+                dialog=page.get_by_role('dialog'); slider=dialog.get_by_role('slider',name=re.compile('^'+(op['ui_parameter'] if op else 'Percentage')+r'(?::.*)?$'))
                 slider.press('Home')
-                for _ in range(first['percentage']): slider.press('ArrowRight')
-                expect(slider).to_have_value(str(first['percentage']))
+                for _ in range(first[key]-(op['parameter']['min'] if op else 0)): slider.press('ArrowRight')
+                expect(slider).to_have_value(str(first[key]))
                 dialog.get_by_role('button',name='Apply',exact=True).click()
                 expect(dialog).not_to_be_visible()
                 page.get_by_role('menuitem',name='File',exact=True).click()
@@ -170,13 +184,16 @@ def selfcheck(directory):
     return {'status':'passed','equal':equal,'unequal':unequal}
 
 def main():
-    parser=argparse.ArgumentParser(); parser.add_argument('kind',choices=['reference','devreference','candidate','build','selfcheck'])
+    parser=argparse.ArgumentParser(); parser.add_argument('kind',choices=['reference','brightness-reference','devreference','candidate','build','selfcheck'])
     parser.add_argument('request',type=Path); parser.add_argument('directory',type=Path); args=parser.parse_args()
     d=within(args.directory,EVIDENCE/'learning'); d.mkdir(parents=True,exist_ok=True)
     try:
         request=json.loads(args.request.read_text())
         result={'status':'passed'}
         if args.kind=='reference': result=reference(request,d)
+        elif args.kind=='brightness-reference':
+            from adapter.brightness import reference_brightness
+            result=reference_brightness(request,d)
         elif args.kind=='devreference': result=developer_reference(request,d)
         elif args.kind=='candidate': result=candidate(request,d)
         elif args.kind=='selfcheck': result=selfcheck(d)

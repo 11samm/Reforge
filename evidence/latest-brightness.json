@@ -1,0 +1,9 @@
+{
+  "status": "usable_within_tested_scope",
+  "report": "evidence/brightness-results.md",
+  "integration": "evidence/brightness-integration.json",
+  "original_run_status": "unresolved",
+  "raw_run_report": "evidence/brightness/original-run-report.json",
+  "host_revalidation": "evidence/brightness/visible-report.json",
+  "fresh_evaluation": "evidence/brightness/fresh-report.json"
+}
