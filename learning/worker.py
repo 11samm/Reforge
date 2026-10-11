@@ -1,4 +1,4 @@
-"""Trusted bounded workers. Reference controller closes before candidate execution."""
+"""Trusted bounded workers with separate reference and candidate controllers."""
 import argparse
 from functools import partial
 from http.server import ThreadingHTTPServer
@@ -117,7 +117,9 @@ def candidate(request,directory):
             +'{try{f()}catch(e){if(String(e).includes("Network disabled"))n++}}if(n!==3)throw Error("Network guard failed");console.log("3 network guard probes denied");'],directory/'network-guard.log')
         command(permissions+[str(directory/'batch.mjs'),str(directory/'batch-inputs.json')],directory/'batch-execution.log')
         result['independent']=True
-        result['execution']={'reference_browser_closed':True,'input_only_batch':exports,
+        from features import sessions
+        result['execution']={'reference_browser_closed':not sessions.active() and sessions.pool is None,
+                             'separate_reference_controller':True,'input_only_batch':exports,
                              'node_permission_guard':True,'standard_network_api_guard':'three probes denied; not an OS sandbox'}
         for row in suite['cases']:
             if digest(row['expected'])!=row['expected_sha256'] or digest(row['input'])!=row['input_sha256']:
@@ -131,10 +133,11 @@ def candidate(request,directory):
         server=ThreadingHTTPServer(('127.0.0.1',0),partial(QuietHandler,directory=str(app/'dist')))
         threading.Thread(target=server.serve_forever,daemon=True).start()
         try:
-            with sync_playwright() as pw:
+            from features.sessions import candidate_browser, replace_page
+            with candidate_browser() as browser:
                 from features import live
-                browser=pw.chromium.launch(headless=not live.enabled(),timeout=30000)
                 page=browser.new_page(viewport={'width':1440,'height':1000},device_scale_factor=1,accept_downloads=True)
+                replace_page(page)
                 live.attach(page,'candidate')
                 page.set_default_timeout(8000); external=[]; errors=[]
                 def route(r):
@@ -179,8 +182,6 @@ def candidate(request,directory):
                 result['ui_check']={'case_id':first['id'],'comparison':comparison,'external_requests':external,'browser_errors':errors}
                 result['ui_valid']=True
                 page.screenshot(path=str(directory/'ui-blur.png'))
-                live.close()
-                browser.close()
         finally: server.shutdown(); server.server_close()
     except Exception as error:
         result['error']={'type':type(error).__name__,'message':str(error)[:2000]}
@@ -196,37 +197,40 @@ def selfcheck(directory):
         raise ValueError('Evaluator sentinel failed; stop promotion')
     return {'status':'passed','equal':equal,'unequal':unequal}
 
+def execute(kind,request,d):
+    try:
+        if request.get('harness_patch'):
+            if kind not in ('feature-discovery','feature-reference'): raise ValueError('Harness patches restricted to feature reference workers')
+            from features.repair import install_file
+            install_file(request['harness_patch'])
+        from features import live
+        live.start(kind,request)
+        result={'status':'passed'}
+        if kind=='reference': result=reference(request,d)
+        elif kind=='brightness-reference':
+            from adapter.brightness import reference_brightness
+            result=reference_brightness(request,d)
+        elif kind=='feature-reference':
+            from features.browser import reference as feature_reference
+            result=feature_reference(request,d)
+        elif kind=='feature-discovery':
+            from features.discovery import discover
+            result=discover(request,d)
+        elif kind=='devreference': result=developer_reference(request,d)
+        elif kind=='candidate': result=candidate(request,d)
+        elif kind=='selfcheck': result=selfcheck(d)
+        else: build(d,request.get('app'))
+    except Exception as error: result={'status':'infrastructure_failure','error':{'type':type(error).__name__,'message':str(error)[:2000]}}
+    from features import live
+    from features import sessions
+    if not sessions.active(): live.close()
+    save(d/'result.json',result)
+    return 0 if result.get('status') in ['passed','observed','discovered'] or result.get('build_valid') else 1
+
 def main():
     parser=argparse.ArgumentParser(); parser.add_argument('kind',choices=['reference','brightness-reference','feature-reference','feature-discovery','devreference','candidate','build','selfcheck'])
     parser.add_argument('request',type=Path); parser.add_argument('directory',type=Path); args=parser.parse_args()
     d=within(args.directory,EVIDENCE/'learning'); d.mkdir(parents=True,exist_ok=True)
-    try:
-        request=json.loads(args.request.read_text())
-        if request.get('harness_patch'):
-            if args.kind not in ('feature-discovery','feature-reference'): raise ValueError('Harness patches restricted to feature reference workers')
-            from features.repair import install_file
-            install_file(request['harness_patch'])
-        from features import live
-        live.start(args.kind,request)
-        result={'status':'passed'}
-        if args.kind=='reference': result=reference(request,d)
-        elif args.kind=='brightness-reference':
-            from adapter.brightness import reference_brightness
-            result=reference_brightness(request,d)
-        elif args.kind=='feature-reference':
-            from features.browser import reference as feature_reference
-            result=feature_reference(request,d)
-        elif args.kind=='feature-discovery':
-            from features.discovery import discover
-            result=discover(request,d)
-        elif args.kind=='devreference': result=developer_reference(request,d)
-        elif args.kind=='candidate': result=candidate(request,d)
-        elif args.kind=='selfcheck': result=selfcheck(d)
-        else: build(d,request.get('app'))
-    except Exception as error: result={'status':'infrastructure_failure','error':{'type':type(error).__name__,'message':str(error)[:2000]}}
-    from features import live
-    live.close()
-    save(d/'result.json',result)
-    return 0 if result.get('status') in ['passed','observed','discovered'] or result.get('build_valid') else 1
+    return execute(args.kind,json.loads(args.request.read_text()),d)
 
 if __name__=='__main__': raise SystemExit(main())

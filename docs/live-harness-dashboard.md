@@ -1,12 +1,14 @@
 # Actual harness browser presentation
 
-Implemented on branch `codex/live-harness-dashboard`, based on main `4f37096`.
-Worktree: `D:/Samuel/Downloads/Code/ReforgerData/live-harness-worktree`.
+Initial implementation: `codex/live-harness-dashboard`, based on main `4f37096`. Persistent-session update: `codex/persistent-live-browsers`, based on main `b641458`.
+Original worktree: `D:/Samuel/Downloads/Code/ReforgerData/live-harness-worktree`. Use the current main checkout or `persistent-live-browsers` worktree for the updated behavior.
 No AGENTS.md was found in the repository or inspected ancestor directories. Existing main work, raw evidence, candidate workspaces and source worktrees were left intact.
 
 ## Presentation and ownership
 
 The Implement a feature screen displays miniPaint on the left and the candidate editor on the right. `features.live.Session` attaches a private Chromium DevTools Protocol (CDP) session to the **existing worker-owned Playwright page**. `Page.startScreencast` delivers JPEG compositor frames; the dashboard polls the latest frame/state at 300 ms. No browser is launched for presentation, no actions are replayed, and workers receive no visibility delays.
+
+Two job-owned processes now retain their actual Chromium browsers throughout visible testing. Each has a single synchronous Playwright owner; the parent schedules actions separately using a private file mailbox. The candidate owner first builds and displays the prepared shell, then performs its real candidate gates in the same browser. Each reference procedure still receives a fresh context/document. Browsers are closed before final evaluation and on job completion, interruption, deadline, cancellation or owner failure. Linux owners also watch parent liveness; Windows ownership uses the existing kill-on-close Job Objects.
 
 The reference adapter's existing headed execution is preserved. Candidate UI verification is headed when presentation is enabled by the owned feature-job child; other executions retain their previous headless mode. Both existing viewports stay 1440 × 1000 at device scale 1. CSS scales the displayed images without changing automation coordinates. Narrow screens stack the two panes.
 
@@ -23,7 +25,7 @@ Embedding restrictions: https://developer.mozilla.org/en-US/docs/Web/HTTP/Refere
 
 ## Isolation
 
-The harness deliberately executes reference and candidate workers sequentially. The reference closes before independent candidate execution. Both panes are present, but only the worker currently running can be live; the other shows unavailable/disconnected. We do not keep a closed reference image on screen and call it live.
+Both actual browser sessions stay open simultaneously during visible testing. Reference and candidate actions are scheduled separately, and an idle owner pumps browser events while waiting. No retained screenshot is used to impersonate a connected browser. The separate candidate process receives no reference browser handles, controller or reference internals; its batch execution retains the input-only and network permission guards. Candidate execution metadata reports the persistent reference browser as open instead of claiming it was closed.
 
 Once-only final evaluation calls `live.hide()` before producing fresh final inputs, then disables presentation for all subsequent workers. Cleanup gates and baseline subprocesses also do not publish frames. Reference presentation reads only visible page images; no source, network bodies, bundles, hidden state, canvas extraction, HAR or tracing is introduced. Expected PNGs, exact policies, model access boundaries and final repair isolation remain unchanged. The original recorded side-by-side evidence inspector is unchanged.
 
@@ -69,8 +71,8 @@ npm.cmd run build
 ## Technical limits
 
 - CDP screencasting is Chromium-specific and experimental. JPEGs are presentation only; they are not exact PNG evaluation evidence. Streams are sampled latest frames, not guaranteed recordings of every fast intermediate change. No artificial pacing was added.
-- The synchronous Playwright owner delivers callbacks while processing Playwright calls. During a blocking model invocation the last frame can remain visible; its capture timestamp is displayed. Browser/page disconnect callbacks may be delivered at the next Playwright call; process death and feed failures are cleared independently. Next step for continuous idle-frame/disconnect delivery: move the worker's existing control loop to an asynchronous owner with a read-only frame task, then rerun the same exact gates. Do not create another browser/session or controller.
-- Reference/candidate checks remain sequential for independence. Simultaneous active panes would require a reviewed harness lifecycle change; it is not part of this implementation.
+- Idle owners pump callbacks independently while the parent performs model calls or runs the other role. A blocking model call inside reference discovery still blocks that reference owner until browser-tool dispatch resumes; capture timestamps disclose the latest real frame. Static pages need not produce new compositor frames. No action delays were added.
+- Both browsers remain open; their diagnostic actions are scheduled separately. Browser pages/contexts can be replaced for fresh-state gates within the same owned browser. Held-out workers always run separately after both visible owners have terminated.
 - No paid Contrast discovery run was performed. Discovery tool hooks are covered by existing broker tests and the same adapter transport; end-to-end streaming was verified with saved deterministic Brightness procedures. To validate a full autonomous Contrast run, obtain separate paid-run authorization and run the unchanged bounded pipeline while reviewing this screen.
 - The demo needs hosted miniPaint; offline UI/isolation tests work without it. It verifies existing Brightness only, and does not expand supported learning requests.
 

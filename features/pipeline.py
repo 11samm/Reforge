@@ -44,6 +44,8 @@ def run(request, job_id, emit):
     directory.mkdir(parents=True,exist_ok=False)
     from .preparation import prepare
     app, preparation=prepare(request,job_id)
+    from .sessions import start_pool
+    start_pool(app)
     save(directory/'preparation.json',preparation)
     emit('evidence',artifact='preparation.json',activity='Isolated editor prepared; target operation absent')
     # Harness process/deadline helper, without constructing or modifying an accepted workspace.
@@ -155,6 +157,8 @@ def continue_job(source_job,job_id,emit,request=None):
     app=ROOT/'dev-workspaces'/('feature-'+job_id)
     shutil.copytree(source_app,app,ignore=shutil.ignore_patterns('node_modules','dist'))
     shutil.copytree(source_app/'node_modules',app/'node_modules')
+    from .sessions import start_pool
+    start_pool(app)
     save(directory/'spec.json',spec); save(directory/'validation.json',validation)
     save(directory/'continuation.json',{'source_job':source_job,'mode':'development_resume_saved_evidence','new_reference_experiments':0})
     config=copy.deepcopy(DEFAULTS); config.update(fresh_experiments=4,candidates=2,retries=0,run_seconds=600,reserve_seconds=100,command_seconds=90)

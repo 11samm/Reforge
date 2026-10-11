@@ -46,8 +46,10 @@ class Session:
                 try: self.cdp.detach()
                 except Exception: pass
             self.value.update(session_id=uuid.uuid4().hex, frame=None, frame_sequence=0)
+            generation=self.value['session_id']
             self.cdp=page.context.new_cdp_session(page)
             def frame(event):
+                if self.value['session_id']!=generation: return
                 try:
                     self.cdp.send('Page.screencastFrameAck', {'sessionId':event['sessionId']})
                     self.value.update(state='ready', frame=event['data'], captured_at=time.time(),
@@ -55,9 +57,11 @@ class Session:
                     self.publish()
                 except Exception: pass
             self.cdp.on('Page.screencastFrame', frame)
-            page.on('close',lambda *_:self.close())
-            page.on('crash',lambda *_:self.close())
-            page.context.browser.on('disconnected',lambda *_:self.close())
+            def closed(*_):
+                if self.value['session_id']==generation: self.close()
+            page.on('close',closed)
+            page.on('crash',closed)
+            page.context.browser.on('disconnected',closed)
             self.cdp.send('Page.startScreencast', {'format':'jpeg','quality':65,
                 'maxWidth':1440,'maxHeight':1000,'everyNthFrame':1})
             self.value.update(state='ready'); self.publish()
@@ -79,6 +83,11 @@ def start(kind, request):
     if kind not in ('candidate','build','feature-discovery','feature-reference','reference','brightness-reference','devreference'): return
     parameters={k:request[k] for k in ('value','brightness','percentage') if k in request}
     if 'input_path' in request: parameters['input']=Path(request['input_path']).name
+    from . import sessions
+    if sessions.active() and current and current.role==role:
+        current.value['parameters']=parameters
+        current.action('Starting '+kind)
+        return
     current=Session(role,'building' if role=='candidate' else 'launching',
         {'candidate':'Independent UI/batch agreement check','build':'Build and type check',
          'feature-discovery':'Discover visible controls', 'feature-reference':'Diagnostic import, adjustment and export'}.get(kind,'Reference procedure'),parameters)
@@ -95,6 +104,8 @@ def close():
     if current: current.close()
 
 def hide():
+    from .sessions import stop_pool
+    stop_pool()
     if enabled():
         for role in ROLES: Session(role,'hidden','Held-out evaluation is not presented').close('hidden')
     os.environ['REFORGE_LIVE_ENABLED']='0'

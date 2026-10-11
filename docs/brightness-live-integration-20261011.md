@@ -32,9 +32,9 @@ See [live browser startup](live-harness-dashboard.md) for the no-model demo and
 [fresh Brightness commands](fresh-brightness-demo.md) for preparation and learning.
 Use the current checkout in those commands rather than the original source worktree.
 
-The two browser panes remain sequential because the harness runs reference and
-candidate workers independently. Final evaluation is hidden. Frames can pause
-while the synchronous owner waits for a model call. These integration checks do
+The subsequent persistent-browser update keeps both actual sessions open, with
+separately scheduled actions and final-evaluation blackout. See
+[persistent browser ownership](persistent-live-browsers.md). These integration checks do
 not establish repeatable autonomous sub-five-minute timing: the unchanged final
 Brightness configuration still needs repeat rehearsals. The existing dashboard
 request form remains Contrast-only; fresh Brightness is available through the

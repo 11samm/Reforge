@@ -30,3 +30,27 @@ class LiveTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp, patch.object(live,'ROOT',Path(temp)), patch.dict(os.environ,{'REFORGE_LIVE_ENABLED':'0'}):
             live.start('candidate',{}); live.action('not published')
             self.assertEqual(list(Path(temp).iterdir()),[])
+
+    def test_final_blackout_closes_pool_before_hiding(self):
+        with tempfile.TemporaryDirectory() as temp, patch.object(live,'ROOT',Path(temp)), patch.dict(os.environ,{'REFORGE_LIVE_JOB':'a'*32,'REFORGE_LIVE_ENABLED':'1'}), patch('features.sessions.stop_pool') as stop:
+            live.hide()
+            stop.assert_called_once()
+            self.assertFalse(live.enabled())
+
+    def test_closed_old_page_does_not_disconnect_replacement(self):
+        class FakeCDP:
+            def send(self,*args): pass
+            def detach(self): pass
+            def on(self,*args): pass
+        class FakePage:
+            def __init__(self):
+                self.callbacks={}
+                self.context=__import__('types').SimpleNamespace(new_cdp_session=lambda _:FakeCDP(),browser=__import__('types').SimpleNamespace(on=lambda *a:None))
+            def on(self,name,callback): self.callbacks[name]=callback
+        with tempfile.TemporaryDirectory() as temp, patch.object(live,'ROOT',Path(temp)), patch.dict(os.environ,{'REFORGE_LIVE_JOB':'a'*32,'REFORGE_LIVE_ENABLED':'1'}):
+            session=live.Session('candidate'); first=FakePage(); second=FakePage()
+            session.attach(first); session.attach(second)
+            first.callbacks['close']()
+            self.assertEqual(session.value['state'],'ready')
+            second.callbacks['close']()
+            self.assertEqual(session.value['state'],'disconnected')

@@ -47,7 +47,7 @@ export function LiveBrowsers({ jobId, status, connected }: { jobId?: string; sta
   const fallback: BrowserSession = { state: jobId && (!connected || !active || !feedConnected) ? 'disconnected' : 'unavailable', frame: null };
   return <section className="glass card live-execution" aria-label="Live harness browsers">
     <div className="card-head"><h3>Live execution</h3><Pill tone={current && feedConnected ? 'good' : 'warn'}>{current && feedConnected ? 'Harness feed connected' : 'No live feed'}</Pill></div>
-    <p className="small muted">Actual worker-owned sessions · read-only live frames · no playback. Reference and candidate checks run sequentially; closed sessions are cleared.</p>
+    <p className="small muted">Both actual browser sessions stay open during visible testing. Actions run separately; idle browsers wait for their next test. Final evaluation is hidden.</p>
     <div className="live-browser-pair"><BrowserView title="miniPaint reference" session={current?.sessions.reference ?? fallback} /><BrowserView title="Candidate editor" session={current?.sessions.candidate ?? fallback} /></div>
     <div className="live-activity" role="status"><div><span>Stage</span><strong>{current?.stage ?? 'No active execution'}</strong></div><div><span>Job elapsed (backend)</span><strong>{clock(current?.elapsed_seconds ?? 0)}</strong></div><div><span>Current activity</span><strong>{current?.activity ?? 'Waiting for backend events'}</strong></div>
       {current?.experiment && <div className="live-experiment"><span>Latest experiment purpose</span><strong>{current.experiment.question}</strong><p>{current.experiment.usefulness}</p><code>{JSON.stringify({ input: current.experiment.input, value: current.experiment.value })}</code></div>}
