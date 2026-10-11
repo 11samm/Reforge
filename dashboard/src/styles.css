@@ -302,6 +302,12 @@ figcaption { font-size: 12px; font-weight: 600; color: var(--ink-2); margin-bott
 .toggle { display: inline-flex; gap: 6px; align-items: center; font-size: 12.5px; font-weight: 600; color: var(--ink-2); cursor: pointer; }
 .toggle input { accent-color: var(--primary); }
 .inspector .pixel-frame, .inspector .pixel-missing { margin: 0 auto; }
+.inspector .segmented { flex-wrap: wrap; max-width: 100%; }
+.inspector .segmented button { padding: 6px 8px; }
+.side-by-side { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.side-by-side figure { margin: 0; min-width: 0; }
+.side-by-side figcaption { font-size: 12.5px; font-weight: 600; margin-bottom: 6px; display: flex; gap: 6px; align-items: baseline; flex-wrap: wrap; }
+.side-by-side .pixel-missing { font-size: 11.5px; padding: 10px; }
 .inspector > p.small { margin-top: 8px; }
 .reasons { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
 .reasons li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; padding: 8px 10px; border-radius: 10px; background: rgba(253, 230, 237, 0.6); }

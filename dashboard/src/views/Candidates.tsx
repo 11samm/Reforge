@@ -6,7 +6,7 @@ import { Card, Clamp, DecisionPill, Empty, EvidenceChip, Gate, Icon, OutcomePill
 import { candidateAt, decisionNote } from './shared.ts';
 
 type Tab = 'cases' | 'baselines' | 'builder';
-type ImageMode = 'reference' | 'candidate' | 'rgb' | 'alpha' | 'input';
+type ImageMode = 'side' | 'reference' | 'candidate' | 'rgb' | 'alpha' | 'input';
 
 export function Candidates({ run, t, sel, setSel, onOpenEvidence }: {
   run: Run; t: number; sel: Selection; setSel: (f: (s: Selection) => Selection) => void; onOpenEvidence: (id: string) => void;
@@ -137,7 +137,7 @@ function CasePanel({ run, cases, evaluated, decided, candidateFailed, errorText,
   selectedCase: string | null; onSelectCase: (id: string) => void; onOpenEvidence: (id: string) => void; policy: Record<string, unknown> | null;
 }) {
   const k = cases.find((c) => c.id === selectedCase) ?? cases.find((c) => evaluated && c.outcome !== 'passed') ?? cases[0] ?? null;
-  const [mode, setMode] = useState<ImageMode>('reference');
+  const [mode, setMode] = useState<ImageMode>('side');
   const [regions, setRegions] = useState(true);
   if (!k) return <Card><Empty>No suite cases recorded.</Empty></Card>;
   const showResults = evaluated;
@@ -146,9 +146,9 @@ function CasePanel({ run, cases, evaluated, decided, candidateFailed, errorText,
 
   const missingCandidate = !showResults ? (decided && candidateFailed ? `No candidate output: candidate stopped before evaluation${errorText ? ` (${errorText})` : ''}` : 'Not evaluated yet at this point')
     : k.outcome === 'missing_output' ? 'Evaluator recorded missing candidate output' : 'Candidate image not in bundle';
-  const img = { reference: k.images.reference, candidate: showResults ? k.images.candidate : null, rgb: showResults ? k.images.rgbDifference : null, alpha: showResults ? k.images.alphaDifference : null, input: k.images.input }[mode];
-  const missing = { reference: 'Reference output not in bundle', input: 'Input not in bundle', candidate: missingCandidate,
-    rgb: showResults ? 'RGB difference image not in bundle' : missingCandidate, alpha: showResults ? 'Alpha difference image not in bundle' : missingCandidate }[mode];
+  const imgs = { reference: k.images.reference, candidate: showResults ? k.images.candidate : null, rgb: showResults ? k.images.rgbDifference : null, alpha: showResults ? k.images.alphaDifference : null, input: k.images.input };
+  const missings = { reference: 'Reference output not in bundle', input: 'Input not in bundle', candidate: missingCandidate,
+    rgb: showResults ? 'RGB difference image not in bundle' : missingCandidate, alpha: showResults ? 'Alpha difference image not in bundle' : missingCandidate };
   const parsed = k.reasons.map((r) => parseReason(r) ?? { raw: r, region: '', metric: '', label: r, value: NaN, limit: NaN, comparator: '' });
   const P = (key: string) => (typeof policy?.[key] === 'number' ? (policy[key] as number) : null);
 
@@ -187,15 +187,29 @@ function CasePanel({ run, cases, evaluated, decided, candidateFailed, errorText,
       <Card className="inspector" title={<>Inspect <span className="mono">{k.id}</span></>} aside={<EvidenceChip id={k.id} onOpen={onOpenEvidence} />}>
         <div className="inspector-controls">
           <Segmented<ImageMode> label="Image view" value={mode} onChange={setMode} options={[
+            { id: 'side', label: 'Side by side' },
             { id: 'reference', label: 'Reference' },
             { id: 'candidate', label: 'Candidate' },
-            { id: 'rgb', label: 'RGB diff ×16' },
-            { id: 'alpha', label: 'Alpha diff ×16' },
+            { id: 'rgb', label: 'RGB ×16' },
+            { id: 'alpha', label: 'Alpha ×16' },
             { id: 'input', label: 'Input' },
           ]} />
           <label className="toggle"><input type="checkbox" checked={regions} onChange={(e) => setRegions(e.target.checked)} /> Regions</label>
         </div>
-        <PixelImage src={img} alt={`${k.id} ${mode}`} missing={missing} regions={regionBoxes} showRegions={regions} maxWidth={420} />
+        {mode === 'side' ? (
+          <div className="side-by-side">
+            <figure>
+              <figcaption>Reference <small className="muted">miniPaint output</small></figcaption>
+              <PixelImage src={imgs.reference} alt={`${k.id} reference`} missing={missings.reference} regions={regionBoxes} showRegions={regions} maxWidth={240} />
+            </figure>
+            <figure>
+              <figcaption>Candidate <small className="muted">generated app output</small></figcaption>
+              <PixelImage src={imgs.candidate} alt={`${k.id} candidate`} missing={missings.candidate} regions={regionBoxes} showRegions={regions} maxWidth={240} />
+            </figure>
+          </div>
+        ) : (
+          <PixelImage src={imgs[mode]} alt={`${k.id} ${mode}`} missing={missings[mode]} regions={regionBoxes} showRegions={regions} maxWidth={420} />
+        )}
         <p className="muted small">Scored on raw unpremultiplied RGBA; checkerboard is display only. Difference images come from the trusted evaluator.</p>
 
         <h4>{showResults && k.outcome === 'passed' ? 'Why it passed' : 'Why it failed'}</h4>

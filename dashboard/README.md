@@ -28,7 +28,7 @@ To choose a bundle, use the run picker or add `?run=<id>`, for example
 | Overview | Run identity, reference version, and scope. Current phase, elapsed time, remaining budget, and the current question. Candidate history with trusted gates, decisions, and the final outcome. |
 | Experiments | Each fresh experiment: question, requested vs. accepted Percentage (exact-match check), input and reference output, purpose, hypotheses, and linked claims. |
 | Contract | Claims with status filters, evidence links (which open the experiment or case), unresolved questions, and alternatives. |
-| Candidates | Per-case RGB, alpha, and region results. A reference / candidate / RGB diff ×16 / alpha diff ×16 / input inspector, with region overlays and parsed "why it failed" reasons. Also baseline regressions, failure routing, timeout errors, and builder telemetry. |
+| Candidates | Per-case RGB, alpha, and region results. An inspector that opens with the miniPaint reference and the generated app's output side by side, and can switch to reference, candidate, RGB diff ×16, alpha diff ×16, or input on their own. It has region overlays and parsed "why it failed" reasons. Also baseline regressions, failure routing, timeout errors, and builder telemetry. |
 | Model usage | Recorded token usage per invocation. Missing telemetry is marked "Not recorded". |
 | Event log | Every event, plus normalization warnings. Clicking an event seeks the replay. |
 
