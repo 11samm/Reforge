@@ -62,10 +62,16 @@ steps are in [DATA-CONTRACT.md](DATA-CONTRACT.md).
 - **Layout** follows the reference admin dashboard: a left sidebar with a run
   picker and identity card, a page title with a mode badge, a provenance
   banner, filter chips and segmented tabs, and tables with a detail panel.
-- **Style** is restrained glassmorphism: frosted white panels over a soft
-  blue/violet gradient with blurred light orbs, dark navy text for contrast,
-  thin borders, and soft shadows. Colors carry meaning only: green passed,
-  red failed/rejected, amber missing or synthetic, blue pending/info.
+- **Style** is restrained glassmorphism: translucent frosted panels over a
+  pastel gradient with blurred light orbs, dark navy text for contrast,
+  thin translucent white borders, and soft tinted shadows. Colors carry
+  meaning only: green passed, red failed/rejected, amber missing or
+  synthetic, blue pending/info.
+- **Tokens:** every color, glass opacity, blur, gradient and shadow comes
+  from `src/tokens.css`, the single source of truth shared with the design
+  system page in `../design-system/index.html`. `styles.css` maps dashboard
+  roles (`--good`, `--muted`, ...) onto those tokens. The only raw colors left
+  are white, the opaque image checkerboard, and the region overlay colors.
 - **Target sizes:** sized for a 1440×1000 judging screen. The overview fits
   the outcome and history above the fold. Breakpoints at 1280 px and 980 px
   keep it usable on laptops.
