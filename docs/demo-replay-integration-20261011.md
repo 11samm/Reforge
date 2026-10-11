@@ -113,3 +113,7 @@ Exact source paths are in `portable-replay.md`. Both calls passed in this worktr
 No functional integration blocker remains in local validation. GitHub CI must pass on the final head before merging. Main is unchanged and this PR must not be merged automatically. All source worktrees, original local changes and raw archives are retained. Test-generated screenshots/latest-summary files are backed up under `.scratch/integration-generated-reports` before restoring their tracked historical versions in this worktree only.
 
 Actual reference verification depends on hosted miniPaint. No continuous browser video was archived; uncertain screenshot timing uses conservative section-completion boundaries. Hashes detect corruption but do not authenticate authors. No new model-based learning, repeatability claim, timing benchmark, promotion or acceptance result was created. Final evidence stays outside builder/repair contexts. Acceptance remains within the recorded tested scope.
+
+## Hosted CI stabilization
+
+The first PR CI run `38171237852` passed Linux and the complete dashboard/browser checks. Windows passed all 145 offline tests, 75 relocated-fixture tests and command-help checks, then exceeded the five-minute job allowance during cleanup. Windows Media Foundation installation alone took about four minutes. The offline-check job allowance is now ten minutes so dependency installation/runner cleanup have headroom. No learning deadline, evaluator criterion, test or frozen expected output is relaxed. The final-head CI result is recorded in the PR.
