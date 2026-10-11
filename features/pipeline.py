@@ -39,9 +39,13 @@ def validate_procedure(spec, path, directory, worker):
     save(directory/'validation.json',result); return result
 
 def run(request, job_id, emit):
-    request_id(request)
+    feature=request_id(request)
     start=time.monotonic(); directory=ROOT/'evidence/learning'/('feature-'+job_id)
     directory.mkdir(parents=True,exist_ok=False)
+    from .preparation import prepare
+    app, preparation=prepare(request,job_id)
+    save(directory/'preparation.json',preparation)
+    emit('evidence',artifact='preparation.json',activity='Isolated editor prepared; target operation absent')
     # Harness process/deadline helper, without constructing or modifying an accepted workspace.
     from learning.run import Harness
     from learning.core import Budget
@@ -54,7 +58,7 @@ def run(request, job_id, emit):
     path=directory/'inputs/diagnostic.png'; diagnostic(path)
     emit('stage',stage='Discover',activity='Inspecting visible menus and adjustment controls')
     from .repair import classify, repair, RepairBudget, recall, remember
-    patch=recall(directory/'repairs',emit)
+    patch=recall(directory/'repairs',emit) if feature=='contrast' else None
     repairs=RepairBudget(seconds=300,attempts=5); history=[]; latest_case=None
     for attempt in range(6):
         attempt_dir=directory/'discovery'/('attempt' if attempt==0 else 'attempt-'+str(attempt+1))
@@ -62,7 +66,7 @@ def run(request, job_id, emit):
         history.append({'attempt':attempt+1,'status':r.get('status'),'error':r.get('error')})
         save(directory/'repair-summary.json',{'attempts':history,'repairs_used':repairs.used,'host_modified':bool(patch),'canonical_host_modified':False})
         if r.get('status')=='discovered':
-            if patch and latest_case: remember(patch,latest_case)
+            if patch and latest_case and feature=='contrast': remember(patch,latest_case)
             break
         case=classify(attempt_dir,r)
         if case is None or not repairs.admit(case): break
@@ -89,14 +93,12 @@ def run(request, job_id, emit):
         save(directory/'validation.json',validation)
         return {'status':'failed','classification':validation['status']}
     # Never copy old evidence/final outputs or mutate the accepted editor.
-    app=ROOT/'dev-workspaces'/('feature-'+job_id)
-    shutil.copytree(ROOT/'generated-app',app,ignore=shutil.ignore_patterns('node_modules','dist'))
-    shutil.copytree(ROOT/'generated-app/node_modules',app/'node_modules')
-    # Promotion must not make a subsequent discovery run start with Contrast.
-    shutil.copyfile(ROOT/'features/templates/contrast/main.tsx',app/'src/main.tsx')
-    (app/'src/contrast.ts').unlink(missing_ok=True)
     config=copy.deepcopy(DEFAULTS); config.update(fresh_experiments=4,candidates=2,retries=0,run_seconds=max(120,min(600,int(1200-(time.monotonic()-start)))),reserve_seconds=100,command_seconds=90)
     h=AdjustmentHarness(config,app,spec,validation,notify=emit)
+    h.provenance.update(preparation=preparation,feature_absent_at_start=True,
+                        clean_start_autonomous_demonstration=True,
+                        learning_origin='fresh_discovery_and_experiments')
+    save(h.directory/'provenance.json',h.provenance)
     h.harness_patch=patch
     # Save presentation records under the job root; only explicitly copied artifacts are served.
     h.run(); save(directory/'visible-report.json',h.report); emit('evidence',artifact='visible-report.json',activity='Frozen visible gate outcome recorded')
@@ -117,20 +119,22 @@ def final_check(spec,app,control,directory,emit,patch=None):
         r=Harness.worker(control,'feature-reference',{'spec':spec,'input_path':str(final_input),'input_sha256':digest(final_input),'value':value,**({'harness_patch':str(patch)} if patch else {})},directory/'final/experiments'/ident,60,cleanup=True)
         if r.get('status')!='observed': return {'status':'failed','classification':'final_procedure_failure'}
         rows.append({'id':ident,'value':value,'input':str(final_input),'expected':r['output_path'],'input_sha256':digest(final_input),'expected_sha256':digest(r['output_path']),'regions':{'full':[0,0,43+i*4,13+i*4]}})
-    suite={'id':'final-contrast-v1','policy':load_policy(),'cases':rows}; save(directory/'final/suite.json',suite)
-    result=Harness.worker(control,'candidate',{'operation':'contrast','spec':spec,'app':str(app),'suite':suite,'suite_sha256':digest(directory/'final/suite.json')},directory/'final/evaluation',90,cleanup=True)
+    feature=spec['feature_id']
+    suite={'id':'final-'+feature+'-v1','policy':load_policy(),'cases':rows}; save(directory/'final/suite.json',suite)
+    result=Harness.worker(control,'candidate',{'operation':feature,'spec':spec,'app':str(app),'suite':suite,'suite_sha256':digest(directory/'final/suite.json')},directory/'final/evaluation',90,cleanup=True)
     result['baseline_pass']=control.report['final_baseline_pass']; accepted,reason=decide(result)
     save(directory/'final-summary.json',{'status':'accepted' if accepted else 'unresolved','classification':reason,'cases':[{k:c.get(k) for k in ('case_id','status','classification','metrics')} for c in result.get('cases',[])],'promoted':False})
     emit('evidence',artifact='final-summary.json',activity='Independent final evaluation complete')
     return {'status':'accepted' if accepted else 'unresolved','classification':reason,'promoted':False,'harness_repaired':bool(patch),'scope':'frozen visible and two once-only fresh cases; isolated workspace'}
 
-def continue_job(source_job,job_id,emit):
+def continue_job(source_job,job_id,emit,request=None):
     import re
     from adapter.png import within
     if not re.fullmatch(r'[a-f0-9]{32}',source_job): raise ValueError('Invalid resume job ID')
     directory=ROOT/'evidence/learning'/('feature-'+job_id); directory.mkdir(parents=True,exist_ok=False)
     old=ROOT/'evidence/learning'/('feature-'+source_job)
     spec=json.loads((old/'spec.json').read_text(encoding='utf-8'))
+    if request is not None and request_id(request)!=spec['feature_id']: raise ValueError('Resume request differs from source feature')
     validation=json.loads((old/'validation.json').read_text(encoding='utf-8'))
     # Find only the visible learning record tied to this exact isolated source job.
     sources=[]
@@ -162,8 +166,13 @@ def continue_job(source_job,job_id,emit):
     result['mode']='development_resume_saved_evidence'; return result
 
 def main():
-    parser=argparse.ArgumentParser(); parser.add_argument('--pilot',action='store_true'); parser.add_argument('--request',default='Implement Contrast'); parser.add_argument('--resume-job'); args=parser.parse_args()
+    parser=argparse.ArgumentParser(); parser.add_argument('--pilot',action='store_true'); parser.add_argument('--prepare-demo',action='store_true'); parser.add_argument('--request',default='Implement Contrast'); parser.add_argument('--resume-job'); args=parser.parse_args()
     request_id(args.request)
+    if args.prepare_demo:
+        if args.pilot or args.resume_job: parser.error('--prepare-demo cannot invoke or resume a learning run')
+        from .preparation import prepare
+        app,record=prepare(args.request,uuid.uuid4().hex)
+        print(json.dumps(record)); return 0
     if not args.pilot:
         print(json.dumps({'mode':'prepare-only','budget':BUDGET,'model_invoked':False})); return 0
     from .jobs import JobStore, execute

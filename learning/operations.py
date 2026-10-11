@@ -11,11 +11,12 @@ BRIGHTNESS = {
 }
 
 def operation_spec(ident, discovered=None):
- if ident=='brightness': return BRIGHTNESS
- if ident=='contrast' and discovered is not None:
+ if ident=='brightness' and discovered is None: return BRIGHTNESS
+ if ident in ('contrast','brightness') and discovered is not None:
   from features.spec import validate,parameter
   validate(discovered,ready=True); p=parameter(discovered)
-  return {'id':'contrast','version':1,'source':'src/contrast.ts','export':'applyContrast',
+  if discovered['feature_id'] != ident: raise ValueError('Discovered operation mismatch')
+  return {'id':ident,'version':1,'source':'src/'+ident+'.ts','export':'apply'+ident.title(),
           'parameter':{'name':p['label'],'key':'value','min':p['min'],'max':p['max'],'default':p['default'],'step':p['step']},
-          'ui_menu':'Image','ui_item':'Contrast…','ui_parameter':p['label'],'policy':'exact-rgba-v1'}
+          'ui_menu':'Image','ui_item':'Contrast…' if ident=='contrast' else 'Color Corrections…','ui_parameter':p['label'].rstrip().removesuffix(':').rstrip(),'policy':'exact-rgba-v1'}
  raise ValueError('Unknown or unvalidated operation specification')
